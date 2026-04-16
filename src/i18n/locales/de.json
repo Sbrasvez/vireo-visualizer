@@ -228,7 +228,12 @@
     "check_data_error": "Überprüfe die Daten",
     "reservation_error": "Buchungsfehler",
     "reservation_sent": "Buchung gesendet!",
-    "see_you_at": "Wir erwarten dich im {{restaurant}}"
+    "see_you_at": "Wir erwarten dich im {{restaurant}}",
+    "err_name": "Gib deinen Namen ein",
+    "err_email": "Ungültige E-Mail",
+    "err_time": "Ungültige Uhrzeit",
+    "choose_date": "Wähle ein Datum",
+    "email_confirmation_note": "Du erhältst eine Bestätigungs-E-Mail mit allen Details."
   },
   "marketplace": {
     "badge": "Handel & zertifizierte Wiederverwendung",

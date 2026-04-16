@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { format } from "date-fns";
-import { it } from "date-fns/locale";
+import { it, enUS, es, fr, de } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -49,15 +50,16 @@ interface Props {
   onOpenChange: (v: boolean) => void;
 }
 
-const reservationSchema = z.object({
-  name: z.string().trim().min(2, "Inserisci il tuo nome").max(80),
-  email: z.string().trim().email("Email non valida").max(255),
-  phone: z.string().trim().max(30).optional().or(z.literal("")),
-  partySize: z.number().int().min(1).max(20),
-  date: z.date(),
-  time: z.string().regex(/^\d{2}:\d{2}$/, "Orario non valido"),
-  notes: z.string().max(500).optional().or(z.literal("")),
-});
+const buildSchema = (t: (k: string) => string) =>
+  z.object({
+    name: z.string().trim().min(2, t("restaurant_dialog.err_name")).max(80),
+    email: z.string().trim().email(t("restaurant_dialog.err_email")).max(255),
+    phone: z.string().trim().max(30).optional().or(z.literal("")),
+    partySize: z.number().int().min(1).max(20),
+    date: z.date(),
+    time: z.string().regex(/^\d{2}:\d{2}$/, t("restaurant_dialog.err_time")),
+    notes: z.string().max(500).optional().or(z.literal("")),
+  });
 
 const TIME_SLOTS = [
   "12:30", "13:00", "13:30", "14:00",
@@ -69,11 +71,13 @@ export default function RestaurantDetailDialog({
   open,
   onOpenChange,
 }: Props) {
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const { menu, photos, reviews, loading } = useRestaurantDetails(
     restaurant?.id ?? null,
   );
+  const dateLocale = ({ it, en: enUS, es, fr, de } as any)[i18n.language] || it;
 
   // Reservation form state
   const [name, setName] = useState("");
@@ -96,6 +100,7 @@ export default function RestaurantDetailDialog({
   }, {});
 
   const handleReserve = async () => {
+    const reservationSchema = buildSchema(t);
     const parsed = reservationSchema.safeParse({
       name: user?.email ? name || user.email.split("@")[0] : name,
       email: email || user?.email || "",
@@ -107,18 +112,18 @@ export default function RestaurantDetailDialog({
     });
     if (!parsed.success) {
       toast({
-        title: "Controlla i dati",
+        title: t("restaurant_dialog.check_data_error"),
         description: parsed.error.issues[0].message,
         variant: "destructive",
       });
       return;
     }
     if (!date) {
-      toast({ title: "Seleziona una data", variant: "destructive" });
+      toast({ title: t("restaurant_dialog.select_date_error"), variant: "destructive" });
       return;
     }
     if (!time) {
-      toast({ title: "Seleziona un orario", variant: "destructive" });
+      toast({ title: t("restaurant_dialog.select_time_error"), variant: "destructive" });
       return;
     }
 
@@ -139,7 +144,7 @@ export default function RestaurantDetailDialog({
 
     if (error) {
       toast({
-        title: "Errore prenotazione",
+        title: t("restaurant_dialog.reservation_error"),
         description: error.message,
         variant: "destructive",
       });
@@ -147,7 +152,6 @@ export default function RestaurantDetailDialog({
       return;
     }
 
-    // Fire-and-forget email confirmation (works only if email infra is set up)
     supabase.functions
       .invoke("send-transactional-email", {
         body: {
@@ -157,7 +161,7 @@ export default function RestaurantDetailDialog({
           templateData: {
             name: parsed.data.name,
             restaurantName: restaurant.name,
-            date: format(parsed.data.date, "EEEE d MMMM yyyy", { locale: it }),
+            date: format(parsed.data.date, "EEEE d MMMM yyyy", { locale: dateLocale }),
             time: parsed.data.time,
             partySize: parsed.data.partySize,
             address: restaurant.address,
@@ -170,8 +174,8 @@ export default function RestaurantDetailDialog({
     setSuccess(true);
     setSubmitting(false);
     toast({
-      title: "Prenotazione inviata!",
-      description: `Ti aspettiamo da ${restaurant.name}`,
+      title: t("restaurant_dialog.reservation_sent"),
+      description: t("restaurant_dialog.see_you_at", { restaurant: restaurant.name }),
     });
   };
 
@@ -208,10 +212,10 @@ export default function RestaurantDetailDialog({
               {restaurant.available_now ? (
                 <Badge className="bg-primary text-primary-foreground gap-1.5">
                   <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
-                  Disponibile ora
+                  {t("restaurant_dialog.available_now")}
                 </Badge>
               ) : (
-                <Badge variant="secondary">Completo stasera</Badge>
+                <Badge variant="secondary">{t("restaurant_dialog.complete_tonight")}</Badge>
               )}
               {(restaurant.eco_certifications || []).slice(0, 2).map((c) => (
                 <Badge key={c} variant="outline" className="bg-background/80 backdrop-blur-sm gap-1">
@@ -228,7 +232,7 @@ export default function RestaurantDetailDialog({
                 <span className="flex items-center gap-1">
                   <Star className="size-4 fill-tertiary text-tertiary" />
                   <strong>{restaurant.rating?.toFixed(1) ?? "—"}</strong>
-                  <span className="text-foreground/70">({restaurant.reviews_count} recensioni)</span>
+                  <span className="text-foreground/70">{t("restaurant_dialog.reviews_count", { count: restaurant.reviews_count ?? 0 })}</span>
                 </span>
                 <span>·</span>
                 <span className="flex items-center gap-1">
@@ -243,13 +247,13 @@ export default function RestaurantDetailDialog({
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
           <TabsList className="mx-6 mt-4 grid w-auto grid-cols-5 bg-muted">
-            <TabsTrigger value="info">Info</TabsTrigger>
-            <TabsTrigger value="menu">Menu</TabsTrigger>
-            <TabsTrigger value="photos">Foto</TabsTrigger>
-            <TabsTrigger value="reviews">Recensioni</TabsTrigger>
+            <TabsTrigger value="info">{t("restaurant_dialog.tab_info")}</TabsTrigger>
+            <TabsTrigger value="menu">{t("restaurant_dialog.tab_menu")}</TabsTrigger>
+            <TabsTrigger value="photos">{t("restaurant_dialog.tab_photos")}</TabsTrigger>
+            <TabsTrigger value="reviews">{t("restaurant_dialog.tab_reviews")}</TabsTrigger>
             <TabsTrigger value="reserve" className="gap-1">
               <Heart className="size-3.5" />
-              Prenota
+              {t("restaurant_dialog.tab_reserve")}
             </TabsTrigger>
           </TabsList>
 
@@ -273,19 +277,19 @@ export default function RestaurantDetailDialog({
                 ))}
               </div>
               <div className="grid sm:grid-cols-2 gap-4 pt-2">
-                <InfoRow icon={MapPin} label="Indirizzo">{restaurant.address}</InfoRow>
+                <InfoRow icon={MapPin} label={t("restaurant_dialog.address")}>{restaurant.address}</InfoRow>
                 {restaurant.phone && (
-                  <InfoRow icon={Phone} label="Telefono">
+                  <InfoRow icon={Phone} label={t("restaurant_dialog.phone")}>
                     <a href={`tel:${restaurant.phone}`} className="hover:text-primary">{restaurant.phone}</a>
                   </InfoRow>
                 )}
                 {restaurant.email && (
-                  <InfoRow icon={Mail} label="Email">
+                  <InfoRow icon={Mail} label={t("restaurant_dialog.email")}>
                     <a href={`mailto:${restaurant.email}`} className="hover:text-primary">{restaurant.email}</a>
                   </InfoRow>
                 )}
                 {restaurant.website && (
-                  <InfoRow icon={Globe} label="Sito web">
+                  <InfoRow icon={Globe} label={t("restaurant_dialog.website")}>
                     <a href={restaurant.website} target="_blank" rel="noreferrer" className="hover:text-primary">{restaurant.website.replace(/^https?:\/\//, "")}</a>
                   </InfoRow>
                 )}
@@ -294,7 +298,7 @@ export default function RestaurantDetailDialog({
                 <div>
                   <div className="flex items-center gap-2 text-sm font-semibold mb-2">
                     <Clock className="size-4 text-primary" />
-                    Orari di apertura
+                    {t("restaurant_dialog.opening_hours")}
                   </div>
                   <div className="grid gap-1 text-sm text-muted-foreground">
                     {Object.entries(restaurant.opening_hours).map(([k, v]) => (
@@ -328,7 +332,7 @@ export default function RestaurantDetailDialog({
                           )}
                           {(m.allergens || []).length > 0 && (
                             <p className="text-xs text-muted-foreground/80 mt-1">
-                              Allergeni: {(m.allergens || []).join(", ")}
+                              {t("restaurant_dialog.allergens")}: {(m.allergens || []).join(", ")}
                             </p>
                           )}
                         </div>
@@ -368,7 +372,7 @@ export default function RestaurantDetailDialog({
 
             <TabsContent value="reviews" className="mt-0 space-y-4">
               {reviews.length === 0 && (
-                <p className="text-muted-foreground text-sm">Nessuna recensione ancora.</p>
+                <p className="text-muted-foreground text-sm">{t("restaurant_dialog.no_reviews")}</p>
               )}
               {reviews.map((r) => (
                 <div key={r.id} className="rounded-xl border border-border/60 p-4 bg-card">
@@ -406,21 +410,21 @@ export default function RestaurantDetailDialog({
                 <div className="space-y-4 max-w-2xl">
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <Label htmlFor="r-name">Nome*</Label>
-                      <Input id="r-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Il tuo nome" maxLength={80} />
+                      <Label htmlFor="r-name">{t("restaurant_dialog.name")}*</Label>
+                      <Input id="r-name" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("restaurant_dialog.your_name")} maxLength={80} />
                     </div>
                     <div>
-                      <Label htmlFor="r-email">Email*</Label>
+                      <Label htmlFor="r-email">{t("restaurant_dialog.email")}*</Label>
                       <Input id="r-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={user?.email ?? "tua@email.it"} maxLength={255} />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <Label htmlFor="r-phone">Telefono</Label>
-                      <Input id="r-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+39 ..." maxLength={30} />
+                      <Label htmlFor="r-phone">{t("restaurant_dialog.phone")}</Label>
+                      <Input id="r-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("restaurant_dialog.phone_placeholder")} maxLength={30} />
                     </div>
                     <div>
-                      <Label htmlFor="r-party">Coperti*</Label>
+                      <Label htmlFor="r-party">{t("restaurant_dialog.covers")}*</Label>
                       <div className="relative">
                         <Users className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                         <Input
@@ -437,12 +441,12 @@ export default function RestaurantDetailDialog({
                   </div>
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <Label>Data*</Label>
+                      <Label>{t("restaurant_dialog.date")}*</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button variant="outline" className="w-full justify-start font-normal">
                             <CalendarIcon className="size-4 mr-2" />
-                            {date ? format(date, "EEE d MMM yyyy", { locale: it }) : "Scegli una data"}
+                            {date ? format(date, "EEE d MMM yyyy", { locale: dateLocale }) : t("restaurant_dialog.choose_date")}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0 bg-popover" align="start">
@@ -458,27 +462,27 @@ export default function RestaurantDetailDialog({
                       </Popover>
                     </div>
                     <div>
-                      <Label>Orario*</Label>
+                      <Label>{t("restaurant_dialog.time")}*</Label>
                       <div className="grid grid-cols-5 gap-1.5">
-                        {TIME_SLOTS.map((t) => (
+                        {TIME_SLOTS.map((slot) => (
                           <button
-                            key={t}
+                            key={slot}
                             type="button"
-                            onClick={() => setTime(t)}
+                            onClick={() => setTime(slot)}
                             className={`text-xs py-2 rounded-md border transition-colors ${
-                              time === t
+                              time === slot
                                 ? "bg-primary text-primary-foreground border-primary"
                                 : "bg-background hover:bg-accent border-border"
                             }`}
                           >
-                            {t}
+                            {slot}
                           </button>
                         ))}
                       </div>
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="r-notes">Note (allergie, occasioni speciali...)</Label>
+                    <Label htmlFor="r-notes">{t("restaurant_dialog.notes")} ({t("restaurant_dialog.notes_placeholder")})</Label>
                     <Textarea id="r-notes" value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={500} rows={3} />
                   </div>
                   <Button
@@ -488,10 +492,10 @@ export default function RestaurantDetailDialog({
                     className="w-full shadow-elegant"
                   >
                     {submitting ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Heart className="size-4 mr-2" />}
-                    Conferma prenotazione
+                    {submitting ? t("restaurant_dialog.submitting") : t("restaurant_dialog.reserve_btn")}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    Riceverai una email di conferma con tutti i dettagli.
+                    {t("restaurant_dialog.email_confirmation_note")}
                   </p>
                 </div>
               )}

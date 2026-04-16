@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RestaurantMap, { type RestaurantMarker } from "@/components/RestaurantMap";
@@ -27,21 +28,13 @@ import { useGeocoding } from "@/hooks/useGeocoding";
 import { useToast } from "@/hooks/use-toast";
 import heroImg from "@/assets/restaurants-hero.jpg";
 
-const CUISINE_LABELS: Record<string, string> = {
-  vegano: "Vegano",
-  vegetariano: "Vegetariano",
-  plant_based: "Plant-based",
-  bio: "Bio certificato",
-  mediterraneo: "Mediterraneo",
-  crudista: "Crudista / Raw",
-  fusion: "Fusion",
-  km_zero: "Km 0",
-};
-
 export default function Restaurants() {
+  const { t } = useTranslation();
   const { restaurants, loading } = useRestaurants();
   const { geocode, loading: geocoding } = useGeocoding();
   const { toast } = useToast();
+  const CUISINE_KEYS = ["vegano", "vegetariano", "plant_based", "bio", "mediterraneo", "crudista", "fusion", "km_zero"] as const;
+  const cuisineLabel = (k: string) => t(`restaurants.cuisines.${k}`, { defaultValue: k });
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [dialogRestaurant, setDialogRestaurant] = useState<Restaurant | null>(null);
@@ -79,14 +72,14 @@ export default function Restaurants() {
   const handleSearch = async () => {
     const q = searchInput.trim();
     if (!q) {
-      toast({ title: "Inserisci una città o un indirizzo", variant: "destructive" });
+      toast({ title: t("restaurants.geo_no_location_title"), variant: "destructive" });
       return;
     }
     const result = await geocode(q);
     if (!result) {
       toast({
-        title: "Nessuna località trovata",
-        description: "Prova con una città italiana, es. 'Milano Navigli' o 'Roma Trastevere'",
+        title: t("restaurants.geo_not_found_title"),
+        description: t("restaurants.geo_not_found_desc"),
         variant: "destructive",
       });
       return;
@@ -98,7 +91,7 @@ export default function Restaurants() {
     }));
     setOriginLabel(result.name);
     toast({
-      title: "Posizione impostata",
+      title: t("restaurants.geo_set_title"),
       description: result.name,
     });
   };
@@ -134,20 +127,20 @@ export default function Restaurants() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border text-sm font-medium mb-6 animate-fade-up">
                 <Sparkles className="size-4 text-primary" />
-                <span>{restaurants.length} ristoranti eco-friendly in Italia</span>
+                <span>{t("restaurants.badge_count", { count: restaurants.length })}</span>
               </div>
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                Mangia <span className="italic text-gradient-warm">consapevole</span>, ovunque tu sia
+                {t("restaurants.title_1")} <span className="italic text-gradient-warm">{t("restaurants.title_aware")}</span>{t("restaurants.title_2")}
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-                Una mappa interattiva di ristoranti veg, bio e km 0 selezionati in tutta Italia. Scopri menu, foto, recensioni e prenota in tempo reale.
+                {t("restaurants.subtitle")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 max-w-xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
                 <div className="relative flex-1">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
                   <Input
-                    placeholder="Es. Milano, Roma Trastevere, Firenze..."
+                    placeholder={t("restaurants.search_placeholder")}
                     className="pl-12 h-14 rounded-xl text-base bg-card shadow-soft"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
@@ -156,14 +149,14 @@ export default function Restaurants() {
                 </div>
                 <Button size="lg" onClick={handleSearch} disabled={geocoding} className="h-14 px-8 rounded-xl shadow-elegant">
                   {geocoding ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4 mr-2" />}
-                  Cerca zona
+                  {t("restaurants.search_btn")}
                 </Button>
               </div>
 
               {originLabel && (
                 <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-sm animate-fade-up">
                   <MapPin className="size-3.5 text-primary" />
-                  <span className="text-foreground">Centrato su <strong>{originLabel}</strong></span>
+                  <span className="text-foreground">{t("restaurants.centered_on")} <strong>{originLabel}</strong></span>
                   <button onClick={clearOrigin} className="hover:bg-primary/20 rounded-full p-0.5">
                     <X className="size-3.5" />
                   </button>
@@ -181,7 +174,7 @@ export default function Restaurants() {
               <aside className="bg-card rounded-2xl border border-border/60 p-5 h-fit lg:sticky lg:top-28 space-y-5 shadow-soft">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <Label className="text-sm font-semibold">Tipo di cucina</Label>
+                    <Label className="text-sm font-semibold">{t("restaurants.filters_cuisine")}</Label>
                   </div>
                   <Select
                     value={filters.cuisine}
@@ -189,27 +182,27 @@ export default function Restaurants() {
                   >
                     <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-popover z-50">
-                      <SelectItem value="all">Tutte le cucine</SelectItem>
-                      {Object.entries(CUISINE_LABELS).map(([k, v]) => (
-                        <SelectItem key={k} value={k}>{v}</SelectItem>
+                      <SelectItem value="all">{t("restaurants.all_cuisines")}</SelectItem>
+                      {CUISINE_KEYS.map((k) => (
+                        <SelectItem key={k} value={k}>{cuisineLabel(k)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label className="text-sm font-semibold mb-1 block">Fascia di prezzo</Label>
+                  <Label className="text-sm font-semibold mb-1 block">{t("restaurants.filters_price")}</Label>
                   <Select
                     value={filters.price}
                     onValueChange={(v) => setFilters((f) => ({ ...f, price: v as any }))}
                   >
                     <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-popover z-50">
-                      <SelectItem value="all">Qualsiasi</SelectItem>
-                      <SelectItem value="€">€ Economico</SelectItem>
-                      <SelectItem value="€€">€€ Medio</SelectItem>
-                      <SelectItem value="€€€">€€€ Alto</SelectItem>
-                      <SelectItem value="€€€€">€€€€ Premium</SelectItem>
+                      <SelectItem value="all">{t("restaurants.any_price")}</SelectItem>
+                      <SelectItem value="€">{t("restaurants.price_economy")}</SelectItem>
+                      <SelectItem value="€€">{t("restaurants.price_medium")}</SelectItem>
+                      <SelectItem value="€€€">{t("restaurants.price_high")}</SelectItem>
+                      <SelectItem value="€€€€">{t("restaurants.price_premium")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -217,7 +210,7 @@ export default function Restaurants() {
                 {filters.origin && (
                   <div>
                     <Label className="text-sm font-semibold mb-2 block">
-                      Raggio di ricerca: <span className="text-primary">{filters.radiusKm} km</span>
+                      {t("restaurants.radius_label")}: <span className="text-primary">{filters.radiusKm} km</span>
                     </Label>
                     <Slider
                       value={[filters.radiusKm]}
@@ -231,7 +224,7 @@ export default function Restaurants() {
 
                 <div className="flex items-center justify-between gap-3 pt-2 border-t border-border/60">
                   <Label htmlFor="avail" className="text-sm font-semibold cursor-pointer">
-                    Solo disponibili ora
+                    {t("restaurants.available_only")}
                   </Label>
                   <Switch
                     id="avail"
@@ -241,13 +234,13 @@ export default function Restaurants() {
                 </div>
 
                 <div>
-                  <Label className="text-sm font-semibold mb-1 block">Cerca per nome</Label>
+                  <Label className="text-sm font-semibold mb-1 block">{t("restaurants.search_by_name")}</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input
                       value={filters.search}
                       onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
-                      placeholder="Nome ristorante..."
+                      placeholder={t("restaurants.name_placeholder")}
                       className="pl-9 bg-background"
                     />
                   </div>
@@ -256,7 +249,7 @@ export default function Restaurants() {
                 <div className="text-center pt-2 border-t border-border/60">
                   <div className="text-3xl font-display font-bold text-primary">{filtered.length}</div>
                   <div className="text-xs text-muted-foreground uppercase tracking-wide">
-                    {filtered.length === 1 ? "ristorante trovato" : "ristoranti trovati"}
+                    {filtered.length === 1 ? t("restaurants.found_one") : t("restaurants.found_many")}
                   </div>
                 </div>
               </aside>
@@ -267,10 +260,10 @@ export default function Restaurants() {
                   <div>
                     <div className="inline-flex items-center gap-2 text-sm text-primary font-medium mb-1">
                       <MapIcon className="size-4" />
-                      Esplora sulla mappa
+                      {t("restaurants.explore_map")}
                     </div>
                     <h2 className="font-display text-2xl sm:text-3xl font-bold">
-                      {originLabel ? `Vicino a ${originLabel.split(",")[0]}` : "Locali in tutta Italia"}
+                      {originLabel ? t("restaurants.near", { place: originLabel.split(",")[0] }) : t("restaurants.all_in_italy")}
                     </h2>
                   </div>
                 </div>
@@ -301,10 +294,10 @@ export default function Restaurants() {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <h2 className="font-display text-3xl sm:text-4xl font-bold">
-                  {originLabel ? "Ordinati per distanza" : "Tutti i ristoranti"}
+                  {originLabel ? t("restaurants.sorted_by_distance") : t("restaurants.all_restaurants")}
                 </h2>
                 <p className="text-muted-foreground mt-1">
-                  Clicca una scheda per vedere menu, foto, recensioni e prenotare
+                  {t("restaurants.click_card_hint")}
                 </p>
               </div>
             </div>
@@ -312,8 +305,8 @@ export default function Restaurants() {
             {filtered.length === 0 ? (
               <div className="text-center py-20 bg-card rounded-2xl border border-border/60">
                 <Leaf className="size-10 mx-auto text-muted-foreground mb-3" />
-                <h3 className="font-display text-xl font-semibold mb-2">Nessun ristorante con questi filtri</h3>
-                <p className="text-muted-foreground text-sm">Prova ad ampliare il raggio o rimuovere alcuni filtri.</p>
+                <h3 className="font-display text-xl font-semibold mb-2">{t("restaurants.no_results_title")}</h3>
+                <p className="text-muted-foreground text-sm">{t("restaurants.no_results_desc")}</p>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -348,10 +341,10 @@ export default function Restaurants() {
                           {r.available_now ? (
                             <Badge className="bg-primary text-primary-foreground gap-1.5">
                               <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
-                              Disponibile
+                              {t("restaurants.available")}
                             </Badge>
                           ) : (
-                            <Badge variant="secondary">Completo</Badge>
+                            <Badge variant="secondary">{t("restaurants.complete")}</Badge>
                           )}
                           {r._distance != null && (
                             <Badge variant="outline" className="bg-background/90 backdrop-blur-sm">
@@ -385,7 +378,7 @@ export default function Restaurants() {
                           {r.cuisine.slice(0, 2).map((c) => (
                             <span key={c} className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground capitalize">
                               <Leaf className="size-3 inline mr-1" />
-                              {CUISINE_LABELS[c] || c}
+                              {cuisineLabel(c)}
                             </span>
                           ))}
                         </div>
@@ -396,7 +389,7 @@ export default function Restaurants() {
                           variant={r.available_now ? "default" : "secondary"}
                         >
                           <Clock className="size-4 mr-2" />
-                          {r.available_now ? "Vedi e prenota" : "Lista d'attesa"}
+                          {r.available_now ? t("restaurants.book_live") : t("restaurants.waitlist")}
                         </Button>
                       </div>
                     </article>
