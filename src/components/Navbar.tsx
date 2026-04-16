@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Leaf } from "lucide-react";
+import { Leaf, ChefHat, Utensils, ShoppingBag, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { label: "Ricette", href: "/recipes" },
-  { label: "Ristoranti", href: "/restaurants" },
-  { label: "Marketplace", href: "/marketplace" },
-  { label: "Blog", href: "/blog" },
+  { label: "Ricette", href: "/recipes", icon: ChefHat },
+  { label: "Ristoranti", href: "/restaurants", icon: Utensils },
+  { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
+  { label: "Blog", href: "/blog", icon: BookOpen },
 ];
 
 export default function Navbar() {
