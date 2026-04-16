@@ -188,3 +188,117 @@
     background-clip: text;
   }
 }
+
+/* ============ Mapbox custom markers & popups ============ */
+.vireo-marker {
+  position: relative;
+  width: 36px;
+  height: 44px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.vireo-marker:hover { transform: translateY(-3px) scale(1.05); }
+
+.vireo-marker-dot {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: grid;
+  place-items: center;
+  color: hsl(var(--primary-foreground));
+  box-shadow: 0 6px 16px -4px hsl(var(--primary) / 0.5), 0 0 0 3px hsl(var(--background));
+}
+.vireo-marker-dot.is-available { background: hsl(var(--primary)); }
+.vireo-marker-dot.is-busy { background: hsl(var(--muted-foreground)); opacity: 0.85; }
+.vireo-marker-dot svg { transform: rotate(45deg); }
+
+.vireo-marker-pulse {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: hsl(var(--primary) / 0.35);
+  animation: vireo-pulse 2.2s ease-out infinite;
+  pointer-events: none;
+}
+.vireo-marker-dot.is-busy + .vireo-marker-pulse { display: none; }
+
+@keyframes vireo-pulse {
+  0% { transform: translateX(-50%) scale(0.6); opacity: 0.7; }
+  100% { transform: translateX(-50%) scale(2.2); opacity: 0; }
+}
+
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 50px -20px hsl(146 50% 36% / 0.35) !important;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground));
+}
+.mapboxgl-popup-tip {
+  border-top-color: hsl(var(--card)) !important;
+  border-bottom-color: hsl(var(--card)) !important;
+}
+.vireo-popup { width: 240px; }
+.vireo-popup-img {
+  width: 100%;
+  height: 110px;
+  background-size: cover;
+  background-position: center;
+}
+.vireo-popup-body { padding: 12px 14px 14px; }
+.vireo-popup-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.vireo-popup-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 8px;
+}
+.vireo-popup-status {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+.vireo-popup-status.ok { color: hsl(var(--primary)); }
+.vireo-popup-status.no { color: hsl(var(--muted-foreground)); }
+.vireo-popup-cta {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  font-size: 13px;
+  font-weight: 600;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.vireo-popup-cta:hover { opacity: 0.9; }
+.vireo-popup-cta:disabled {
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  cursor: not-allowed;
+}
+
