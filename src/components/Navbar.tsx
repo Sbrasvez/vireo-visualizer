@@ -29,17 +29,17 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
       <nav className="container flex items-center justify-between h-16">
-        <div className="relative" ref={menuRef}>
+        <div className="flex items-center gap-2" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2 group"
+            className="size-9 rounded-xl bg-primary flex items-center justify-center transition-transform hover:scale-105"
             aria-label="Menu"
           >
-            <div className="size-9 rounded-xl bg-primary flex items-center justify-center transition-transform group-hover:scale-105">
-              <Leaf className="size-5 text-primary-foreground" />
-            </div>
-            <span className="font-display text-xl font-bold text-foreground">Vireo</span>
+            <Leaf className="size-5 text-primary-foreground" />
           </button>
+          <Link to="/" className="font-display text-xl font-bold text-foreground hover:text-primary transition-colors">
+            Vireo
+          </Link>
 
           {menuOpen && (
             <div className="absolute top-full left-0 mt-2 w-52 bg-background border border-border rounded-xl shadow-lg py-1 animate-fade-up z-50">
