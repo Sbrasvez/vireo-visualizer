@@ -13,6 +13,7 @@ export type RecipeFilters = {
 export type RecipeRow = {
   id: string;
   external_id: string | null;
+  source: string;
   title: string;
   slug: string;
   summary: string | null;

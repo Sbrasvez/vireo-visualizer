@@ -17,7 +17,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import RecipeCard from "@/components/RecipeCard";
-import SkeletonCard from "@/components/SkeletonCard";
+import { SkeletonCard } from "@/components/SkeletonCard";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRecipes } from "@/hooks/useRecipes";
 
