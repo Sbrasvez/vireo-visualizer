@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ const articles = [
 ];
 
 export default function Blog() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -37,18 +39,18 @@ export default function Blog() {
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
                 <BookOpen className="size-4" />
-                <span>Articoli, guide e linee guida</span>
+                <span>{t("blog.badge")}</span>
               </div>
               <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                Blog & <span className="italic text-gradient-leaf">guide green</span>
+                {t("blog.title_1")} <span className="italic text-gradient-leaf">{t("blog.title_2")}</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-                Storie, consigli e strumenti per adottare uno stile di vita più sostenibile, un passo alla volta.
+                {t("blog.subtitle")}
               </p>
 
               <div className="flex gap-3 max-w-md animate-fade-up" style={{ animationDelay: "0.3s" }}>
-                <Input placeholder="La tua email per la newsletter" className="h-12 rounded-xl bg-card" />
-                <Button className="h-12 px-6 rounded-xl shadow-elegant">Iscriviti</Button>
+                <Input placeholder={t("blog.newsletter_placeholder")} className="h-12 rounded-xl bg-card" />
+                <Button className="h-12 px-6 rounded-xl shadow-elegant">{t("blog.subscribe")}</Button>
               </div>
             </div>
           </div>
@@ -61,7 +63,7 @@ export default function Blog() {
                 <img src={featured.img} alt={featured.title} loading="lazy" className="w-full h-full object-cover" width={1024} height={768} />
               </div>
               <div className="p-8 lg:p-12">
-                <Badge className="mb-4 bg-secondary text-secondary-foreground">In evidenza · {featured.category}</Badge>
+                <Badge className="mb-4 bg-secondary text-secondary-foreground">{t("blog.featured_label")} · {featured.category}</Badge>
                 <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4 text-balance leading-tight">{featured.title}</h2>
                 <p className="text-muted-foreground text-lg mb-6 leading-relaxed">{featured.excerpt}</p>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
@@ -69,7 +71,7 @@ export default function Blog() {
                   <span className="flex items-center gap-1.5"><Clock className="size-4" /> {featured.read}</span>
                 </div>
                 <Button className="rounded-xl gap-2 group">
-                  Leggi l'articolo
+                  {t("blog.read_article")}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
@@ -79,10 +81,10 @@ export default function Blog() {
 
         <section className="pb-20">
           <div className="container">
-            <h2 className="font-display text-3xl font-bold mb-10">Tutti gli articoli</h2>
+            <h2 className="font-display text-3xl font-bold mb-10">{t("blog.all_articles")}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((a, i) => (
-                <article key={a.id} className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
+                <article key={a.id} className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up cursor-pointer" style={{ animationDelay: `${i * 0.06}s` }}>
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img src={a.img} alt={a.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width={1024} height={640} />
                     <Badge className="absolute top-3 left-3 bg-card/95 backdrop-blur text-foreground">{a.category}</Badge>

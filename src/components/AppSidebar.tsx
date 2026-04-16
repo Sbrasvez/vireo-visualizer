@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   ChefHat,
@@ -29,26 +30,27 @@ import { usePlan } from "@/hooks/usePlan";
 import { PlanBadge } from "@/components/PlanBadge";
 import { Button } from "@/components/ui/button";
 
-const mainItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Ricette", url: "/recipes", icon: ChefHat },
-  { title: "Ristoranti", url: "/restaurants", icon: Utensils },
-  { title: "Marketplace", url: "/marketplace", icon: ShoppingBag },
-  { title: "AI Chat", url: "/ai", icon: Sparkles },
-  { title: "Blog", url: "/blog", icon: BookOpen },
-];
-
-const accountItems = [
-  { title: "Profilo", url: "/profile", icon: User },
-  { title: "Prezzi", url: "/pricing", icon: Tag },
-];
-
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
   const { signOut, user } = useAuth();
   const { plan } = usePlan();
+  const { t } = useTranslation();
+
+  const mainItems = [
+    { title: t("nav.dashboard"), url: "/dashboard", icon: LayoutDashboard },
+    { title: t("nav.recipes"), url: "/recipes", icon: ChefHat },
+    { title: t("nav.restaurants"), url: "/restaurants", icon: Utensils },
+    { title: t("nav.marketplace"), url: "/marketplace", icon: ShoppingBag },
+    { title: t("nav.ai_chat"), url: "/ai", icon: Sparkles },
+    { title: t("nav.blog"), url: "/blog", icon: BookOpen },
+  ];
+
+  const accountItems = [
+    { title: t("nav.profile"), url: "/profile", icon: User },
+    { title: t("nav.pricing"), url: "/pricing", icon: Tag },
+  ];
 
   const isActive = (path: string) => location.pathname === path;
   const linkCls = (active: boolean) =>
@@ -74,7 +76,7 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Esplora</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("nav.explore")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainItems.map((item) => (
@@ -96,7 +98,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("nav.account")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {accountItems.map((item) => (
@@ -127,7 +129,7 @@ export function AppSidebar() {
             onClick={signOut}
           >
             <LogOut className="size-4" />
-            {!collapsed && <span>Esci</span>}
+            {!collapsed && <span>{t("nav.logout")}</span>}
           </Button>
         </SidebarFooter>
       )}

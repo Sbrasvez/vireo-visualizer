@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   ChefHat,
   Calendar,
@@ -61,18 +62,19 @@ const RECOMMENDED_RECIPES = [
   },
 ];
 
-function getGreeting(name?: string) {
-  const h = new Date().getHours();
-  const t = h < 12 ? "Buongiorno" : h < 18 ? "Buon pomeriggio" : "Buonasera";
-  return name ? `${t}, ${name}!` : `${t}!`;
-}
-
 export default function Dashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { plan, isPro } = usePlan();
   const { stats, loading: statsLoading } = useDashboardStats();
   const { restaurants } = useRestaurants();
   const [displayName, setDisplayName] = useState<string | undefined>();
+
+  const getGreeting = (name?: string) => {
+    const h = new Date().getHours();
+    const greet = h < 12 ? t("dashboard.good_morning") : h < 18 ? t("dashboard.good_afternoon") : t("dashboard.good_evening");
+    return name ? `${greet}, ${name}!` : `${greet}!`;
+  };
 
   useEffect(() => {
     const meta = (user?.user_metadata as { display_name?: string; full_name?: string }) || {};
@@ -89,43 +91,15 @@ export default function Dashboard() {
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
             {getGreeting(displayName)}
           </h1>
-          <p className="text-muted-foreground">
-            Ecco un colpo d'occhio sul tuo viaggio sostenibile.
-          </p>
+          <p className="text-muted-foreground">{t("dashboard.subtitle")}</p>
         </section>
 
         {/* Stats */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            label="Ricette salvate"
-            value={stats.savedRecipes}
-            icon={ChefHat}
-            accent="primary"
-            loading={statsLoading}
-          />
-          <StatCard
-            label="Prenotazioni"
-            value={stats.reservations}
-            icon={Calendar}
-            accent="secondary"
-            loading={statsLoading}
-          />
-          <StatCard
-            label="Ordini"
-            value={stats.orders}
-            hint="Marketplace"
-            icon={ShoppingBag}
-            accent="tertiary"
-            loading={statsLoading}
-          />
-          <StatCard
-            label="CO₂ risparmiata"
-            value={`${stats.co2KgSaved} kg`}
-            hint="Il tuo impatto"
-            icon={Leaf}
-            accent="primary"
-            loading={statsLoading}
-          />
+          <StatCard label={t("dashboard.saved_recipes")} value={stats.savedRecipes} icon={ChefHat} accent="primary" loading={statsLoading} />
+          <StatCard label={t("dashboard.reservations")} value={stats.reservations} icon={Calendar} accent="secondary" loading={statsLoading} />
+          <StatCard label={t("dashboard.orders")} value={stats.orders} hint={t("dashboard.marketplace_hint")} icon={ShoppingBag} accent="tertiary" loading={statsLoading} />
+          <StatCard label={t("dashboard.co2_saved")} value={`${stats.co2KgSaved} kg`} hint={t("dashboard.co2_hint")} icon={Leaf} accent="primary" loading={statsLoading} />
         </section>
 
         {/* Upgrade banner */}
@@ -137,18 +111,13 @@ export default function Dashboard() {
                   <Sparkles className="size-6" />
                 </div>
                 <div>
-                  <h3 className="font-display text-xl font-semibold mb-1">
-                    Sblocca tutto con Vireo Pro
-                  </h3>
-                  <p className="text-sm text-muted-foreground max-w-md">
-                    Ricette illimitate, AI Chat senza limiti, prenotazioni con storico ed export
-                    lista spesa PDF. Prova 14 giorni gratis.
-                  </p>
+                  <h3 className="font-display text-xl font-semibold mb-1">{t("dashboard.upgrade_title")}</h3>
+                  <p className="text-sm text-muted-foreground max-w-md">{t("dashboard.upgrade_desc")}</p>
                 </div>
               </div>
               <Button asChild size="lg" className="shrink-0 shadow-lg shadow-primary/25">
                 <Link to="/pricing">
-                  Scopri Pro <ArrowRight className="size-4 ml-1" />
+                  {t("dashboard.discover_pro")} <ArrowRight className="size-4 ml-1" />
                 </Link>
               </Button>
             </CardContent>
@@ -159,14 +128,12 @@ export default function Dashboard() {
         <section className="space-y-4">
           <div className="flex items-end justify-between">
             <div>
-              <h2 className="font-display text-2xl font-semibold">Ricette consigliate</h2>
-              <p className="text-sm text-muted-foreground">
-                Selezionate per te in base ai tuoi gusti
-              </p>
+              <h2 className="font-display text-2xl font-semibold">{t("dashboard.recommended_recipes")}</h2>
+              <p className="text-sm text-muted-foreground">{t("dashboard.recommended_desc")}</p>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link to="/recipes">
-                Tutte <ArrowRight className="size-4 ml-1" />
+                {t("dashboard.all")} <ArrowRight className="size-4 ml-1" />
               </Link>
             </Button>
           </div>
@@ -203,14 +170,12 @@ export default function Dashboard() {
         <section className="space-y-4">
           <div className="flex items-end justify-between">
             <div>
-              <h2 className="font-display text-2xl font-semibold">Ristoranti per te</h2>
-              <p className="text-sm text-muted-foreground">
-                I locali eco-friendly più amati su Vireo
-              </p>
+              <h2 className="font-display text-2xl font-semibold">{t("dashboard.nearby_restaurants")}</h2>
+              <p className="text-sm text-muted-foreground">{t("dashboard.nearby_desc")}</p>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link to="/restaurants">
-                Esplora mappa <ArrowRight className="size-4 ml-1" />
+                {t("dashboard.explore_map")} <ArrowRight className="size-4 ml-1" />
               </Link>
             </Button>
           </div>
@@ -268,8 +233,8 @@ export default function Dashboard() {
         {/* Plan note */}
         {plan && (
           <p className="text-xs text-muted-foreground text-center pt-4">
-            Piano attivo: <span className="font-semibold capitalize">{plan.tier}</span>
-            {plan.tier === "free" && " · 10 messaggi AI al giorno · 5 ricerche mappa"}
+            {t("dashboard.active_plan")}: <span className="font-semibold capitalize">{plan.tier}</span>
+            {plan.tier === "free" && ` · ${t("dashboard.free_plan_hint")}`}
           </p>
         )}
       </div>
