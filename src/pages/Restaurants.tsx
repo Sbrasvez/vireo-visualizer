@@ -127,20 +127,20 @@ export default function Restaurants() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border text-sm font-medium mb-6 animate-fade-up">
                 <Sparkles className="size-4 text-primary" />
-                <span>{restaurants.length} ristoranti eco-friendly in Italia</span>
+                <span>{t("restaurants.badge_count", { count: restaurants.length })}</span>
               </div>
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                Mangia <span className="italic text-gradient-warm">consapevole</span>, ovunque tu sia
+                {t("restaurants.title_1")} <span className="italic text-gradient-warm">{t("restaurants.title_aware")}</span>{t("restaurants.title_2")}
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-                Una mappa interattiva di ristoranti veg, bio e km 0 selezionati in tutta Italia. Scopri menu, foto, recensioni e prenota in tempo reale.
+                {t("restaurants.subtitle")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 max-w-xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
                 <div className="relative flex-1">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
                   <Input
-                    placeholder="Es. Milano, Roma Trastevere, Firenze..."
+                    placeholder={t("restaurants.search_placeholder")}
                     className="pl-12 h-14 rounded-xl text-base bg-card shadow-soft"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
@@ -149,14 +149,14 @@ export default function Restaurants() {
                 </div>
                 <Button size="lg" onClick={handleSearch} disabled={geocoding} className="h-14 px-8 rounded-xl shadow-elegant">
                   {geocoding ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4 mr-2" />}
-                  Cerca zona
+                  {t("restaurants.search_btn")}
                 </Button>
               </div>
 
               {originLabel && (
                 <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-sm animate-fade-up">
                   <MapPin className="size-3.5 text-primary" />
-                  <span className="text-foreground">Centrato su <strong>{originLabel}</strong></span>
+                  <span className="text-foreground">{t("restaurants.centered_on")} <strong>{originLabel}</strong></span>
                   <button onClick={clearOrigin} className="hover:bg-primary/20 rounded-full p-0.5">
                     <X className="size-3.5" />
                   </button>
@@ -174,7 +174,7 @@ export default function Restaurants() {
               <aside className="bg-card rounded-2xl border border-border/60 p-5 h-fit lg:sticky lg:top-28 space-y-5 shadow-soft">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <Label className="text-sm font-semibold">Tipo di cucina</Label>
+                    <Label className="text-sm font-semibold">{t("restaurants.filters_cuisine")}</Label>
                   </div>
                   <Select
                     value={filters.cuisine}
@@ -182,27 +182,27 @@ export default function Restaurants() {
                   >
                     <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-popover z-50">
-                      <SelectItem value="all">Tutte le cucine</SelectItem>
-                      {Object.entries(CUISINE_LABELS).map(([k, v]) => (
-                        <SelectItem key={k} value={k}>{v}</SelectItem>
+                      <SelectItem value="all">{t("restaurants.all_cuisines")}</SelectItem>
+                      {CUISINE_KEYS.map((k) => (
+                        <SelectItem key={k} value={k}>{cuisineLabel(k)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label className="text-sm font-semibold mb-1 block">Fascia di prezzo</Label>
+                  <Label className="text-sm font-semibold mb-1 block">{t("restaurants.filters_price")}</Label>
                   <Select
                     value={filters.price}
                     onValueChange={(v) => setFilters((f) => ({ ...f, price: v as any }))}
                   >
                     <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
                     <SelectContent className="bg-popover z-50">
-                      <SelectItem value="all">Qualsiasi</SelectItem>
-                      <SelectItem value="€">€ Economico</SelectItem>
-                      <SelectItem value="€€">€€ Medio</SelectItem>
-                      <SelectItem value="€€€">€€€ Alto</SelectItem>
-                      <SelectItem value="€€€€">€€€€ Premium</SelectItem>
+                      <SelectItem value="all">{t("restaurants.any_price")}</SelectItem>
+                      <SelectItem value="€">{t("restaurants.price_economy")}</SelectItem>
+                      <SelectItem value="€€">{t("restaurants.price_medium")}</SelectItem>
+                      <SelectItem value="€€€">{t("restaurants.price_high")}</SelectItem>
+                      <SelectItem value="€€€€">{t("restaurants.price_premium")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -210,7 +210,7 @@ export default function Restaurants() {
                 {filters.origin && (
                   <div>
                     <Label className="text-sm font-semibold mb-2 block">
-                      Raggio di ricerca: <span className="text-primary">{filters.radiusKm} km</span>
+                      {t("restaurants.radius_label")}: <span className="text-primary">{filters.radiusKm} km</span>
                     </Label>
                     <Slider
                       value={[filters.radiusKm]}
@@ -224,7 +224,7 @@ export default function Restaurants() {
 
                 <div className="flex items-center justify-between gap-3 pt-2 border-t border-border/60">
                   <Label htmlFor="avail" className="text-sm font-semibold cursor-pointer">
-                    Solo disponibili ora
+                    {t("restaurants.available_only")}
                   </Label>
                   <Switch
                     id="avail"
@@ -234,13 +234,13 @@ export default function Restaurants() {
                 </div>
 
                 <div>
-                  <Label className="text-sm font-semibold mb-1 block">Cerca per nome</Label>
+                  <Label className="text-sm font-semibold mb-1 block">{t("restaurants.search_by_name")}</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input
                       value={filters.search}
                       onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
-                      placeholder="Nome ristorante..."
+                      placeholder={t("restaurants.name_placeholder")}
                       className="pl-9 bg-background"
                     />
                   </div>
@@ -249,7 +249,7 @@ export default function Restaurants() {
                 <div className="text-center pt-2 border-t border-border/60">
                   <div className="text-3xl font-display font-bold text-primary">{filtered.length}</div>
                   <div className="text-xs text-muted-foreground uppercase tracking-wide">
-                    {filtered.length === 1 ? "ristorante trovato" : "ristoranti trovati"}
+                    {filtered.length === 1 ? t("restaurants.found_one") : t("restaurants.found_many")}
                   </div>
                 </div>
               </aside>
