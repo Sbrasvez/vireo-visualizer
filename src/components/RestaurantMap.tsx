@@ -84,10 +84,10 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
       const el = document.createElement("button");
       el.type = "button";
       el.setAttribute("aria-label", `${r.name}, ${r.city}`);
-      el.className = "vireo-marker group";
+      el.className = "vireo-marker";
       el.innerHTML = `
         <span class="vireo-marker-dot ${r.available ? "is-available" : "is-busy"}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
             <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.4c1.7 8.7-1.4 14.5-8.2 17.6Z"/>
             <path d="M2 22c1.5-7 6-13 12-15"/>
           </svg>
@@ -121,9 +121,12 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
         </div>
       `;
 
-      const popup = new mapboxgl.Popup({ offset: 28, closeButton: false, maxWidth: "280px" }).setHTML(popupHtml);
+      const popup = new mapboxgl.Popup({ offset: 32, closeButton: false, maxWidth: "280px" }).setHTML(popupHtml);
 
-      const marker = new mapboxgl.Marker({ element: el, anchor: "bottom" })
+      // anchor: "center" because the .vireo-marker box is 32x32 and we
+      // visually anchor the dot's tip to the box center via CSS translate.
+      // This makes Mapbox apply its translate to a stable square — no jitter on pan/zoom.
+      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([r.lng, r.lat])
         .setPopup(popup)
         .addTo(map);
