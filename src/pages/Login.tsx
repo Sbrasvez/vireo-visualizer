@@ -27,7 +27,7 @@ export default function Login() {
     if (error) {
       toast({ title: "Errore", description: error.message, variant: "destructive" });
     } else {
-      navigate("/");
+      navigate("/dashboard");
     }
   };
 

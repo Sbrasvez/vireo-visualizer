@@ -1,6 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Leaf, ChefHat, Utensils, ShoppingBag, BookOpen, LogOut, User } from "lucide-react";
+import {
+  Leaf,
+  ChefHat,
+  Utensils,
+  ShoppingBag,
+  BookOpen,
+  LogOut,
+  User,
+  LayoutDashboard,
+  Tag,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -9,6 +19,7 @@ const navLinks = [
   { label: "Ristoranti", href: "/restaurants", icon: Utensils },
   { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
   { label: "Blog", href: "/blog", icon: BookOpen },
+  { label: "Prezzi", href: "/pricing", icon: Tag },
 ];
 
 export default function Navbar() {
@@ -61,6 +72,11 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {user ? (
             <>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
+                <Link to="/dashboard">
+                  <LayoutDashboard className="size-4 mr-1" /> Dashboard
+                </Link>
+              </Button>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/profile">
                   <User className="size-4 mr-1" /> Profilo
