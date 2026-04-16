@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Search, ChefHat, SlidersHorizontal, Loader2 } from "lucide-react";
+import { Search, ChefHat, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -21,29 +21,30 @@ import { SkeletonCard } from "@/components/SkeletonCard";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRecipes } from "@/hooks/useRecipes";
 
-const DIETS = [
-  { value: "all", label: "Tutte le diete" },
-  { value: "vegan", label: "Vegana" },
-  { value: "vegetarian", label: "Vegetariana" },
-  { value: "gluten free", label: "Senza glutine" },
-  { value: "dairy free", label: "Senza lattosio" },
-  { value: "ketogenic", label: "Chetogenica" },
-];
-
-const DIFFICULTIES = [
-  { value: "all", label: "Qualsiasi difficoltà" },
-  { value: "facile", label: "Facile" },
-  { value: "media", label: "Media" },
-  { value: "difficile", label: "Difficile" },
-];
-
 export default function Recipes() {
+  const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState("");
   const [diet, setDiet] = useState("all");
   const [difficulty, setDifficulty] = useState<"all" | "facile" | "media" | "difficile">("all");
   const [maxTime, setMaxTime] = useState<number>(120);
   const [page, setPage] = useState(1);
   const search = useDebounce(searchInput, 350);
+
+  const DIETS = [
+    { value: "all", label: t("recipes.diet_all") },
+    { value: "vegan", label: t("recipes.diet_vegan") },
+    { value: "vegetarian", label: t("recipes.diet_vegetarian") },
+    { value: "gluten free", label: t("recipes.diet_gluten_free") },
+    { value: "dairy free", label: t("recipes.diet_dairy_free") },
+    { value: "ketogenic", label: t("recipes.diet_keto") },
+  ];
+
+  const DIFFICULTIES = [
+    { value: "all", label: t("recipes.difficulty_all") },
+    { value: "facile", label: t("recipes.difficulty_easy") },
+    { value: "media", label: t("recipes.difficulty_medium") },
+    { value: "difficile", label: t("recipes.difficulty_hard") },
+  ];
 
   const { data, isLoading } = useRecipes({
     search,
@@ -54,7 +55,6 @@ export default function Recipes() {
     pageSize: 24,
   });
 
-  // Reset to page 1 on filter change
   const filterKey = `${search}|${diet}|${difficulty}|${maxTime}`;
   useMemo(() => {
     setPage(1);
@@ -74,14 +74,13 @@ export default function Recipes() {
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
                 <ChefHat className="size-4" />
-                <span>Database Spoonacular + AI Vireo</span>
+                <span>{t("recipes.badge")}</span>
               </div>
               <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                Ricette <span className="italic text-gradient-leaf">vegane</span> e bio
+                {t("recipes.title_1")} <span className="italic text-gradient-leaf">{t("recipes.title_vegan")}</span> {t("recipes.title_2")}
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-                Migliaia di ricette filtrabili per dieta, ingredienti, tempo di preparazione e difficoltà.
-                Scegli, scala le porzioni e cucina con istruzioni step-by-step.
+                {t("recipes.subtitle")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 max-w-2xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
@@ -90,7 +89,7 @@ export default function Recipes() {
                   <Input
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    placeholder="Cerca una ricetta o un ingrediente..."
+                    placeholder={t("recipes.search_placeholder")}
                     className="pl-12 h-14 rounded-xl text-base border-border bg-card"
                   />
                 </div>
@@ -101,15 +100,14 @@ export default function Recipes() {
 
         <section className="py-12 sm:py-16">
           <div className="container">
-            {/* Filters */}
             <div className="rounded-2xl border border-border/60 bg-card p-5 sm:p-6 mb-8 shadow-soft">
               <div className="flex items-center gap-2 mb-4">
                 <SlidersHorizontal className="size-4 text-primary" />
-                <h2 className="font-display text-lg font-semibold">Filtri</h2>
+                <h2 className="font-display text-lg font-semibold">{t("recipes.filters")}</h2>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div>
-                  <label className="text-sm font-medium mb-2 block text-muted-foreground">Dieta</label>
+                  <label className="text-sm font-medium mb-2 block text-muted-foreground">{t("recipes.filter_diet")}</label>
                   <Select value={diet} onValueChange={setDiet}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -118,7 +116,7 @@ export default function Recipes() {
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block text-muted-foreground">Difficoltà</label>
+                  <label className="text-sm font-medium mb-2 block text-muted-foreground">{t("recipes.filter_difficulty")}</label>
                   <Select value={difficulty} onValueChange={(v) => setDifficulty(v as typeof difficulty)}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -128,20 +126,19 @@ export default function Recipes() {
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-muted-foreground">Tempo massimo</label>
-                    <span className="text-sm font-semibold text-primary">{maxTime} min</span>
+                    <label className="text-sm font-medium text-muted-foreground">{t("recipes.filter_time")}</label>
+                    <span className="text-sm font-semibold text-primary">{maxTime} {t("recipes.min")}</span>
                   </div>
                   <Slider value={[maxTime]} min={10} max={120} step={5} onValueChange={(v) => setMaxTime(v[0])} />
                 </div>
               </div>
             </div>
 
-            {/* Header count */}
             <div className="flex items-end justify-between mb-6">
               <div>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold">Ricette in evidenza</h2>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold">{t("recipes.featured")}</h2>
                 <p className="text-muted-foreground mt-1">
-                  {isLoading ? "Caricamento…" : `${data?.total ?? 0} ricette trovate`}
+                  {isLoading ? t("recipes.loading") : t("recipes.results_count", { count: data?.total ?? 0 })}
                 </p>
               </div>
               {(diet !== "all" || difficulty !== "all" || maxTime < 120 || search) && (
@@ -150,12 +147,11 @@ export default function Recipes() {
                   size="sm"
                   onClick={() => { setSearchInput(""); setDiet("all"); setDifficulty("all"); setMaxTime(120); }}
                 >
-                  Azzera filtri
+                  {t("recipes.reset_filters")}
                 </Button>
               )}
             </div>
 
-            {/* Grid */}
             {isLoading ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
@@ -163,8 +159,8 @@ export default function Recipes() {
             ) : !data?.recipes.length ? (
               <div className="text-center py-20">
                 <ChefHat className="size-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-display text-2xl font-semibold mb-2">Nessuna ricetta trovata</h3>
-                <p className="text-muted-foreground">Prova ad allargare i filtri o a cambiare la ricerca.</p>
+                <h3 className="font-display text-2xl font-semibold mb-2">{t("recipes.no_results_title")}</h3>
+                <p className="text-muted-foreground">{t("recipes.no_results_desc")}</p>
               </div>
             ) : (
               <>

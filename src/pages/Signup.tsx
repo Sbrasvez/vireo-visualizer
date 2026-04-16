@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import Navbar from "@/components/Navbar";
@@ -13,6 +14,7 @@ import { Leaf, Mail, Lock, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Signup() {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,9 +35,9 @@ export default function Signup() {
     });
     setLoading(false);
     if (error) {
-      toast({ title: "Errore", description: error.message, variant: "destructive" });
+      toast({ title: t("auth.error"), description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Registrazione completata!", description: "Controlla la tua email per verificare l'account." });
+      toast({ title: t("auth.signup_success_title"), description: t("auth.signup_success_desc") });
       navigate("/login");
     }
   };
@@ -47,7 +49,7 @@ export default function Signup() {
     });
     setLoading(false);
     if (result.error) {
-      toast({ title: "Errore", description: String(result.error), variant: "destructive" });
+      toast({ title: t("auth.error"), description: String(result.error), variant: "destructive" });
     }
   };
 
@@ -60,8 +62,8 @@ export default function Signup() {
             <div className="mx-auto size-12 rounded-xl bg-primary flex items-center justify-center mb-2">
               <Leaf className="size-6 text-primary-foreground" />
             </div>
-            <CardTitle className="font-display text-2xl">Crea il tuo account</CardTitle>
-            <CardDescription>Unisciti alla community Vireo</CardDescription>
+            <CardTitle className="font-display text-2xl">{t("auth.signup_title")}</CardTitle>
+            <CardDescription>{t("auth.signup_desc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
@@ -78,40 +80,40 @@ export default function Signup() {
             <div className="relative">
               <Separator />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-xs text-muted-foreground">
-                oppure
+                {t("auth.or")}
               </span>
             </div>
 
             <form onSubmit={handleSignup} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nome</Label>
+                <Label htmlFor="name">{t("auth.name")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  <Input id="name" placeholder="Il tuo nome" className="pl-10" value={name} onChange={(e) => setName(e.target.value)} required />
+                  <Input id="name" placeholder={t("auth.name_placeholder")} className="pl-10" value={name} onChange={(e) => setName(e.target.value)} required />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("auth.email")}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  <Input id="email" type="email" placeholder="nome@email.com" className="pl-10" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Input id="email" type="email" placeholder={t("auth.email_placeholder")} className="pl-10" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("auth.password")}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  <Input id="password" type="password" placeholder="Almeno 6 caratteri" className="pl-10" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+                  <Input id="password" type="password" placeholder={t("auth.password_min")} className="pl-10" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                 </div>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Registrazione..." : "Crea account"}
+                {loading ? t("auth.signing_up") : t("auth.signup_btn")}
               </Button>
             </form>
 
             <p className="text-center text-sm text-muted-foreground">
-              Hai già un account?{" "}
-              <Link to="/login" className="text-primary hover:underline font-medium">Accedi</Link>
+              {t("auth.have_account")}{" "}
+              <Link to="/login" className="text-primary hover:underline font-medium">{t("auth.login_link")}</Link>
             </p>
           </CardContent>
         </Card>

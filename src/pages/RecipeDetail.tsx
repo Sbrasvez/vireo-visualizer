@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, Clock, Users, Flame, Leaf, ChefHat, Minus, Plus, ExternalLink, Bookmark } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,6 +20,7 @@ function fmtAmount(n: number): string {
 }
 
 export default function RecipeDetail() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { data: recipe, isLoading } = useRecipeBySlug(slug);
   const { user } = useAuth();
@@ -39,7 +41,7 @@ export default function RecipeDetail() {
 
   const handleSave = async () => {
     if (!user) {
-      toast.error("Accedi per salvare le ricette");
+      toast.error(t("recipes.save_login_required"));
       return;
     }
     if (!recipe) return;
@@ -52,8 +54,8 @@ export default function RecipeDetail() {
       ready_in_minutes: recipe.ready_in_minutes,
       diets: recipe.diets,
     } as never);
-    if (error) toast.error("Errore nel salvataggio");
-    else toast.success("Ricetta salvata nel tuo profilo");
+    if (error) toast.error(t("recipes.save_error"));
+    else toast.success(t("recipes.save_success"));
   };
 
   if (isLoading) {
@@ -81,9 +83,9 @@ export default function RecipeDetail() {
         <Navbar />
         <main className="flex-1 pt-24 container py-20 text-center">
           <ChefHat className="size-16 text-muted-foreground mx-auto mb-4" />
-          <h1 className="font-display text-3xl font-bold mb-3">Ricetta non trovata</h1>
-          <p className="text-muted-foreground mb-6">La ricetta che stai cercando non esiste o è stata rimossa.</p>
-          <Button asChild><Link to="/recipes">Torna alle ricette</Link></Button>
+          <h1 className="font-display text-3xl font-bold mb-3">{t("recipes.not_found_title")}</h1>
+          <p className="text-muted-foreground mb-6">{t("recipes.not_found_desc")}</p>
+          <Button asChild><Link to="/recipes">{t("recipes.back")}</Link></Button>
         </main>
         <Footer />
       </div>
@@ -101,10 +103,9 @@ export default function RecipeDetail() {
       <main className="flex-1 pt-24">
         <div className="container">
           <Button asChild variant="ghost" size="sm" className="mb-6">
-            <Link to="/recipes"><ArrowLeft className="size-4 mr-2" />Tutte le ricette</Link>
+            <Link to="/recipes"><ArrowLeft className="size-4 mr-2" />{t("recipes.back")}</Link>
           </Button>
 
-          {/* Hero */}
           <div className="relative aspect-[16/7] sm:aspect-[16/6] rounded-2xl overflow-hidden mb-8 shadow-elegant">
             {recipe.image ? (
               <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" />
@@ -131,21 +132,20 @@ export default function RecipeDetail() {
             </div>
           </div>
 
-          {/* Meta + actions */}
           <div className="flex flex-wrap items-center gap-6 mb-10 text-muted-foreground">
             {recipe.ready_in_minutes && (
-              <span className="flex items-center gap-2"><Clock className="size-5 text-primary" /><strong className="text-foreground">{recipe.ready_in_minutes}</strong> min</span>
+              <span className="flex items-center gap-2"><Clock className="size-5 text-primary" /><strong className="text-foreground">{recipe.ready_in_minutes}</strong> {t("recipes.min")}</span>
             )}
-            <span className="flex items-center gap-2"><Users className="size-5 text-primary" /><strong className="text-foreground">{currentServings}</strong> porzioni</span>
+            <span className="flex items-center gap-2"><Users className="size-5 text-primary" /><strong className="text-foreground">{currentServings}</strong> {t("recipes.servings")}</span>
             {cal && <span className="flex items-center gap-2"><Flame className="size-5 text-primary" /><strong className="text-foreground">{cal}</strong> kcal</span>}
             <div className="ml-auto flex gap-2">
               <Button variant="outline" size="sm" onClick={handleSave}>
-                <Bookmark className="size-4 mr-2" />Salva
+                <Bookmark className="size-4 mr-2" />{t("recipes.save")}
               </Button>
               {recipe.source_url && (
                 <Button asChild variant="ghost" size="sm">
                   <a href={recipe.source_url} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="size-4 mr-2" />Fonte
+                    <ExternalLink className="size-4 mr-2" />{t("recipes.source")}
                   </a>
                 </Button>
               )}
@@ -153,23 +153,22 @@ export default function RecipeDetail() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8 pb-16">
-            {/* Sidebar: Ingredients */}
             <aside className="lg:col-span-1 space-y-6">
               <Card>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-display text-xl font-bold">Ingredienti</h2>
+                    <h2 className="font-display text-xl font-bold">{t("recipes.ingredients")}</h2>
                     <div className="flex items-center gap-2 bg-muted rounded-full p-1">
                       <Button
                         variant="ghost" size="icon" className="size-7 rounded-full"
                         onClick={() => setServings(Math.max(1, currentServings - 1))}
-                        aria-label="Riduci porzioni"
+                        aria-label={t("recipes.decrease_servings")}
                       ><Minus className="size-3.5" /></Button>
                       <span className="text-sm font-semibold w-8 text-center">{currentServings}</span>
                       <Button
                         variant="ghost" size="icon" className="size-7 rounded-full"
                         onClick={() => setServings(currentServings + 1)}
-                        aria-label="Aumenta porzioni"
+                        aria-label={t("recipes.increase_servings")}
                       ><Plus className="size-3.5" /></Button>
                     </div>
                   </div>
@@ -194,24 +193,23 @@ export default function RecipeDetail() {
               {recipe.nutrition && (
                 <Card>
                   <CardContent className="p-6">
-                    <h3 className="font-display text-lg font-bold mb-4">Valori per porzione (scalati)</h3>
+                    <h3 className="font-display text-lg font-bold mb-4">{t("recipes.nutrition_title")}</h3>
                     <div className="grid grid-cols-2 gap-4 text-sm">
-                      {cal != null && <NutriBox label="Calorie" value={`${cal} kcal`} />}
-                      {protein != null && <NutriBox label="Proteine" value={`${protein} g`} />}
-                      {carbs != null && <NutriBox label="Carboidrati" value={`${carbs} g`} />}
-                      {fat != null && <NutriBox label="Grassi" value={`${fat} g`} />}
+                      {cal != null && <NutriBox label={t("recipes.nutri_calories")} value={`${cal} kcal`} />}
+                      {protein != null && <NutriBox label={t("recipes.nutri_protein")} value={`${protein} g`} />}
+                      {carbs != null && <NutriBox label={t("recipes.nutri_carbs")} value={`${carbs} g`} />}
+                      {fat != null && <NutriBox label={t("recipes.nutri_fat")} value={`${fat} g`} />}
                     </div>
                   </CardContent>
                 </Card>
               )}
             </aside>
 
-            {/* Main: Instructions */}
             <section className="lg:col-span-2 space-y-6">
               {recipe.summary && (
                 <Card>
                   <CardContent className="p-6">
-                    <h2 className="font-display text-xl font-bold mb-3">Descrizione</h2>
+                    <h2 className="font-display text-xl font-bold mb-3">{t("recipes.description")}</h2>
                     <p className="text-muted-foreground leading-relaxed">{recipe.summary}</p>
                   </CardContent>
                 </Card>
@@ -219,9 +217,9 @@ export default function RecipeDetail() {
 
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="font-display text-2xl font-bold mb-6">Istruzioni step-by-step</h2>
+                  <h2 className="font-display text-2xl font-bold mb-6">{t("recipes.instructions")}</h2>
                   {recipe.instructions.length === 0 ? (
-                    <p className="text-muted-foreground">Istruzioni non disponibili per questa ricetta.</p>
+                    <p className="text-muted-foreground">{t("recipes.no_instructions")}</p>
                   ) : (
                     <ol className="space-y-5">
                       {recipe.instructions.map((s) => {

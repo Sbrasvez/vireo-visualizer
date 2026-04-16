@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import Navbar from "@/components/Navbar";
@@ -13,6 +14,7 @@ import { Leaf, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ export default function Login() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      toast({ title: "Errore", description: error.message, variant: "destructive" });
+      toast({ title: t("auth.error"), description: error.message, variant: "destructive" });
     } else {
       navigate("/dashboard");
     }
@@ -38,7 +40,7 @@ export default function Login() {
     });
     setLoading(false);
     if (result.error) {
-      toast({ title: "Errore", description: String(result.error), variant: "destructive" });
+      toast({ title: t("auth.error"), description: String(result.error), variant: "destructive" });
     }
   };
 
@@ -51,8 +53,8 @@ export default function Login() {
             <div className="mx-auto size-12 rounded-xl bg-primary flex items-center justify-center mb-2">
               <Leaf className="size-6 text-primary-foreground" />
             </div>
-            <CardTitle className="font-display text-2xl">Bentornato</CardTitle>
-            <CardDescription>Accedi al tuo account Vireo</CardDescription>
+            <CardTitle className="font-display text-2xl">{t("auth.login_title")}</CardTitle>
+            <CardDescription>{t("auth.login_desc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
@@ -69,36 +71,36 @@ export default function Login() {
             <div className="relative">
               <Separator />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-3 text-xs text-muted-foreground">
-                oppure
+                {t("auth.or")}
               </span>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("auth.email")}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  <Input id="email" type="email" placeholder="nome@email.com" className="pl-10" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Input id="email" type="email" placeholder={t("auth.email_placeholder")} className="pl-10" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">Password dimenticata?</Link>
+                  <Label htmlFor="password">{t("auth.password")}</Label>
+                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">{t("auth.forgot")}</Link>
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  <Input id="password" type="password" placeholder="••••••••" className="pl-10" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  <Input id="password" type="password" placeholder={t("auth.password_placeholder")} className="pl-10" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Accesso in corso..." : "Accedi"}
+                {loading ? t("auth.logging_in") : t("auth.login_btn")}
               </Button>
             </form>
 
             <p className="text-center text-sm text-muted-foreground">
-              Non hai un account?{" "}
-              <Link to="/signup" className="text-primary hover:underline font-medium">Registrati</Link>
+              {t("auth.no_account")}{" "}
+              <Link to="/signup" className="text-primary hover:underline font-medium">{t("auth.register")}</Link>
             </p>
           </CardContent>
         </Card>

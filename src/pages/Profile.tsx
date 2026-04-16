@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
@@ -10,10 +11,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Leaf, Camera, Save, Loader2 } from "lucide-react";
+import { Camera, Save, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -37,7 +39,7 @@ export default function Profile() {
   }, [user, authLoading]);
 
   const fetchProfile = async () => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("profiles")
       .select("*")
       .eq("user_id", user!.id)
@@ -56,7 +58,7 @@ export default function Profile() {
     if (!file || !user) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      toast({ title: "File troppo grande", description: "Max 2MB", variant: "destructive" });
+      toast({ title: t("profile.avatar_too_large"), description: t("profile.avatar_too_large_desc"), variant: "destructive" });
       return;
     }
 
@@ -68,14 +70,13 @@ export default function Profile() {
       .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
-      toast({ title: "Errore upload", description: uploadError.message, variant: "destructive" });
+      toast({ title: t("profile.upload_error"), description: uploadError.message, variant: "destructive" });
       setUploading(false);
       return;
     }
 
     const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
-    // Add cache buster
     const url = `${publicUrl}?t=${Date.now()}`;
     setAvatarUrl(url);
 
@@ -85,7 +86,7 @@ export default function Profile() {
       .eq("user_id", user.id);
 
     setUploading(false);
-    toast({ title: "Avatar aggiornato!" });
+    toast({ title: t("profile.avatar_updated") });
   };
 
   const handleSave = async () => {
@@ -99,9 +100,9 @@ export default function Profile() {
 
     setSaving(false);
     if (error) {
-      toast({ title: "Errore", description: error.message, variant: "destructive" });
+      toast({ title: t("auth.error"), description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Profilo aggiornato!" });
+      toast({ title: t("profile.profile_updated") });
     }
   };
 
@@ -151,25 +152,25 @@ export default function Profile() {
                 />
               </div>
               <div>
-                <CardTitle className="font-display text-2xl">Il tuo profilo</CardTitle>
+                <CardTitle className="font-display text-2xl">{t("profile.title")}</CardTitle>
                 <CardDescription>{user?.email}</CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="displayName">Nome visualizzato</Label>
+                <Label htmlFor="displayName">{t("profile.display_name")}</Label>
                 <Input
                   id="displayName"
-                  placeholder="Il tuo nome"
+                  placeholder={t("profile.name_placeholder")}
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="bio">Bio</Label>
+                <Label htmlFor="bio">{t("profile.bio")}</Label>
                 <Textarea
                   id="bio"
-                  placeholder="Racconta qualcosa di te..."
+                  placeholder={t("profile.bio_placeholder")}
                   rows={4}
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
@@ -179,7 +180,7 @@ export default function Profile() {
               </div>
               <Button onClick={handleSave} className="w-full" disabled={saving}>
                 {saving ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Save className="size-4 mr-2" />}
-                {saving ? "Salvataggio..." : "Salva modifiche"}
+                {saving ? t("profile.saving") : t("profile.save")}
               </Button>
             </CardContent>
           </Card>
