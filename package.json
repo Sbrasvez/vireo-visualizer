@@ -1,12 +1,16 @@
 {
-  "name": "vireo-backend",
+  "name": "vireo",
   "version": "1.0.0",
-  "description": "Backend for Vireo app",
+  "description": "Vireo web app",
   "main": "server.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "import-data": "node importData.js"
+    "server:dev": "nodemon server.js",
+    "import-data": "node importData.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
