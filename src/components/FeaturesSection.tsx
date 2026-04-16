@@ -1,68 +1,38 @@
+import { useTranslation } from "react-i18next";
 import { Utensils, MapPin, ShoppingBag, Bot, Mic, BookOpen } from "lucide-react";
 import featureRestaurant from "@/assets/feature-restaurant.jpg";
 import featureMarket from "@/assets/feature-market.jpg";
 import featureAI from "@/assets/feature-ai.jpg";
 
-const features = [
-  {
-    icon: Utensils,
-    title: "Ricette Vegane & Bio",
-    description: "Migliaia di ricette filtrabili per dieta, ingredienti, tempo di preparazione e valori nutrizionali, con suggerimenti per ingredienti locali.",
-    color: "bg-primary/10 text-primary",
-  },
-  {
-    icon: MapPin,
-    title: "Mappa Interattiva",
-    description: "Geolocalizzazione avanzata per trovare ristoranti e negozi eco-friendly con filtri per prezzo, rating e distanza.",
-    color: "bg-tertiary/15 text-tertiary",
-  },
-  {
-    icon: ShoppingBag,
-    title: "Marketplace Etico",
-    description: "Vetrina dedicata alla compravendita di prodotti eco e al riuso, con linee guida rigorose per garantire la sostenibilità.",
-    color: "bg-secondary/15 text-secondary",
-  },
-  {
-    icon: Bot,
-    title: "Assistente AI",
-    description: "Chatbot basato su GPT che ti guida con suggerimenti personalizzati, piani alimentari e consigli per ridurre lo spreco.",
-    color: "bg-vireo-leaf/10 text-vireo-leaf",
-  },
-  {
-    icon: Mic,
-    title: "Comandi Vocali",
-    description: "Riconoscimento vocale per interazioni hands-free — chiedi ricette, timer e conversioni mentre cucini.",
-    color: "bg-vireo-clay/20 text-vireo-terracotta",
-  },
-  {
-    icon: BookOpen,
-    title: "Blog & Community",
-    description: "Articoli, guide e una rete di persone impegnate in scelte responsabili. Notifiche, social e prenotazioni live.",
-    color: "bg-primary/10 text-primary",
-  },
-];
-
-const showcase = [
-  { src: featureRestaurant, alt: "Ristorante eco-friendly con piante e luce naturale", label: "Ristoranti", value: "500+" },
-  { src: featureMarket, alt: "Mercato bio con verdure fresche e prodotti sostenibili", label: "Marketplace", value: "1.2k" },
-  { src: featureAI, alt: "Smartphone con app di ricette green in cucina", label: "AI", value: "24/7" },
-];
-
 export default function FeaturesSection() {
+  const { t } = useTranslation();
+
+  const features = [
+    { icon: Utensils, title: t("features.items.recipes_title"), description: t("features.items.recipes_desc"), color: "bg-primary/10 text-primary" },
+    { icon: MapPin, title: t("features.items.map_title"), description: t("features.items.map_desc"), color: "bg-tertiary/15 text-tertiary" },
+    { icon: ShoppingBag, title: t("features.items.market_title"), description: t("features.items.market_desc"), color: "bg-secondary/15 text-secondary" },
+    { icon: Bot, title: t("features.items.ai_title"), description: t("features.items.ai_desc"), color: "bg-vireo-leaf/10 text-vireo-leaf" },
+    { icon: Mic, title: t("features.items.voice_title"), description: t("features.items.voice_desc"), color: "bg-vireo-clay/20 text-vireo-terracotta" },
+    { icon: BookOpen, title: t("features.items.blog_title"), description: t("features.items.blog_desc"), color: "bg-primary/10 text-primary" },
+  ];
+
+  const showcase = [
+    { src: featureRestaurant, alt: t("features.items.map_title"), label: t("nav.restaurants"), value: "500+" },
+    { src: featureMarket, alt: t("features.items.market_title"), label: t("nav.marketplace"), value: "1.2k" },
+    { src: featureAI, alt: t("features.items.ai_title"), label: "AI", value: "24/7" },
+  ];
+
   return (
     <section id="features" className="py-24 sm:py-32 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto mb-20">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-4">L'ecosistema Vireo</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-4">{t("features.kicker")}</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold mb-5 text-balance">
-            Tutto ciò che serve per <span className="italic text-gradient-leaf">vivere green</span>
+            {t("features.title_1")} <span className="italic text-gradient-leaf">{t("features.title_green")}</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Una piattaforma digitale d'avanguardia che integra tecnologia, sostenibilità e benessere.
-          </p>
+          <p className="text-muted-foreground text-lg">{t("features.subtitle")}</p>
         </div>
 
-        {/* Showcase strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-20">
           {showcase.map((item, i) => (
             <div
@@ -87,7 +57,6 @@ export default function FeaturesSection() {
           ))}
         </div>
 
-        {/* Feature cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((f, i) => (
             <div

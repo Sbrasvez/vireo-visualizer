@@ -1,26 +1,38 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Leaf, Instagram, Twitter, Github, Mail } from "lucide-react";
 
-const links = {
-  Prodotto: [
-    { label: "Ricette", href: "/recipes" },
-    { label: "Ristoranti", href: "/restaurants" },
-    { label: "Marketplace", href: "/marketplace" },
-    { label: "AI Assistant", href: "/recipes" },
-  ],
-  Risorse: [
-    { label: "Blog", href: "/blog" },
-    { label: "Guide", href: "/blog" },
-    { label: "FAQ", href: "/blog" },
-  ],
-  Legale: [
-    { label: "Privacy", href: "#" },
-    { label: "Termini", href: "#" },
-    { label: "Cookie", href: "#" },
-  ],
-};
-
 export default function Footer() {
+  const { t } = useTranslation();
+
+  const groups = [
+    {
+      title: t("footer.product"),
+      items: [
+        { label: t("nav.recipes"), href: "/recipes" },
+        { label: t("nav.restaurants"), href: "/restaurants" },
+        { label: t("nav.marketplace"), href: "/marketplace" },
+        { label: "AI Assistant", href: "/recipes" },
+      ],
+    },
+    {
+      title: t("footer.resources"),
+      items: [
+        { label: t("nav.blog"), href: "/blog" },
+        { label: "Guide", href: "/blog" },
+        { label: "FAQ", href: "/blog" },
+      ],
+    },
+    {
+      title: t("footer.legal"),
+      items: [
+        { label: "Privacy", href: "#" },
+        { label: "Terms", href: "#" },
+        { label: "Cookie", href: "#" },
+      ],
+    },
+  ];
+
   return (
     <footer className="border-t border-border bg-muted/40 pt-20 pb-10">
       <div className="container">
@@ -33,10 +45,10 @@ export default function Footer() {
               <span className="font-display text-2xl font-bold">Vireo</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mb-2 italic font-medium">
-              "Vivi green, semplicemente."
+              {t("footer.tagline")}
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mb-6">
-              Smart Living, Green Future. La piattaforma digitale che integra tecnologia, sostenibilità e benessere.
+              {t("footer.description")}
             </p>
             <div className="flex items-center gap-3">
               {[Instagram, Twitter, Github, Mail].map((Icon, i) => (
@@ -52,11 +64,11 @@ export default function Footer() {
             </div>
           </div>
 
-          {Object.entries(links).map(([group, items]) => (
-            <div key={group}>
-              <h4 className="font-display font-semibold text-sm mb-4 uppercase tracking-wider">{group}</h4>
+          {groups.map((group) => (
+            <div key={group.title}>
+              <h4 className="font-display font-semibold text-sm mb-4 uppercase tracking-wider">{group.title}</h4>
               <ul className="space-y-2.5">
-                {items.map((l) => (
+                {group.items.map((l) => (
                   <li key={l.label}>
                     <Link to={l.href} className="text-sm text-muted-foreground hover:text-primary transition-colors story-link">
                       {l.label}
@@ -69,8 +81,8 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Vireo. Tutti i diritti riservati.</p>
-          <p className="font-medium">Made with 🌱 in Italy</p>
+          <p>© {new Date().getFullYear()} Vireo. {t("footer.rights")}</p>
+          <p className="font-medium">{t("footer.made")}</p>
         </div>
       </div>
     </footer>

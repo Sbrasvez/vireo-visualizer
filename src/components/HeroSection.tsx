@@ -1,9 +1,11 @@
 import { ArrowRight, Sparkles, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import heroBowl from "@/assets/hero-bowl.jpg";
 
 export default function HeroSection() {
+  const { t } = useTranslation();
   return (
     <section className="relative min-h-[100vh] flex items-center overflow-hidden pt-16 gradient-soft">
       {/* Background decorations */}
@@ -19,41 +21,40 @@ export default function HeroSection() {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-8 animate-fade-up">
               <Sparkles className="size-4" />
-              <span>AI-Powered Sustainable Living</span>
+              <span>{t("hero.badge")}</span>
             </div>
 
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6 animate-fade-up text-balance" style={{ animationDelay: "0.1s" }}>
-              Vivi <span className="italic text-gradient-warm">smart</span>,
+              {t("hero.title_1")} <span className="italic text-gradient-warm">{t("hero.title_smart")}</span>,
               <br />
-              scegli <span className="italic text-gradient-leaf">green</span>.
+              {t("hero.title_2")} <span className="italic text-gradient-leaf">{t("hero.title_green")}</span>.
             </h1>
 
             <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-4 animate-fade-up font-medium" style={{ animationDelay: "0.2s" }}>
-              "Vivi green, semplicemente."
+              {t("hero.tagline")}
             </p>
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-10 animate-fade-up" style={{ animationDelay: "0.25s" }}>
-              Ricette vegane e bio, ristoranti eco-friendly, marketplace etico
-              e un assistente AI con comandi vocali — tutto in un'unica piattaforma per un futuro più verde.
+              {t("hero.description")}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
               <Button size="lg" className="gap-2 text-base px-8 rounded-xl shadow-elegant group" asChild>
                 <Link to="/signup">
-                  Inizia ora
+                  {t("hero.cta_start")}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" className="gap-2 text-base px-8 rounded-xl" asChild>
-                <Link to="/recipes">Esplora le ricette</Link>
+                <Link to="/recipes">{t("hero.cta_explore")}</Link>
               </Button>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 mt-16 max-w-lg mx-auto lg:mx-0 animate-fade-up" style={{ animationDelay: "0.45s" }}>
               {[
-                { value: "2k+", label: "Ricette bio" },
-                { value: "500+", label: "Ristoranti" },
-                { value: "10k+", label: "Utenti green" },
+                { value: "2k+", label: t("hero.stat_recipes") },
+                { value: "500+", label: t("hero.stat_restaurants") },
+                { value: "10k+", label: t("hero.stat_users") },
               ].map((s) => (
                 <div key={s.label} className="text-center lg:text-left">
                   <div className="font-display text-3xl sm:text-4xl font-bold text-foreground">{s.value}</div>
@@ -83,7 +84,7 @@ export default function HeroSection() {
                   <Sparkles className="size-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <div className="text-xs text-muted-foreground">Eco-score</div>
+                  <div className="text-xs text-muted-foreground">{t("hero.badge_eco")}</div>
                   <div className="font-display text-lg font-bold text-primary">9.2/10</div>
                 </div>
               </div>
@@ -94,7 +95,7 @@ export default function HeroSection() {
                   <Leaf className="size-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <div className="text-xs text-muted-foreground">CO₂ risparmiata</div>
+                  <div className="text-xs text-muted-foreground">{t("hero.badge_co2")}</div>
                   <div className="font-display text-lg font-bold text-secondary">−2.4 kg</div>
                 </div>
               </div>
