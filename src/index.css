@@ -190,10 +190,14 @@
 }
 
 /* ============ Mapbox custom markers & popups ============
-   IMPORTANT: Mapbox applies its own translate(...) on the marker root.
-   Never set display:flex or width/height that depends on layout there.
-   Use a fixed-size box and absolute-position children so the geographic
-   anchor is exact and stable on pan/zoom. */
+   IMPORTANT: Mapbox sets `transform: translate(...)` on the marker root
+   every frame to keep it pinned to its lng/lat. Do NOT add display:flex,
+   margins, or layout-driven sizing on the marker root — they fight with
+   Mapbox's transform and cause the visible jitter/drift on pan/zoom.
+
+   Strategy: marker root is a fixed 32x32 box. We use anchor:"bottom" in
+   Mapbox so the BOTTOM-CENTER of this box is locked to the geo coord.
+   Children are absolutely positioned inside, so they never affect layout. */
 .vireo-marker {
   position: relative;
   width: 32px;
@@ -203,18 +207,16 @@
   padding: 0;
   margin: 0;
   cursor: pointer;
-  will-change: transform;
-}
-.vireo-marker:hover .vireo-marker-dot {
-  transform: translate(-50%, -100%) rotate(-45deg) scale(1.08);
+  pointer-events: auto;
 }
 
 .vireo-marker-dot {
   position: absolute;
-  /* Anchor: bottom-center of dot sits on the geo coordinate */
+  /* Bottom-center of the dot sits on bottom-center of the marker box,
+     which Mapbox locks to the lng/lat. */
   left: 50%;
-  top: 0;
-  transform: translate(-50%, -100%) rotate(-45deg);
+  bottom: 0;
+  transform: translateX(-50%) rotate(-45deg);
   transform-origin: 50% 100%;
   width: 28px;
   height: 28px;
@@ -225,6 +227,9 @@
   box-shadow: 0 6px 16px -4px hsl(var(--primary) / 0.5), 0 0 0 3px hsl(var(--background));
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.vireo-marker:hover .vireo-marker-dot {
+  transform: translateX(-50%) rotate(-45deg) scale(1.1);
+}
 .vireo-marker-dot.is-available { background: hsl(var(--primary)); }
 .vireo-marker-dot.is-busy { background: hsl(var(--muted-foreground)); opacity: 0.85; }
 .vireo-marker-dot svg { transform: rotate(45deg); }
@@ -232,11 +237,10 @@
 .vireo-marker-pulse {
   position: absolute;
   left: 50%;
-  top: 0;
+  bottom: 0;
   width: 28px;
   height: 28px;
   margin-left: -14px;
-  margin-top: -28px;
   border-radius: 50%;
   background: hsl(var(--primary) / 0.35);
   animation: vireo-pulse 2.2s ease-out infinite;
@@ -247,7 +251,7 @@
 
 @keyframes vireo-pulse {
   0% { transform: scale(0.6); opacity: 0.7; }
-  100% { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 
 /* Origin pin (user searched location) */

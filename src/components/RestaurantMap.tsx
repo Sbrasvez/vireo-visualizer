@@ -123,10 +123,9 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
 
       const popup = new mapboxgl.Popup({ offset: 32, closeButton: false, maxWidth: "280px" }).setHTML(popupHtml);
 
-      // anchor: "center" because the .vireo-marker box is 32x32 and we
-      // visually anchor the dot's tip to the box center via CSS translate.
-      // This makes Mapbox apply its translate to a stable square — no jitter on pan/zoom.
-      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+      // anchor: "bottom" → Mapbox locks the BOTTOM-CENTER of the marker box
+      // to the lng/lat. Our CSS positions the pin tip at that exact spot.
+      const marker = new mapboxgl.Marker({ element: el, anchor: "bottom" })
         .setLngLat([r.lng, r.lat])
         .setPopup(popup)
         .addTo(map);
