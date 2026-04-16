@@ -410,21 +410,21 @@ export default function RestaurantDetailDialog({
                 <div className="space-y-4 max-w-2xl">
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <Label htmlFor="r-name">Nome*</Label>
-                      <Input id="r-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Il tuo nome" maxLength={80} />
+                      <Label htmlFor="r-name">{t("restaurant_dialog.name")}*</Label>
+                      <Input id="r-name" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("restaurant_dialog.your_name")} maxLength={80} />
                     </div>
                     <div>
-                      <Label htmlFor="r-email">Email*</Label>
+                      <Label htmlFor="r-email">{t("restaurant_dialog.email")}*</Label>
                       <Input id="r-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={user?.email ?? "tua@email.it"} maxLength={255} />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <Label htmlFor="r-phone">Telefono</Label>
-                      <Input id="r-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+39 ..." maxLength={30} />
+                      <Label htmlFor="r-phone">{t("restaurant_dialog.phone")}</Label>
+                      <Input id="r-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("restaurant_dialog.phone_placeholder")} maxLength={30} />
                     </div>
                     <div>
-                      <Label htmlFor="r-party">Coperti*</Label>
+                      <Label htmlFor="r-party">{t("restaurant_dialog.covers")}*</Label>
                       <div className="relative">
                         <Users className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                         <Input
@@ -441,12 +441,12 @@ export default function RestaurantDetailDialog({
                   </div>
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
-                      <Label>Data*</Label>
+                      <Label>{t("restaurant_dialog.date")}*</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button variant="outline" className="w-full justify-start font-normal">
                             <CalendarIcon className="size-4 mr-2" />
-                            {date ? format(date, "EEE d MMM yyyy", { locale: it }) : "Scegli una data"}
+                            {date ? format(date, "EEE d MMM yyyy", { locale: dateLocale }) : t("restaurant_dialog.choose_date")}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0 bg-popover" align="start">
@@ -462,27 +462,27 @@ export default function RestaurantDetailDialog({
                       </Popover>
                     </div>
                     <div>
-                      <Label>Orario*</Label>
+                      <Label>{t("restaurant_dialog.time")}*</Label>
                       <div className="grid grid-cols-5 gap-1.5">
-                        {TIME_SLOTS.map((t) => (
+                        {TIME_SLOTS.map((slot) => (
                           <button
-                            key={t}
+                            key={slot}
                             type="button"
-                            onClick={() => setTime(t)}
+                            onClick={() => setTime(slot)}
                             className={`text-xs py-2 rounded-md border transition-colors ${
-                              time === t
+                              time === slot
                                 ? "bg-primary text-primary-foreground border-primary"
                                 : "bg-background hover:bg-accent border-border"
                             }`}
                           >
-                            {t}
+                            {slot}
                           </button>
                         ))}
                       </div>
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="r-notes">Note (allergie, occasioni speciali...)</Label>
+                    <Label htmlFor="r-notes">{t("restaurant_dialog.notes")} ({t("restaurant_dialog.notes_placeholder")})</Label>
                     <Textarea id="r-notes" value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={500} rows={3} />
                   </div>
                   <Button
@@ -492,10 +492,10 @@ export default function RestaurantDetailDialog({
                     className="w-full shadow-elegant"
                   >
                     {submitting ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Heart className="size-4 mr-2" />}
-                    Conferma prenotazione
+                    {submitting ? t("restaurant_dialog.submitting") : t("restaurant_dialog.reserve_btn")}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    Riceverai una email di conferma con tutti i dettagli.
+                    {t("restaurant_dialog.email_confirmation_note")}
                   </p>
                 </div>
               )}
