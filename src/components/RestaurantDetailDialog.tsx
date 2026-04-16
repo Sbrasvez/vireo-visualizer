@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { format } from "date-fns";
-import { it } from "date-fns/locale";
+import { it, enUS, es, fr, de } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -49,15 +50,16 @@ interface Props {
   onOpenChange: (v: boolean) => void;
 }
 
-const reservationSchema = z.object({
-  name: z.string().trim().min(2, "Inserisci il tuo nome").max(80),
-  email: z.string().trim().email("Email non valida").max(255),
-  phone: z.string().trim().max(30).optional().or(z.literal("")),
-  partySize: z.number().int().min(1).max(20),
-  date: z.date(),
-  time: z.string().regex(/^\d{2}:\d{2}$/, "Orario non valido"),
-  notes: z.string().max(500).optional().or(z.literal("")),
-});
+const buildSchema = (t: (k: string) => string) =>
+  z.object({
+    name: z.string().trim().min(2, t("restaurant_dialog.err_name")).max(80),
+    email: z.string().trim().email(t("restaurant_dialog.err_email")).max(255),
+    phone: z.string().trim().max(30).optional().or(z.literal("")),
+    partySize: z.number().int().min(1).max(20),
+    date: z.date(),
+    time: z.string().regex(/^\d{2}:\d{2}$/, t("restaurant_dialog.err_time")),
+    notes: z.string().max(500).optional().or(z.literal("")),
+  });
 
 const TIME_SLOTS = [
   "12:30", "13:00", "13:30", "14:00",
@@ -69,11 +71,13 @@ export default function RestaurantDetailDialog({
   open,
   onOpenChange,
 }: Props) {
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const { menu, photos, reviews, loading } = useRestaurantDetails(
     restaurant?.id ?? null,
   );
+  const dateLocale = ({ it, en: enUS, es, fr, de } as any)[i18n.language] || it;
 
   // Reservation form state
   const [name, setName] = useState("");
