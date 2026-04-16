@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RestaurantMap, { type RestaurantMarker } from "@/components/RestaurantMap";
@@ -27,21 +28,13 @@ import { useGeocoding } from "@/hooks/useGeocoding";
 import { useToast } from "@/hooks/use-toast";
 import heroImg from "@/assets/restaurants-hero.jpg";
 
-const CUISINE_LABELS: Record<string, string> = {
-  vegano: "Vegano",
-  vegetariano: "Vegetariano",
-  plant_based: "Plant-based",
-  bio: "Bio certificato",
-  mediterraneo: "Mediterraneo",
-  crudista: "Crudista / Raw",
-  fusion: "Fusion",
-  km_zero: "Km 0",
-};
-
 export default function Restaurants() {
+  const { t } = useTranslation();
   const { restaurants, loading } = useRestaurants();
   const { geocode, loading: geocoding } = useGeocoding();
   const { toast } = useToast();
+  const CUISINE_KEYS = ["vegano", "vegetariano", "plant_based", "bio", "mediterraneo", "crudista", "fusion", "km_zero"] as const;
+  const cuisineLabel = (k: string) => t(`restaurants.cuisines.${k}`, { defaultValue: k });
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [dialogRestaurant, setDialogRestaurant] = useState<Restaurant | null>(null);
