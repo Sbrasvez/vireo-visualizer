@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      co2_log: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          kg_co2: number
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          kg_co2?: number
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          kg_co2?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -307,6 +331,75 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_recipes: {
+        Row: {
+          created_at: string
+          diets: string[] | null
+          external_id: string
+          id: string
+          image_url: string | null
+          ready_in_minutes: number | null
+          source: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          diets?: string[] | null
+          external_id: string
+          id?: string
+          image_url?: string | null
+          ready_in_minutes?: number | null
+          source?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          diets?: string[] | null
+          external_id?: string
+          id?: string
+          image_url?: string | null
+          ready_in_minutes?: number | null
+          source?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_plans: {
+        Row: {
+          ai_messages_reset_at: string
+          ai_messages_today: number
+          created_at: string
+          id: string
+          plan_expires_at: string | null
+          tier: Database["public"]["Enums"]["plan_tier"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_messages_reset_at?: string
+          ai_messages_today?: number
+          created_at?: string
+          id?: string
+          plan_expires_at?: string | null
+          tier?: Database["public"]["Enums"]["plan_tier"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_messages_reset_at?: string
+          ai_messages_today?: number
+          created_at?: string
+          id?: string
+          plan_expires_at?: string | null
+          tier?: Database["public"]["Enums"]["plan_tier"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -324,6 +417,7 @@ export type Database = {
         | "crudista"
         | "fusion"
         | "km_zero"
+      plan_tier: "free" | "pro" | "business"
       price_range: "€" | "€€" | "€€€" | "€€€€"
       reservation_status: "pending" | "confirmed" | "cancelled" | "completed"
     }
@@ -463,6 +557,7 @@ export const Constants = {
         "fusion",
         "km_zero",
       ],
+      plan_tier: ["free", "pro", "business"],
       price_range: ["€", "€€", "€€€", "€€€€"],
       reservation_status: ["pending", "confirmed", "cancelled", "completed"],
     },
