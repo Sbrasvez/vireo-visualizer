@@ -228,7 +228,12 @@
     "check_data_error": "Comprueba los datos",
     "reservation_error": "Error en la reserva",
     "reservation_sent": "¡Reserva enviada!",
-    "see_you_at": "Te esperamos en {{restaurant}}"
+    "see_you_at": "Te esperamos en {{restaurant}}",
+    "err_name": "Introduce tu nombre",
+    "err_email": "Email no válido",
+    "err_time": "Horario no válido",
+    "choose_date": "Elige una fecha",
+    "email_confirmation_note": "Recibirás un email de confirmación con todos los detalles."
   },
   "marketplace": {
     "badge": "Compraventa y reuso certificado",

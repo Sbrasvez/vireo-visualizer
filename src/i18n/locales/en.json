@@ -228,7 +228,12 @@
     "check_data_error": "Check your data",
     "reservation_error": "Booking error",
     "reservation_sent": "Booking sent!",
-    "see_you_at": "See you at {{restaurant}}"
+    "see_you_at": "See you at {{restaurant}}",
+    "err_name": "Enter your name",
+    "err_email": "Invalid email",
+    "err_time": "Invalid time",
+    "choose_date": "Choose a date",
+    "email_confirmation_note": "You'll receive a confirmation email with all the details."
   },
   "marketplace": {
     "badge": "Buy, sell & certified reuse",
