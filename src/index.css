@@ -239,6 +239,38 @@
   100% { transform: translateX(-50%) scale(2.2); opacity: 0; }
 }
 
+/* Origin pin (user searched location) */
+.vireo-origin-pin {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+.vireo-origin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: hsl(var(--tertiary));
+  border: 3px solid hsl(var(--background));
+  box-shadow: 0 4px 12px -2px hsl(var(--tertiary) / 0.6);
+  z-index: 2;
+}
+.vireo-origin-pulse {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: hsl(var(--tertiary) / 0.6);
+  animation: vireo-origin-pulse 1.6s ease-out infinite;
+}
+@keyframes vireo-origin-pulse {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
 .mapboxgl-popup-content {
   padding: 0 !important;
   border-radius: 14px !important;
