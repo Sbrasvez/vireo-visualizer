@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, MapPin } from "lucide-react";
 
 export interface RestaurantMarker {
-  id: number;
+  id: string;
   name: string;
   city: string;
   rating: number;
@@ -18,14 +18,16 @@ export interface RestaurantMarker {
 
 interface RestaurantMapProps {
   restaurants: RestaurantMarker[];
-  activeId?: number | null;
-  onMarkerClick?: (id: number) => void;
+  activeId?: string | null;
+  onMarkerClick?: (id: string) => void;
+  origin?: { lat: number; lng: number } | null;
 }
 
-export default function RestaurantMap({ restaurants, activeId, onMarkerClick }: RestaurantMapProps) {
+export default function RestaurantMap({ restaurants, activeId, onMarkerClick, origin }: RestaurantMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<Record<number, mapboxgl.Marker>>({});
+  const markersRef = useRef<Record<string, mapboxgl.Marker>>({});
+  const originMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
