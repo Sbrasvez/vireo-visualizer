@@ -260,10 +260,10 @@ export default function Restaurants() {
                   <div>
                     <div className="inline-flex items-center gap-2 text-sm text-primary font-medium mb-1">
                       <MapIcon className="size-4" />
-                      Esplora sulla mappa
+                      {t("restaurants.explore_map")}
                     </div>
                     <h2 className="font-display text-2xl sm:text-3xl font-bold">
-                      {originLabel ? `Vicino a ${originLabel.split(",")[0]}` : "Locali in tutta Italia"}
+                      {originLabel ? t("restaurants.near", { place: originLabel.split(",")[0] }) : t("restaurants.all_in_italy")}
                     </h2>
                   </div>
                 </div>
@@ -294,10 +294,10 @@ export default function Restaurants() {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <h2 className="font-display text-3xl sm:text-4xl font-bold">
-                  {originLabel ? "Ordinati per distanza" : "Tutti i ristoranti"}
+                  {originLabel ? t("restaurants.sorted_by_distance") : t("restaurants.all_restaurants")}
                 </h2>
                 <p className="text-muted-foreground mt-1">
-                  Clicca una scheda per vedere menu, foto, recensioni e prenotare
+                  {t("restaurants.click_card_hint")}
                 </p>
               </div>
             </div>
@@ -305,8 +305,8 @@ export default function Restaurants() {
             {filtered.length === 0 ? (
               <div className="text-center py-20 bg-card rounded-2xl border border-border/60">
                 <Leaf className="size-10 mx-auto text-muted-foreground mb-3" />
-                <h3 className="font-display text-xl font-semibold mb-2">Nessun ristorante con questi filtri</h3>
-                <p className="text-muted-foreground text-sm">Prova ad ampliare il raggio o rimuovere alcuni filtri.</p>
+                <h3 className="font-display text-xl font-semibold mb-2">{t("restaurants.no_results_title")}</h3>
+                <p className="text-muted-foreground text-sm">{t("restaurants.no_results_desc")}</p>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -341,10 +341,10 @@ export default function Restaurants() {
                           {r.available_now ? (
                             <Badge className="bg-primary text-primary-foreground gap-1.5">
                               <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
-                              Disponibile
+                              {t("restaurants.available")}
                             </Badge>
                           ) : (
-                            <Badge variant="secondary">Completo</Badge>
+                            <Badge variant="secondary">{t("restaurants.complete")}</Badge>
                           )}
                           {r._distance != null && (
                             <Badge variant="outline" className="bg-background/90 backdrop-blur-sm">
@@ -378,7 +378,7 @@ export default function Restaurants() {
                           {r.cuisine.slice(0, 2).map((c) => (
                             <span key={c} className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground capitalize">
                               <Leaf className="size-3 inline mr-1" />
-                              {CUISINE_LABELS[c] || c}
+                              {cuisineLabel(c)}
                             </span>
                           ))}
                         </div>
@@ -389,7 +389,7 @@ export default function Restaurants() {
                           variant={r.available_now ? "default" : "secondary"}
                         >
                           <Clock className="size-4 mr-2" />
-                          {r.available_now ? "Vedi e prenota" : "Lista d'attesa"}
+                          {r.available_now ? t("restaurants.book_live") : t("restaurants.waitlist")}
                         </Button>
                       </div>
                     </article>
