@@ -100,6 +100,7 @@ export default function RestaurantDetailDialog({
   }, {});
 
   const handleReserve = async () => {
+    const reservationSchema = buildSchema(t);
     const parsed = reservationSchema.safeParse({
       name: user?.email ? name || user.email.split("@")[0] : name,
       email: email || user?.email || "",
@@ -111,18 +112,18 @@ export default function RestaurantDetailDialog({
     });
     if (!parsed.success) {
       toast({
-        title: "Controlla i dati",
+        title: t("restaurant_dialog.check_data_error"),
         description: parsed.error.issues[0].message,
         variant: "destructive",
       });
       return;
     }
     if (!date) {
-      toast({ title: "Seleziona una data", variant: "destructive" });
+      toast({ title: t("restaurant_dialog.select_date_error"), variant: "destructive" });
       return;
     }
     if (!time) {
-      toast({ title: "Seleziona un orario", variant: "destructive" });
+      toast({ title: t("restaurant_dialog.select_time_error"), variant: "destructive" });
       return;
     }
 
@@ -143,7 +144,7 @@ export default function RestaurantDetailDialog({
 
     if (error) {
       toast({
-        title: "Errore prenotazione",
+        title: t("restaurant_dialog.reservation_error"),
         description: error.message,
         variant: "destructive",
       });
@@ -151,7 +152,6 @@ export default function RestaurantDetailDialog({
       return;
     }
 
-    // Fire-and-forget email confirmation (works only if email infra is set up)
     supabase.functions
       .invoke("send-transactional-email", {
         body: {
@@ -161,7 +161,7 @@ export default function RestaurantDetailDialog({
           templateData: {
             name: parsed.data.name,
             restaurantName: restaurant.name,
-            date: format(parsed.data.date, "EEEE d MMMM yyyy", { locale: it }),
+            date: format(parsed.data.date, "EEEE d MMMM yyyy", { locale: dateLocale }),
             time: parsed.data.time,
             partySize: parsed.data.partySize,
             address: restaurant.address,
@@ -174,8 +174,8 @@ export default function RestaurantDetailDialog({
     setSuccess(true);
     setSubmitting(false);
     toast({
-      title: "Prenotazione inviata!",
-      description: `Ti aspettiamo da ${restaurant.name}`,
+      title: t("restaurant_dialog.reservation_sent"),
+      description: t("restaurant_dialog.see_you_at", { restaurant: restaurant.name }),
     });
   };
 
@@ -212,10 +212,10 @@ export default function RestaurantDetailDialog({
               {restaurant.available_now ? (
                 <Badge className="bg-primary text-primary-foreground gap-1.5">
                   <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
-                  Disponibile ora
+                  {t("restaurant_dialog.available_now")}
                 </Badge>
               ) : (
-                <Badge variant="secondary">Completo stasera</Badge>
+                <Badge variant="secondary">{t("restaurant_dialog.complete_tonight")}</Badge>
               )}
               {(restaurant.eco_certifications || []).slice(0, 2).map((c) => (
                 <Badge key={c} variant="outline" className="bg-background/80 backdrop-blur-sm gap-1">
@@ -232,7 +232,7 @@ export default function RestaurantDetailDialog({
                 <span className="flex items-center gap-1">
                   <Star className="size-4 fill-tertiary text-tertiary" />
                   <strong>{restaurant.rating?.toFixed(1) ?? "—"}</strong>
-                  <span className="text-foreground/70">({restaurant.reviews_count} recensioni)</span>
+                  <span className="text-foreground/70">{t("restaurant_dialog.reviews_count", { count: restaurant.reviews_count ?? 0 })}</span>
                 </span>
                 <span>·</span>
                 <span className="flex items-center gap-1">
@@ -247,13 +247,13 @@ export default function RestaurantDetailDialog({
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
           <TabsList className="mx-6 mt-4 grid w-auto grid-cols-5 bg-muted">
-            <TabsTrigger value="info">Info</TabsTrigger>
-            <TabsTrigger value="menu">Menu</TabsTrigger>
-            <TabsTrigger value="photos">Foto</TabsTrigger>
-            <TabsTrigger value="reviews">Recensioni</TabsTrigger>
+            <TabsTrigger value="info">{t("restaurant_dialog.tab_info")}</TabsTrigger>
+            <TabsTrigger value="menu">{t("restaurant_dialog.tab_menu")}</TabsTrigger>
+            <TabsTrigger value="photos">{t("restaurant_dialog.tab_photos")}</TabsTrigger>
+            <TabsTrigger value="reviews">{t("restaurant_dialog.tab_reviews")}</TabsTrigger>
             <TabsTrigger value="reserve" className="gap-1">
               <Heart className="size-3.5" />
-              Prenota
+              {t("restaurant_dialog.tab_reserve")}
             </TabsTrigger>
           </TabsList>
 
