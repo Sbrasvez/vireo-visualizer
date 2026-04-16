@@ -1,103 +1,109 @@
-import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ShoppingBag, Star, Heart, Recycle, Leaf } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingBag, Recycle, Tag } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import p1 from "@/assets/product-1.jpg";
+import p2 from "@/assets/product-2.jpg";
+import p3 from "@/assets/product-3.jpg";
+import p4 from "@/assets/product-4.jpg";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  eco_score: string;
-}
-
-const PLACEHOLDER_PRODUCTS: Product[] = [
-  { id: 1, name: "Borraccia in Bambù", description: "Borraccia termica 500ml realizzata in bambù naturale e acciaio inox.", price: 24.90, category: "Casa", eco_score: "A+" },
-  { id: 2, name: "Spazzolino Compostabile", description: "Set di 4 spazzolini in bambù con setole vegetali biodegradabili.", price: 12.50, category: "Igiene", eco_score: "A+" },
-  { id: 3, name: "Beeswax Wrap Set", description: "Set 3 fogli riutilizzabili in cera d'api per conservare alimenti.", price: 18.00, category: "Cucina", eco_score: "A" },
-  { id: 4, name: "Sapone Solido Bio", description: "Sapone artigianale a freddo con oli essenziali biologici.", price: 8.90, category: "Igiene", eco_score: "A+" },
-  { id: 5, name: "Sacchetti Riutilizzabili", description: "Set 6 sacchetti in cotone organico per la spesa sfusa.", price: 14.00, category: "Spesa", eco_score: "A" },
-  { id: 6, name: "Compostiera da Balcone", description: "Compostiera compatta per appartamenti con filtro anti-odore.", price: 45.00, category: "Casa", eco_score: "A+" },
+const products = [
+  { id: 1, name: "Set utensili in bambù", img: p1, price: 18.9, oldPrice: 24.9, seller: "EcoCasa", rating: 4.8, reviews: 142, badge: "Nuovo", reused: false },
+  { id: 2, name: "Barattoli vetro riciclato (set 6)", img: p2, price: 22.5, seller: "ZeroWaste Co.", rating: 4.9, reviews: 287, badge: "Best seller", reused: false },
+  { id: 3, name: "Tote bag cotone organico", img: p3, price: 12.0, seller: "Tessuti Etici", rating: 4.7, reviews: 98, reused: false },
+  { id: 4, name: "Beeswax wraps (set 3)", img: p4, price: 15.5, seller: "BeeFriendly", rating: 4.8, reviews: 213, badge: "Bio", reused: false },
+  { id: 5, name: "Set utensili (riuso)", img: p1, price: 9.9, oldPrice: 18.9, seller: "Vireo Reuse", rating: 4.6, reviews: 54, reused: true },
+  { id: 6, name: "Barattoli vintage (riuso)", img: p2, price: 11.0, seller: "Vireo Reuse", rating: 4.5, reviews: 32, reused: true },
 ];
 
+const categories = ["Tutti", "Cucina", "Casa", "Personal care", "Riuso", "Bio"];
+
 export default function Marketplace() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    fetch("/api/marketplace")
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data) => setProducts(data))
-      .catch(() => setProducts(PLACEHOLDER_PRODUCTS))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const filtered = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-1 pt-24 pb-16">
-        <div className="container">
-          <div className="max-w-2xl mb-12">
-            <Badge className="mb-4 bg-primary/10 text-primary border-0">
-              <Recycle className="size-3 mr-1" /> Eco-Marketplace
-            </Badge>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Marketplace
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Prodotti sostenibili selezionati per uno stile di vita green. Ogni acquisto fa la differenza.
-            </p>
-          </div>
+      <main className="flex-1 pt-24">
+        <section className="relative py-16 gradient-soft overflow-hidden">
+          <div className="absolute top-10 right-10 size-80 rounded-full bg-tertiary/15 blur-3xl animate-float" />
+          <div className="container relative">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
+                <Recycle className="size-4" />
+                <span>Compravendita & riuso certificato</span>
+              </div>
+              <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                Marketplace <span className="italic text-gradient-leaf">sostenibile</span>
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+                Una vetrina dedicata alla compravendita di prodotti eco-friendly e al riuso, con linee guida rigorose per garantire la sostenibilità.
+              </p>
 
-          <div className="relative max-w-md mb-8">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input placeholder="Cerca prodotti..." className="pl-10" value={search} onChange={(e) => setSearch(e.target.value)} />
-          </div>
+              <div className="flex flex-col sm:flex-row gap-3 max-w-2xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+                <div className="relative flex-1">
+                  <ShoppingBag className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
+                  <Input placeholder="Cerca un prodotto..." className="pl-12 h-14 rounded-xl text-base border-border bg-card" />
+                </div>
+                <Button size="lg" className="h-14 px-8 rounded-xl shadow-elegant">Cerca</Button>
+              </div>
 
-          {loading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-xl" />)}
+              <div className="flex flex-wrap gap-2 mt-6 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+                {categories.map((c, i) => (
+                  <Badge key={c} variant={i === 0 ? "default" : "outline"} className="px-4 py-1.5 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-sm">
+                    {c}
+                  </Badge>
+                ))}
+              </div>
             </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((p) => (
-                <Card key={p.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
-                  <div className="h-40 bg-gradient-to-br from-primary/10 to-secondary/30 rounded-t-lg flex items-center justify-center">
-                    <ShoppingBag className="size-10 text-primary/40 group-hover:text-primary/60 transition-colors" />
-                  </div>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg font-display">{p.name}</CardTitle>
-                      <Badge className="bg-primary/15 text-primary border-0 text-xs">{p.eco_score}</Badge>
+          </div>
+        </section>
+
+        <section className="py-20">
+          <div className="container">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((p, i) => (
+                <article key={p.id} className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
+                  <div className="relative aspect-square overflow-hidden bg-muted">
+                    <img src={p.img} alt={p.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width={800} height={800} />
+                    <button className="absolute top-3 right-3 size-9 rounded-full bg-card/95 backdrop-blur flex items-center justify-center text-muted-foreground hover:text-secondary transition-colors shadow-soft" aria-label="Aggiungi ai preferiti">
+                      <Heart className="size-4" />
+                    </button>
+                    <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+                      {p.badge && <Badge className="bg-tertiary text-tertiary-foreground">{p.badge}</Badge>}
+                      {p.reused && (
+                        <Badge variant="secondary" className="bg-secondary/90 text-secondary-foreground gap-1">
+                          <Recycle className="size-3" /> Riuso
+                        </Badge>
+                      )}
                     </div>
-                    <CardDescription>{p.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-foreground flex items-center gap-1">
-                      <Tag className="size-4 text-muted-foreground" /> €{p.price.toFixed(2)}
-                    </span>
-                    <Button size="sm">Aggiungi</Button>
-                  </CardContent>
-                </Card>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <Leaf className="size-3 text-primary" />
+                      {p.seller}
+                    </p>
+                    <h3 className="font-display font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5em]">{p.name}</h3>
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
+                      <Star className="size-3.5 fill-tertiary text-tertiary" />
+                      <span className="font-medium text-foreground">{p.rating}</span>
+                      <span>({p.reviews})</span>
+                    </div>
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <div className="font-display text-xl font-bold text-foreground">€{p.price.toFixed(2)}</div>
+                        {p.oldPrice && <div className="text-xs text-muted-foreground line-through">€{p.oldPrice.toFixed(2)}</div>}
+                      </div>
+                      <Button size="sm" variant="outline" className="rounded-lg">
+                        <ShoppingBag className="size-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
-          )}
-
-          {!loading && filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">Nessun prodotto trovato.</p>
-          )}
-        </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

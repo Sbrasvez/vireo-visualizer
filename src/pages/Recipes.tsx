@@ -1,119 +1,103 @@
-import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Search, Clock, Flame, Leaf, ChefHat } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Search, Clock, Leaf, ChefHat } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import recipe1 from "@/assets/recipe-1.jpg";
+import recipe2 from "@/assets/recipe-2.jpg";
+import recipe3 from "@/assets/recipe-3.jpg";
+import recipe4 from "@/assets/recipe-4.jpg";
 
-interface Recipe {
-  id: number;
-  title: string;
-  ingredients: string;
-  instructions: string;
-  preparation_time: string;
-}
-
-const PLACEHOLDER_RECIPES: Recipe[] = [
-  { id: 1, title: "Buddha Bowl Primavera", ingredients: '["quinoa","avocado","ceci","spinaci","tahini"]', instructions: "Cuoci la quinoa, assembla con verdure fresche e condisci con salsa tahini.", preparation_time: "25 min" },
-  { id: 2, title: "Pasta al Pesto di Cavolo Nero", ingredients: '["pasta integrale","cavolo nero","pinoli","parmigiano","aglio"]', instructions: "Frulla il cavolo nero con pinoli, parmigiano e aglio. Condisci la pasta.", preparation_time: "20 min" },
-  { id: 3, title: "Curry di Lenticchie Rosse", ingredients: '["lenticchie rosse","latte di cocco","curry","pomodori","zenzero"]', instructions: "Cuoci le lenticchie con spezie e latte di cocco fino a cremosità.", preparation_time: "30 min" },
-  { id: 4, title: "Insalata Rainbow", ingredients: '["carote","barbabietola","edamame","cavolo rosso","semi di girasole"]', instructions: "Taglia tutte le verdure julienne e condisci con vinaigrette al limone.", preparation_time: "15 min" },
-  { id: 5, title: "Smoothie Bowl Tropicale", ingredients: '["mango","banana","latte di mandorla","granola","cocco"]', instructions: "Frulla mango e banana, versa nella bowl e decora con toppings.", preparation_time: "10 min" },
-  { id: 6, title: "Risotto agli Asparagi", ingredients: '["riso carnaroli","asparagi","scalogno","vino bianco","brodo vegetale"]', instructions: "Tosta il riso, sfuma con vino e cuoci aggiungendo brodo e asparagi.", preparation_time: "35 min" },
+const recipes = [
+  { id: 1, title: "Buddha Bowl ai Ceci e Tahini", img: recipe1, time: "25 min", kcal: 480, ecoScore: 9.4, tags: ["Vegana", "Bio", "Gluten-free"], category: "Pranzo" },
+  { id: 2, title: "Avocado Toast con Ravanelli", img: recipe2, time: "10 min", kcal: 320, ecoScore: 9.1, tags: ["Vegana", "Veloce"], category: "Colazione" },
+  { id: 3, title: "Smoothie Bowl ai Frutti di Bosco", img: recipe3, time: "8 min", kcal: 290, ecoScore: 9.6, tags: ["Vegana", "Raw"], category: "Colazione" },
+  { id: 4, title: "Pasta al Pesto di Basilico", img: recipe4, time: "20 min", kcal: 540, ecoScore: 8.8, tags: ["Vegetariana", "Italiana"], category: "Pranzo" },
+  { id: 5, title: "Curry di Lenticchie e Cocco", img: recipe1, time: "35 min", kcal: 510, ecoScore: 9.2, tags: ["Vegana", "Spicy"], category: "Cena" },
+  { id: 6, title: "Insalata di Quinoa e Melagrana", img: recipe1, time: "15 min", kcal: 380, ecoScore: 9.5, tags: ["Vegana", "Bio"], category: "Pranzo" },
 ];
 
+const categories = ["Tutte", "Colazione", "Pranzo", "Cena", "Dessert", "Snack"];
+
 export default function Recipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    // Try fetching from API, fallback to placeholder
-    fetch("/api/recipes")
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data) => setRecipes(data))
-      .catch(() => setRecipes(PLACEHOLDER_RECIPES))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const filtered = recipes.filter((r) =>
-    r.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const parseIngredients = (ing: string): string[] => {
-    try { return JSON.parse(ing); } catch { return [ing]; }
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-1 pt-24 pb-16">
-        <div className="container">
-          <div className="max-w-2xl mb-12">
-            <Badge className="mb-4 bg-primary/10 text-primary border-0">
-              <Leaf className="size-3 mr-1" /> Ricette Sostenibili
-            </Badge>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Ricette
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Scopri piatti sani e sostenibili, suggeriti dall'AI in base ai tuoi gusti e alla stagionalità.
-            </p>
-          </div>
+      <main className="flex-1 pt-24">
+        <section className="relative py-16 gradient-soft overflow-hidden">
+          <div className="absolute top-10 right-10 size-72 rounded-full bg-primary/10 blur-3xl animate-float" />
+          <div className="container relative">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
+                <ChefHat className="size-4" />
+                <span>Database Spoonacular + AI Vireo</span>
+              </div>
+              <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                Ricette <span className="italic text-gradient-leaf">vegane</span> e bio
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+                Migliaia di ricette filtrabili per dieta, ingredienti, tempo di preparazione e valori nutrizionali. Suggerimenti per ingredienti locali e biologici.
+              </p>
 
-          <div className="relative max-w-md mb-8">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input
-              placeholder="Cerca ricette..."
-              className="pl-10"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+              <div className="flex flex-col sm:flex-row gap-3 max-w-2xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
+                  <Input placeholder="Cerca una ricetta o un ingrediente..." className="pl-12 h-14 rounded-xl text-base border-border bg-card" />
+                </div>
+                <Button size="lg" className="h-14 px-8 rounded-xl shadow-elegant">Cerca</Button>
+              </div>
 
-          {loading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-72 rounded-xl" />
-              ))}
+              <div className="flex flex-wrap gap-2 mt-6 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+                {categories.map((c, i) => (
+                  <Badge key={c} variant={i === 0 ? "default" : "outline"} className="px-4 py-1.5 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-sm">
+                    {c}
+                  </Badge>
+                ))}
+              </div>
             </div>
-          ) : (
+          </div>
+        </section>
+
+        <section className="py-20">
+          <div className="container">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <h2 className="font-display text-3xl font-bold">Ricette in evidenza</h2>
+                <p className="text-muted-foreground mt-1">{recipes.length} ricette trovate</p>
+              </div>
+            </div>
+
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((recipe) => (
-                <Card key={recipe.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
-                  <div className="h-40 bg-gradient-to-br from-primary/20 to-accent/30 rounded-t-lg flex items-center justify-center">
-                    <ChefHat className="size-12 text-primary/40 group-hover:text-primary/60 transition-colors" />
+              {recipes.map((r, i) => (
+                <article key={r.id} className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img src={r.img} alt={r.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width={800} height={600} />
+                    <div className="absolute top-3 right-3 bg-card/95 backdrop-blur rounded-full px-3 py-1.5 flex items-center gap-1.5 shadow-soft">
+                      <Leaf className="size-3.5 text-primary" />
+                      <span className="text-xs font-bold text-primary">{r.ecoScore}</span>
+                    </div>
+                    <div className="absolute top-3 left-3">
+                      <Badge variant="secondary" className="backdrop-blur">{r.category}</Badge>
+                    </div>
                   </div>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-display">{recipe.title}</CardTitle>
-                    <CardDescription className="flex items-center gap-1">
-                      <Clock className="size-3" /> {recipe.preparation_time}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {parseIngredients(recipe.ingredients).slice(0, 4).map((ing, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs font-normal">
-                          {ing}
-                        </Badge>
+                  <div className="p-5">
+                    <h3 className="font-display text-lg font-semibold mb-3 line-clamp-2 group-hover:text-primary transition-colors">{r.title}</h3>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                      <span className="flex items-center gap-1.5"><Clock className="size-4" />{r.time}</span>
+                      <span className="flex items-center gap-1.5"><Flame className="size-4" />{r.kcal} kcal</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {r.tags.map((t) => (
+                        <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{t}</span>
                       ))}
                     </div>
-                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
-                      Scopri di più →
-                    </Button>
-                  </CardContent>
-                </Card>
+                  </div>
+                </article>
               ))}
             </div>
-          )}
-
-          {!loading && filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">Nessuna ricetta trovata.</p>
-          )}
-        </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

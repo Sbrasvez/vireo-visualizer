@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["DM Sans", "system-ui", "sans-serif"],
-        display: ["Fraunces", "Georgia", "serif"],
+        display: ["Playfair Display", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,12 +51,18 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        tertiary: {
+          DEFAULT: "hsl(var(--tertiary))",
+          foreground: "hsl(var(--tertiary-foreground))",
+        },
         vireo: {
           leaf: "hsl(var(--vireo-leaf))",
+          "leaf-deep": "hsl(var(--vireo-leaf-deep))",
           sun: "hsl(var(--vireo-sun))",
-          earth: "hsl(var(--vireo-earth))",
-          sky: "hsl(var(--vireo-sky))",
+          terracotta: "hsl(var(--vireo-terracotta))",
+          clay: "hsl(var(--vireo-clay))",
           cream: "hsl(var(--vireo-cream))",
+          graphite: "hsl(var(--vireo-graphite))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -95,23 +101,53 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-12px)" },
         },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-20px) rotate(3deg)" },
+        },
         "fade-up": {
           from: { opacity: "0", transform: "translateY(24px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.92)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
+          "50%": { boxShadow: "0 0 0 16px hsl(var(--primary) / 0)" },
+        },
+        "marquee": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "float": "float 6s ease-in-out infinite",
-        "fade-up": "fade-up 0.7s ease-out both",
+        "float-slow": "float-slow 9s ease-in-out infinite",
+        "fade-up": "fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-in": "fade-in 0.6s ease-out both",
+        "scale-in": "scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "shimmer": "shimmer 2.5s linear infinite",
+        "pulse-glow": "pulse-glow 2.4s ease-in-out infinite",
+        "marquee": "marquee 40s linear infinite",
       },
     },
   },
   safelist: [
-    { pattern: /bg-vireo-(leaf|sun|earth|sky|cream)\/\d+/ },
-    { pattern: /text-vireo-(leaf|sun|earth|sky|cream)/ },
-    { pattern: /border-vireo-(leaf|sun|earth|sky|cream)/ },
+    { pattern: /bg-vireo-(leaf|leaf-deep|sun|terracotta|clay|cream|graphite)\/\d+/ },
+    { pattern: /text-vireo-(leaf|leaf-deep|sun|terracotta|clay|cream|graphite)/ },
+    { pattern: /border-vireo-(leaf|leaf-deep|sun|terracotta|clay|cream|graphite)/ },
   ],
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

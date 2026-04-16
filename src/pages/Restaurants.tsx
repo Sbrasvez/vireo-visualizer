@@ -1,109 +1,110 @@
-import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { MapPin, Star, Clock, Leaf, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, Star, Utensils } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import r1 from "@/assets/restaurant-1.jpg";
+import r2 from "@/assets/restaurant-2.jpg";
+import r3 from "@/assets/restaurant-3.jpg";
 
-interface Restaurant {
-  id: number;
-  name: string;
-  location: string;
-  cuisine: string;
-  rating: number;
-  sustainable_practices: string;
-}
-
-const PLACEHOLDER_RESTAURANTS: Restaurant[] = [
-  { id: 1, name: "Green Garden", location: "Milano, Navigli", cuisine: "Vegano", rating: 4.8, sustainable_practices: "Zero waste, km0, packaging compostabile" },
-  { id: 2, name: "Terra & Sapori", location: "Roma, Trastevere", cuisine: "Bio Italiana", rating: 4.6, sustainable_practices: "Orto proprio, energia solare, menu stagionale" },
-  { id: 3, name: "Radice", location: "Firenze, Centro", cuisine: "Plant-based", rating: 4.7, sustainable_practices: "Forniture locali, compostaggio, no plastica" },
-  { id: 4, name: "Foglia Verde", location: "Torino, San Salvario", cuisine: "Raw & Vegan", rating: 4.5, sustainable_practices: "Ingredienti biologici, riduzione sprechi" },
-  { id: 5, name: "Il Germoglio", location: "Bologna, Centro", cuisine: "Vegetariano", rating: 4.9, sustainable_practices: "Farm to table, packaging riutilizzabile" },
-  { id: 6, name: "Mare Pulito", location: "Napoli, Lungomare", cuisine: "Pesce Sostenibile", rating: 4.4, sustainable_practices: "Pesca sostenibile certificata MSC" },
+const restaurants = [
+  { id: 1, name: "Verde Mediterraneo", img: r1, city: "Milano", distance: "1.2 km", rating: 4.9, reviews: 234, price: "€€", tags: ["100% Vegano", "Bio certificato"], available: true },
+  { id: 2, name: "Radici Urban Bistrot", img: r2, city: "Roma", distance: "2.8 km", rating: 4.8, reviews: 187, price: "€€€", tags: ["Plant-based", "Locale"], available: true },
+  { id: 3, name: "Orto al Tavolo", img: r3, city: "Firenze", distance: "0.6 km", rating: 4.7, reviews: 312, price: "€€", tags: ["Km 0", "Stagionale"], available: false },
+  { id: 4, name: "La Foglia d'Oro", img: r1, city: "Torino", distance: "3.4 km", rating: 4.9, reviews: 156, price: "€€€", tags: ["Stellato green", "Innovativo"], available: true },
+  { id: 5, name: "Botanico Bistrot", img: r2, city: "Bologna", distance: "1.8 km", rating: 4.6, reviews: 98, price: "€€", tags: ["Vegano", "Cocktail bio"], available: true },
+  { id: 6, name: "Giardino Segreto", img: r3, city: "Napoli", distance: "2.1 km", rating: 4.8, reviews: 421, price: "€€", tags: ["Outdoor", "Mediterraneo"], available: true },
 ];
 
 export default function Restaurants() {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    fetch("/api/restaurants")
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data) => setRestaurants(data))
-      .catch(() => setRestaurants(PLACEHOLDER_RESTAURANTS))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const filtered = restaurants.filter((r) =>
-    r.name.toLowerCase().includes(search.toLowerCase()) ||
-    r.location.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-1 pt-24 pb-16">
-        <div className="container">
-          <div className="max-w-2xl mb-12">
-            <Badge className="mb-4 bg-primary/10 text-primary border-0">
-              <MapPin className="size-3 mr-1" /> Eco-Friendly
-            </Badge>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Ristoranti
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Trova ristoranti sostenibili vicino a te, con recensioni e pratiche green verificate.
-            </p>
-          </div>
+      <main className="flex-1 pt-24">
+        <section className="relative py-16 gradient-soft overflow-hidden">
+          <div className="absolute top-20 left-10 size-80 rounded-full bg-secondary/15 blur-3xl animate-float-slow" />
+          <div className="container relative">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
+                <MapPin className="size-4" />
+                <span>Mappa interattiva + Prenotazioni live</span>
+              </div>
+              <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                Ristoranti <span className="italic text-gradient-warm">eco-friendly</span>
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+                Geolocalizzazione avanzata per individuare ristoranti, negozi bio e servizi sostenibili. Prenotazioni in tempo reale via Socket.IO.
+              </p>
 
-          <div className="relative max-w-md mb-8">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input placeholder="Cerca per nome o città..." className="pl-10" value={search} onChange={(e) => setSearch(e.target.value)} />
-          </div>
-
-          {loading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-xl" />)}
+              <div className="flex flex-col sm:flex-row gap-3 max-w-2xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+                <div className="relative flex-1">
+                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
+                  <Input placeholder="La tua città o quartiere..." className="pl-12 h-14 rounded-xl text-base border-border bg-card" />
+                </div>
+                <Button size="lg" variant="outline" className="h-14 px-6 rounded-xl gap-2"><Filter className="size-4" /> Filtri</Button>
+                <Button size="lg" className="h-14 px-8 rounded-xl shadow-elegant">Cerca</Button>
+              </div>
             </div>
-          ) : (
+          </div>
+        </section>
+
+        <section className="py-20">
+          <div className="container">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <h2 className="font-display text-3xl font-bold">Vicino a te</h2>
+                <p className="text-muted-foreground mt-1">{restaurants.length} ristoranti disponibili</p>
+              </div>
+            </div>
+
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((r) => (
-                <Card key={r.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
-                  <div className="h-36 bg-gradient-to-br from-accent/30 to-primary/10 rounded-t-lg flex items-center justify-center">
-                    <Utensils className="size-10 text-primary/40 group-hover:text-primary/60 transition-colors" />
+              {restaurants.map((r, i) => (
+                <article key={r.id} className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img src={r.img} alt={r.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width={1024} height={768} />
+                    <div className="absolute top-3 left-3">
+                      {r.available ? (
+                        <Badge className="bg-primary text-primary-foreground gap-1.5">
+                          <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
+                          Disponibile ora
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary">Completo stasera</Badge>
+                      )}
+                    </div>
                   </div>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg font-display">{r.name}</CardTitle>
-                      <div className="flex items-center gap-1 text-sm text-amber-600">
-                        <Star className="size-3.5 fill-amber-500 text-amber-500" /> {r.rating}
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">{r.name}</h3>
+                      <div className="flex items-center gap-1 shrink-0 text-sm font-semibold">
+                        <Star className="size-4 fill-tertiary text-tertiary" />
+                        {r.rating}
                       </div>
                     </div>
-                    <CardDescription className="flex items-center gap-1">
-                      <MapPin className="size-3" /> {r.location}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Badge variant="secondary" className="mb-2 text-xs">{r.cuisine}</Badge>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{r.sustainable_practices}</p>
-                    <Button variant="ghost" size="sm" className="mt-2 text-primary hover:text-primary">
-                      Prenota →
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
+                      <span className="flex items-center gap-1"><MapPin className="size-3.5" />{r.city} · {r.distance}</span>
+                      <span>·</span>
+                      <span>{r.price}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {r.tags.map((t) => (
+                        <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground">
+                          <Leaf className="size-3 inline mr-1" />
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <Button className="w-full rounded-lg" disabled={!r.available} size="sm">
+                      <Clock className="size-4 mr-2" />
+                      {r.available ? "Prenota live" : "Lista d'attesa"}
                     </Button>
-                  </CardContent>
-                </Card>
+                  </div>
+                </article>
               ))}
             </div>
-          )}
-
-          {!loading && filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">Nessun ristorante trovato.</p>
-          )}
-        </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
