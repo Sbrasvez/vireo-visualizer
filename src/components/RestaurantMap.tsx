@@ -145,8 +145,26 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
     const marker = markersRef.current[activeId];
     if (!r || !marker) return;
     map.flyTo({ center: [r.lng, r.lat], zoom: 13, duration: 1000, essential: true });
-    marker.togglePopup();
   }, [activeId, restaurants]);
+
+  // Origin pin (user's searched location)
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || loading || error) return;
+    if (originMarkerRef.current) {
+      originMarkerRef.current.remove();
+      originMarkerRef.current = null;
+    }
+    if (origin) {
+      const el = document.createElement("div");
+      el.className = "vireo-origin-pin";
+      el.innerHTML = `<span class="vireo-origin-dot"></span><span class="vireo-origin-pulse"></span>`;
+      originMarkerRef.current = new mapboxgl.Marker({ element: el })
+        .setLngLat([origin.lng, origin.lat])
+        .addTo(map);
+      map.flyTo({ center: [origin.lng, origin.lat], zoom: 11, duration: 1200 });
+    }
+  }, [origin, loading, error]);
 
   return (
     <div className="relative w-full h-[480px] rounded-2xl overflow-hidden border border-border/60 shadow-elegant bg-muted">
