@@ -61,10 +61,11 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              <span className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground">
-                <User className="size-4" />
-                {user.user_metadata?.full_name || user.email}
-              </span>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/profile">
+                  <User className="size-4 mr-1" /> Profilo
+                </Link>
+              </Button>
               <Button variant="ghost" size="sm" onClick={signOut}>
                 <LogOut className="size-4 mr-1" /> Esci
               </Button>
