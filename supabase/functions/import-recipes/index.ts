@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { number = 100, diet = "vegan" } = await req.json().catch(() => ({}));
+    const { number = 100, diet = "vegan", language = "it" } = await req.json().catch(() => ({}));
 
     // Fetch in batches of 50 (Spoonacular max per request)
     const all: any[] = [];
@@ -49,6 +49,10 @@ Deno.serve(async (req) => {
       url.searchParams.set("fillIngredients", "true");
       url.searchParams.set("number", String(Math.min(batchSize, number - offset)));
       url.searchParams.set("offset", String(offset));
+      // Translate recipe content (title, summary, instructions, ingredients) — Spoonacular supports it/de/es/fr
+      if (language && language !== "en") {
+        url.searchParams.set("language", language);
+      }
 
       const res = await fetch(url);
       if (!res.ok) {

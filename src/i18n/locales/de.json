@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "recipes": "Rezepte",
+    "restaurants": "Restaurants",
+    "marketplace": "Marketplace",
+    "blog": "Blog",
+    "pricing": "Preise",
+    "dashboard": "Dashboard",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "signup": "Kostenlos starten",
+    "menu": "Menü",
+    "language": "Sprache"
+  },
+  "hero": {
+    "badge": "KI für nachhaltiges Leben",
+    "title_1": "Lebe",
+    "title_smart": "smart",
+    "title_2": "wähle",
+    "title_green": "green",
+    "tagline": "\"Lebe green, ganz einfach.\"",
+    "description": "Vegane und Bio-Rezepte, umweltfreundliche Restaurants, ethischer Marketplace und ein KI-Assistent mit Sprachsteuerung — alles in einer Plattform für eine grünere Zukunft.",
+    "cta_start": "Jetzt starten",
+    "cta_explore": "Rezepte entdecken",
+    "stat_recipes": "Bio-Rezepte",
+    "stat_restaurants": "Restaurants",
+    "stat_users": "Green Nutzer",
+    "badge_eco": "Eco-Score",
+    "badge_co2": "CO₂ gespart"
+  },
+  "features": {
+    "kicker": "Das Vireo-Ökosystem",
+    "title_1": "Alles was du brauchst, um",
+    "title_green": "green zu leben",
+    "subtitle": "Eine hochmoderne digitale Plattform, die Technologie, Nachhaltigkeit und Wohlbefinden vereint.",
+    "items": {
+      "recipes_title": "Vegane & Bio-Rezepte",
+      "recipes_desc": "Tausende Rezepte filterbar nach Diät, Zutaten, Zubereitungszeit und Nährwerten, mit Vorschlägen für lokale Zutaten.",
+      "map_title": "Interaktive Karte",
+      "map_desc": "Erweiterte Geolokalisierung, um umweltfreundliche Restaurants und Geschäfte mit Filtern für Preis, Bewertung und Entfernung zu finden.",
+      "market_title": "Ethischer Marketplace",
+      "market_desc": "Showcase für den Handel mit Eco-Produkten und Wiederverwendung, mit strengen Richtlinien zur Sicherstellung der Nachhaltigkeit.",
+      "ai_title": "KI-Assistent",
+      "ai_desc": "GPT-basierter Chatbot mit personalisierten Vorschlägen, Mahlzeitenplänen und Tipps zur Abfallreduzierung.",
+      "voice_title": "Sprachsteuerung",
+      "voice_desc": "Spracherkennung für freihändige Interaktionen — frage nach Rezepten, Timern und Umrechnungen beim Kochen.",
+      "blog_title": "Blog & Community",
+      "blog_desc": "Artikel, Anleitungen und ein Netzwerk von Menschen, die sich für verantwortungsvolle Entscheidungen einsetzen. Benachrichtigungen, Social und Live-Buchungen."
+    }
+  },
+  "how": {
+    "kicker": "So funktioniert's",
+    "title_1": "Drei Schritte zu einem",
+    "title_2": "grünen Lebensstil",
+    "subtitle": "Wir demokratisieren einen gesunden und nachhaltigen Lebensstil und nutzen Technologie zur Reduzierung der Umweltauswirkungen.",
+    "step1_title": "Entdecken",
+    "step1_desc": "Erkunde vegane und Bio-Rezepte, Eco-Restaurants und nachhaltige Produkte mit erweiterten Filtern und Geolokalisierung.",
+    "step2_title": "Kochen & Bestellen",
+    "step2_desc": "Folge KI-geführten Rezepten mit Sprachbefehlen, reserviere live Tische in den besten Green-Locations in deiner Nähe.",
+    "step3_title": "Impact reduzieren",
+    "step3_desc": "Verfolge gespartes CO₂, beteilige dich am Wiederverwendungs-Marketplace und baue eine grünere Zukunft."
+  },
+  "testimonials": {
+    "kicker": "Stimmen aus der Community",
+    "title_1": "Eine Community, die",
+    "title_2": "jeden Tag wächst"
+  },
+  "cta": {
+    "badge": "Heute starten, kostenlos",
+    "title_1": "Bereit, die Welt zu verändern,",
+    "title_2": "Teller für Teller?",
+    "subtitle_1": "\"Dein grüner Lebensstil, in einer App.\"",
+    "subtitle_2": "Werde Teil von über 10.000 Menschen, die mit Vireo bereits nachhaltiger leben.",
+    "cta_signup": "Erstelle dein kostenloses Konto",
+    "cta_explore": "Plattform entdecken"
+  },
+  "footer": {
+    "tagline": "\"Lebe green, ganz einfach.\"",
+    "description": "Smart Living, Green Future. Die digitale Plattform, die Technologie, Nachhaltigkeit und Wohlbefinden vereint.",
+    "product": "Produkt",
+    "resources": "Ressourcen",
+    "legal": "Rechtliches",
+    "rights": "Alle Rechte vorbehalten.",
+    "made": "Made with 🌱 in Italy"
+  },
+  "recipes": {
+    "title": "Vegane & Bio-Rezepte",
+    "subtitle": "Entdecke Plant-Based-Rezepte für jeden Anlass",
+    "search_placeholder": "Rezept suchen...",
+    "filter_diet": "Diät",
+    "filter_time": "Max. Zeit",
+    "filter_difficulty": "Schwierigkeit",
+    "diet_all": "Alle",
+    "difficulty_easy": "Einfach",
+    "difficulty_medium": "Mittel",
+    "difficulty_hard": "Schwer",
+    "no_results": "Keine Rezepte gefunden",
+    "min": "Min",
+    "servings": "Portionen",
+    "ingredients": "Zutaten",
+    "instructions": "Zubereitung",
+    "nutrition": "Nährwerte",
+    "save": "Speichern",
+    "saved": "Gespeichert",
+    "back": "Zurück zu den Rezepten"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "close": "Schließen"
+  }
+}

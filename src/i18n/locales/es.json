@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "recipes": "Recetas",
+    "restaurants": "Restaurantes",
+    "marketplace": "Marketplace",
+    "blog": "Blog",
+    "pricing": "Precios",
+    "dashboard": "Panel",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "signup": "Empezar gratis",
+    "menu": "Menú",
+    "language": "Idioma"
+  },
+  "hero": {
+    "badge": "IA para una vida sostenible",
+    "title_1": "Vive",
+    "title_smart": "smart",
+    "title_2": "elige",
+    "title_green": "green",
+    "tagline": "\"Vive green, simplemente.\"",
+    "description": "Recetas veganas y orgánicas, restaurantes eco-friendly, marketplace ético y un asistente IA con comandos de voz — todo en una plataforma para un futuro más verde.",
+    "cta_start": "Empezar ahora",
+    "cta_explore": "Explorar recetas",
+    "stat_recipes": "Recetas bio",
+    "stat_restaurants": "Restaurantes",
+    "stat_users": "Usuarios green",
+    "badge_eco": "Eco-score",
+    "badge_co2": "CO₂ ahorrado"
+  },
+  "features": {
+    "kicker": "El ecosistema Vireo",
+    "title_1": "Todo lo que necesitas para",
+    "title_green": "vivir green",
+    "subtitle": "Una plataforma digital de vanguardia que integra tecnología, sostenibilidad y bienestar.",
+    "items": {
+      "recipes_title": "Recetas Veganas y Bio",
+      "recipes_desc": "Miles de recetas filtrables por dieta, ingredientes, tiempo de preparación y valores nutricionales, con sugerencias de ingredientes locales.",
+      "map_title": "Mapa Interactivo",
+      "map_desc": "Geolocalización avanzada para encontrar restaurantes y tiendas eco-friendly con filtros de precio, valoración y distancia.",
+      "market_title": "Marketplace Ético",
+      "market_desc": "Escaparate dedicado a la compraventa de productos eco y al reuso, con directrices estrictas para garantizar la sostenibilidad.",
+      "ai_title": "Asistente IA",
+      "ai_desc": "Chatbot basado en GPT que te guía con sugerencias personalizadas, planes de comida y consejos para reducir el desperdicio.",
+      "voice_title": "Comandos de Voz",
+      "voice_desc": "Reconocimiento de voz para interacciones manos libres — pide recetas, temporizadores y conversiones mientras cocinas.",
+      "blog_title": "Blog y Comunidad",
+      "blog_desc": "Artículos, guías y una red de personas comprometidas con elecciones responsables. Notificaciones, social y reservas en vivo."
+    }
+  },
+  "how": {
+    "kicker": "Cómo funciona",
+    "title_1": "Tres pasos hacia un",
+    "title_2": "estilo de vida green",
+    "subtitle": "Democratizamos un estilo de vida sano y sostenible, aprovechando la tecnología para reducir el impacto ambiental.",
+    "step1_title": "Descubre",
+    "step1_desc": "Explora recetas veganas y bio, restaurantes eco y productos sostenibles con filtros avanzados y geolocalización.",
+    "step2_title": "Cocina y Pide",
+    "step2_desc": "Sigue recetas guiadas por IA con comandos de voz, reserva mesas en vivo en los mejores locales green cerca de ti.",
+    "step3_title": "Reduce el impacto",
+    "step3_desc": "Monitoriza el CO₂ ahorrado, participa en el marketplace del reuso y construye un futuro más verde."
+  },
+  "testimonials": {
+    "kicker": "Voces de la comunidad",
+    "title_1": "Una comunidad que crece",
+    "title_2": "cada día"
+  },
+  "cta": {
+    "badge": "Empieza hoy, gratis",
+    "title_1": "¿Listo para cambiar el mundo,",
+    "title_2": "un plato a la vez?",
+    "subtitle_1": "\"Tu estilo de vida green, en una app.\"",
+    "subtitle_2": "Únete a más de 10.000 personas que ya viven más sostenibles con Vireo.",
+    "cta_signup": "Crea tu cuenta gratis",
+    "cta_explore": "Explora la plataforma"
+  },
+  "footer": {
+    "tagline": "\"Vive green, simplemente.\"",
+    "description": "Smart Living, Green Future. La plataforma digital que integra tecnología, sostenibilidad y bienestar.",
+    "product": "Producto",
+    "resources": "Recursos",
+    "legal": "Legal",
+    "rights": "Todos los derechos reservados.",
+    "made": "Hecho con 🌱 en Italia"
+  },
+  "recipes": {
+    "title": "Recetas Veganas y Bio",
+    "subtitle": "Descubre recetas plant-based para cada ocasión",
+    "search_placeholder": "Buscar una receta...",
+    "filter_diet": "Dieta",
+    "filter_time": "Tiempo máx",
+    "filter_difficulty": "Dificultad",
+    "diet_all": "Todas",
+    "difficulty_easy": "Fácil",
+    "difficulty_medium": "Media",
+    "difficulty_hard": "Difícil",
+    "no_results": "No se encontraron recetas",
+    "min": "min",
+    "servings": "porciones",
+    "ingredients": "Ingredientes",
+    "instructions": "Preparación",
+    "nutrition": "Valores nutricionales",
+    "save": "Guardar",
+    "saved": "Guardada",
+    "back": "Volver a recetas"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar"
+  }
+}

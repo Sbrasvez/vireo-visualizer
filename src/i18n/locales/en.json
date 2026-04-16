@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "recipes": "Recipes",
+    "restaurants": "Restaurants",
+    "marketplace": "Marketplace",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "logout": "Sign out",
+    "login": "Sign in",
+    "signup": "Get started",
+    "menu": "Menu",
+    "language": "Language"
+  },
+  "hero": {
+    "badge": "AI-Powered Sustainable Living",
+    "title_1": "Live",
+    "title_smart": "smart",
+    "title_2": "choose",
+    "title_green": "green",
+    "tagline": "\"Live green, simply.\"",
+    "description": "Vegan and organic recipes, eco-friendly restaurants, ethical marketplace and an AI assistant with voice commands — all in one platform for a greener future.",
+    "cta_start": "Get started",
+    "cta_explore": "Explore recipes",
+    "stat_recipes": "Organic recipes",
+    "stat_restaurants": "Restaurants",
+    "stat_users": "Green users",
+    "badge_eco": "Eco-score",
+    "badge_co2": "CO₂ saved"
+  },
+  "features": {
+    "kicker": "The Vireo ecosystem",
+    "title_1": "Everything you need to",
+    "title_green": "live green",
+    "subtitle": "A cutting-edge digital platform that integrates technology, sustainability and well-being.",
+    "items": {
+      "recipes_title": "Vegan & Organic Recipes",
+      "recipes_desc": "Thousands of recipes filterable by diet, ingredients, prep time and nutrition, with suggestions for local ingredients.",
+      "map_title": "Interactive Map",
+      "map_desc": "Advanced geolocation to find eco-friendly restaurants and shops with filters for price, rating and distance.",
+      "market_title": "Ethical Marketplace",
+      "market_desc": "A showcase for trading eco products and reuse, with strict guidelines to ensure sustainability.",
+      "ai_title": "AI Assistant",
+      "ai_desc": "GPT-based chatbot that guides you with personalized suggestions, meal plans and waste-reduction tips.",
+      "voice_title": "Voice Commands",
+      "voice_desc": "Voice recognition for hands-free interactions — ask for recipes, timers and conversions while you cook.",
+      "blog_title": "Blog & Community",
+      "blog_desc": "Articles, guides and a network of people committed to responsible choices. Notifications, social and live bookings."
+    }
+  },
+  "how": {
+    "kicker": "How it works",
+    "title_1": "Three steps toward a",
+    "title_2": "green lifestyle",
+    "subtitle": "We democratize a healthy and sustainable lifestyle, leveraging technology to reduce environmental impact.",
+    "step1_title": "Discover",
+    "step1_desc": "Explore vegan and organic recipes, eco restaurants and sustainable products with advanced filters and geolocation.",
+    "step2_title": "Cook & Order",
+    "step2_desc": "Follow AI-guided recipes with voice commands, book tables live at the best green spots near you.",
+    "step3_title": "Reduce impact",
+    "step3_desc": "Track CO₂ saved, join the reuse marketplace and build a greener future."
+  },
+  "testimonials": {
+    "kicker": "Voices from the community",
+    "title_1": "A community growing",
+    "title_2": "every day"
+  },
+  "cta": {
+    "badge": "Start today, free",
+    "title_1": "Ready to change the world,",
+    "title_2": "one plate at a time?",
+    "subtitle_1": "\"Your green lifestyle, in one app.\"",
+    "subtitle_2": "Join over 10,000 people already living more sustainably with Vireo.",
+    "cta_signup": "Create your free account",
+    "cta_explore": "Explore the platform"
+  },
+  "footer": {
+    "tagline": "\"Live green, simply.\"",
+    "description": "Smart Living, Green Future. The digital platform that integrates technology, sustainability and well-being.",
+    "product": "Product",
+    "resources": "Resources",
+    "legal": "Legal",
+    "rights": "All rights reserved.",
+    "made": "Made with 🌱 in Italy"
+  },
+  "recipes": {
+    "title": "Vegan & Organic Recipes",
+    "subtitle": "Discover plant-based recipes curated for every occasion",
+    "search_placeholder": "Search a recipe...",
+    "filter_diet": "Diet",
+    "filter_time": "Max time",
+    "filter_difficulty": "Difficulty",
+    "diet_all": "All",
+    "difficulty_easy": "Easy",
+    "difficulty_medium": "Medium",
+    "difficulty_hard": "Hard",
+    "no_results": "No recipes found",
+    "min": "min",
+    "servings": "servings",
+    "ingredients": "Ingredients",
+    "instructions": "Instructions",
+    "nutrition": "Nutrition facts",
+    "save": "Save",
+    "saved": "Saved",
+    "back": "Back to recipes"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close"
+  }
+}

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Leaf,
   ChefHat,
@@ -13,19 +14,21 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-
-const navLinks = [
-  { label: "Ricette", href: "/recipes", icon: ChefHat },
-  { label: "Ristoranti", href: "/restaurants", icon: Utensils },
-  { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
-  { label: "Blog", href: "/blog", icon: BookOpen },
-  { label: "Prezzi", href: "/pricing", icon: Tag },
-];
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { user, signOut } = useAuth();
+  const { t } = useTranslation();
+
+  const navLinks = [
+    { label: t("nav.recipes"), href: "/recipes", icon: ChefHat },
+    { label: t("nav.restaurants"), href: "/restaurants", icon: Utensils },
+    { label: t("nav.marketplace"), href: "/marketplace", icon: ShoppingBag },
+    { label: t("nav.blog"), href: "/blog", icon: BookOpen },
+    { label: t("nav.pricing"), href: "/pricing", icon: Tag },
+  ];
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -44,7 +47,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen((v) => !v)}
             className="size-9 rounded-xl bg-primary flex items-center justify-center transition-transform hover:scale-105"
-            aria-label="Menu"
+            aria-label={t("nav.menu")}
           >
             <Leaf className="size-5 text-primary-foreground" />
           </button>
@@ -69,30 +72,31 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher />
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
                 <Link to="/dashboard">
-                  <LayoutDashboard className="size-4 mr-1" /> Dashboard
+                  <LayoutDashboard className="size-4 mr-1" /> {t("nav.dashboard")}
                 </Link>
               </Button>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/profile">
-                  <User className="size-4 mr-1" /> Profilo
+                  <User className="size-4 mr-1" /> <span className="hidden sm:inline">{t("nav.profile")}</span>
                 </Link>
               </Button>
               <Button variant="ghost" size="sm" onClick={signOut}>
-                <LogOut className="size-4 mr-1" /> Esci
+                <LogOut className="size-4 sm:mr-1" /> <span className="hidden sm:inline">{t("nav.logout")}</span>
               </Button>
             </>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">Accedi</Link>
+                <Link to="/login">{t("nav.login")}</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link to="/signup">Inizia gratis</Link>
+                <Link to="/signup">{t("nav.signup")}</Link>
               </Button>
             </>
           )}
