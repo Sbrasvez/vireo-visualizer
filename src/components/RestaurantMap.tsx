@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, MapPin } from "lucide-react";
 
 export interface RestaurantMarker {
-  id: number;
+  id: string;
   name: string;
   city: string;
   rating: number;
@@ -18,14 +18,16 @@ export interface RestaurantMarker {
 
 interface RestaurantMapProps {
   restaurants: RestaurantMarker[];
-  activeId?: number | null;
-  onMarkerClick?: (id: number) => void;
+  activeId?: string | null;
+  onMarkerClick?: (id: string) => void;
+  origin?: { lat: number; lng: number } | null;
 }
 
-export default function RestaurantMap({ restaurants, activeId, onMarkerClick }: RestaurantMapProps) {
+export default function RestaurantMap({ restaurants, activeId, onMarkerClick, origin }: RestaurantMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<Record<number, mapboxgl.Marker>>({});
+  const markersRef = useRef<Record<string, mapboxgl.Marker>>({});
+  const originMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -143,8 +145,26 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick }: 
     const marker = markersRef.current[activeId];
     if (!r || !marker) return;
     map.flyTo({ center: [r.lng, r.lat], zoom: 13, duration: 1000, essential: true });
-    marker.togglePopup();
   }, [activeId, restaurants]);
+
+  // Origin pin (user's searched location)
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || loading || error) return;
+    if (originMarkerRef.current) {
+      originMarkerRef.current.remove();
+      originMarkerRef.current = null;
+    }
+    if (origin) {
+      const el = document.createElement("div");
+      el.className = "vireo-origin-pin";
+      el.innerHTML = `<span class="vireo-origin-dot"></span><span class="vireo-origin-pulse"></span>`;
+      originMarkerRef.current = new mapboxgl.Marker({ element: el })
+        .setLngLat([origin.lng, origin.lat])
+        .addTo(map);
+      map.flyTo({ center: [origin.lng, origin.lat], zoom: 11, duration: 1200 });
+    }
+  }, [origin, loading, error]);
 
   return (
     <div className="relative w-full h-[480px] rounded-2xl overflow-hidden border border-border/60 shadow-elegant bg-muted">

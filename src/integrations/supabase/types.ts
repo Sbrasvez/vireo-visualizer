@@ -44,6 +44,269 @@ export type Database = {
         }
         Relationships: []
       }
+      restaurant_menu_items: {
+        Row: {
+          allergens: string[] | null
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_vegan: boolean | null
+          name: string
+          price: number | null
+          restaurant_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          allergens?: string[] | null
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_vegan?: boolean | null
+          name: string
+          price?: number | null
+          restaurant_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          allergens?: string[] | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_vegan?: boolean | null
+          name?: string
+          price?: number | null
+          restaurant_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_menu_items_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurant_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          restaurant_id: string
+          sort_order: number | null
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          restaurant_id: string
+          sort_order?: number | null
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          restaurant_id?: string
+          sort_order?: number | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_photos_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurant_reservations: {
+        Row: {
+          created_at: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string | null
+          id: string
+          notes: string | null
+          party_size: number
+          reservation_date: string
+          reservation_time: string
+          restaurant_id: string
+          status: Database["public"]["Enums"]["reservation_status"]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          guest_email: string
+          guest_name: string
+          guest_phone?: string | null
+          id?: string
+          notes?: string | null
+          party_size: number
+          reservation_date: string
+          reservation_time: string
+          restaurant_id: string
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          guest_email?: string
+          guest_name?: string
+          guest_phone?: string | null
+          id?: string
+          notes?: string | null
+          party_size?: number
+          reservation_date?: string
+          reservation_time?: string
+          restaurant_id?: string
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_reservations_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurant_reviews: {
+        Row: {
+          author_name: string
+          body: string | null
+          created_at: string
+          id: string
+          rating: number
+          restaurant_id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_name: string
+          body?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          restaurant_id: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          body?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          restaurant_id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_reviews_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurants: {
+        Row: {
+          address: string
+          available_now: boolean
+          city: string
+          cover_image: string | null
+          created_at: string
+          cuisine: Database["public"]["Enums"]["cuisine_type"][]
+          description: string | null
+          eco_certifications: string[] | null
+          email: string | null
+          id: string
+          lat: number
+          lng: number
+          name: string
+          opening_hours: Json | null
+          phone: string | null
+          price: Database["public"]["Enums"]["price_range"]
+          rating: number | null
+          region: string | null
+          reviews_count: number | null
+          short_description: string | null
+          slug: string
+          tags: string[] | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address: string
+          available_now?: boolean
+          city: string
+          cover_image?: string | null
+          created_at?: string
+          cuisine?: Database["public"]["Enums"]["cuisine_type"][]
+          description?: string | null
+          eco_certifications?: string[] | null
+          email?: string | null
+          id?: string
+          lat: number
+          lng: number
+          name: string
+          opening_hours?: Json | null
+          phone?: string | null
+          price?: Database["public"]["Enums"]["price_range"]
+          rating?: number | null
+          region?: string | null
+          reviews_count?: number | null
+          short_description?: string | null
+          slug: string
+          tags?: string[] | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string
+          available_now?: boolean
+          city?: string
+          cover_image?: string | null
+          created_at?: string
+          cuisine?: Database["public"]["Enums"]["cuisine_type"][]
+          description?: string | null
+          eco_certifications?: string[] | null
+          email?: string | null
+          id?: string
+          lat?: number
+          lng?: number
+          name?: string
+          opening_hours?: Json | null
+          phone?: string | null
+          price?: Database["public"]["Enums"]["price_range"]
+          rating?: number | null
+          region?: string | null
+          reviews_count?: number | null
+          short_description?: string | null
+          slug?: string
+          tags?: string[] | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -52,7 +315,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      cuisine_type:
+        | "vegano"
+        | "vegetariano"
+        | "plant_based"
+        | "bio"
+        | "mediterraneo"
+        | "crudista"
+        | "fusion"
+        | "km_zero"
+      price_range: "€" | "€€" | "€€€" | "€€€€"
+      reservation_status: "pending" | "confirmed" | "cancelled" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -179,6 +452,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      cuisine_type: [
+        "vegano",
+        "vegetariano",
+        "plant_based",
+        "bio",
+        "mediterraneo",
+        "crudista",
+        "fusion",
+        "km_zero",
+      ],
+      price_range: ["€", "€€", "€€€", "€€€€"],
+      reservation_status: ["pending", "confirmed", "cancelled", "completed"],
+    },
   },
 } as const

@@ -1,154 +1,419 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RestaurantMap, { type RestaurantMarker } from "@/components/RestaurantMap";
-import { MapPin, Star, Clock, Leaf, Filter, Map as MapIcon } from "lucide-react";
+import RestaurantDetailDialog from "@/components/RestaurantDetailDialog";
+import { MapPin, Star, Clock, Leaf, Search, Map as MapIcon, Loader2, X, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import r1 from "@/assets/restaurant-1.jpg";
-import r2 from "@/assets/restaurant-2.jpg";
-import r3 from "@/assets/restaurant-3.jpg";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  useRestaurants,
+  useFilteredRestaurants,
+  type Filters,
+  type Restaurant,
+} from "@/hooks/useRestaurants";
+import { useGeocoding } from "@/hooks/useGeocoding";
+import { useToast } from "@/hooks/use-toast";
+import heroImg from "@/assets/restaurants-hero.jpg";
 
-const restaurants: RestaurantMarker[] = [
-  { id: 1, name: "Verde Mediterraneo", img: r1, city: "Milano", rating: 4.9, price: "€€", available: true, lng: 9.1900, lat: 45.4642 },
-  { id: 2, name: "Radici Urban Bistrot", img: r2, city: "Roma", rating: 4.8, price: "€€€", available: true, lng: 12.4964, lat: 41.9028 },
-  { id: 3, name: "Orto al Tavolo", img: r3, city: "Firenze", rating: 4.7, price: "€€", available: false, lng: 11.2558, lat: 43.7696 },
-  { id: 4, name: "La Foglia d'Oro", img: r1, city: "Torino", rating: 4.9, price: "€€€", available: true, lng: 7.6869, lat: 45.0703 },
-  { id: 5, name: "Botanico Bistrot", img: r2, city: "Bologna", rating: 4.6, price: "€€", available: true, lng: 11.3426, lat: 44.4949 },
-  { id: 6, name: "Giardino Segreto", img: r3, city: "Napoli", rating: 4.8, price: "€€", available: true, lng: 14.2681, lat: 40.8518 },
-];
-
-const restaurantsExtra: Record<number, { distance: string; tags: string[] }> = {
-  1: { distance: "1.2 km", tags: ["100% Vegano", "Bio certificato"] },
-  2: { distance: "2.8 km", tags: ["Plant-based", "Locale"] },
-  3: { distance: "0.6 km", tags: ["Km 0", "Stagionale"] },
-  4: { distance: "3.4 km", tags: ["Stellato green", "Innovativo"] },
-  5: { distance: "1.8 km", tags: ["Vegano", "Cocktail bio"] },
-  6: { distance: "2.1 km", tags: ["Outdoor", "Mediterraneo"] },
+const CUISINE_LABELS: Record<string, string> = {
+  vegano: "Vegano",
+  vegetariano: "Vegetariano",
+  plant_based: "Plant-based",
+  bio: "Bio certificato",
+  mediterraneo: "Mediterraneo",
+  crudista: "Crudista / Raw",
+  fusion: "Fusion",
+  km_zero: "Km 0",
 };
 
 export default function Restaurants() {
-  const [activeId, setActiveId] = useState<number | null>(null);
+  const { restaurants, loading } = useRestaurants();
+  const { geocode, loading: geocoding } = useGeocoding();
+  const { toast } = useToast();
+
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [dialogRestaurant, setDialogRestaurant] = useState<Restaurant | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [originLabel, setOriginLabel] = useState<string | null>(null);
+
+  const [filters, setFilters] = useState<Filters>({
+    cuisine: "all",
+    price: "all",
+    availableOnly: false,
+    search: "",
+    origin: null,
+    radiusKm: 25,
+  });
+
+  const filtered = useFilteredRestaurants(restaurants, filters);
+
+  const markers: RestaurantMarker[] = useMemo(
+    () =>
+      filtered.map((r) => ({
+        id: r.id,
+        name: r.name,
+        city: r.city,
+        rating: r.rating ?? 0,
+        price: r.price,
+        img: r.cover_image || "",
+        available: r.available_now,
+        lng: r.lng,
+        lat: r.lat,
+      })),
+    [filtered],
+  );
+
+  const handleSearch = async () => {
+    const q = searchInput.trim();
+    if (!q) {
+      toast({ title: "Inserisci una città o un indirizzo", variant: "destructive" });
+      return;
+    }
+    const result = await geocode(q);
+    if (!result) {
+      toast({
+        title: "Nessuna località trovata",
+        description: "Prova con una città italiana, es. 'Milano Navigli' o 'Roma Trastevere'",
+        variant: "destructive",
+      });
+      return;
+    }
+    setFilters((f) => ({
+      ...f,
+      origin: { lat: result.lat, lng: result.lng },
+      search: "",
+    }));
+    setOriginLabel(result.name);
+    toast({
+      title: "Posizione impostata",
+      description: result.name,
+    });
+  };
+
+  const clearOrigin = () => {
+    setFilters((f) => ({ ...f, origin: null }));
+    setOriginLabel(null);
+    setSearchInput("");
+  };
+
+  const openDetail = (r: Restaurant) => {
+    setDialogRestaurant(r);
+    setDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-24">
-        <section className="relative py-16 gradient-soft overflow-hidden">
-          <div className="absolute top-20 left-10 size-80 rounded-full bg-secondary/15 blur-3xl animate-float-slow" />
-          <div className="container relative">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
-                <MapPin className="size-4" />
-                <span>Mappa interattiva + Prenotazioni live</span>
+        {/* HERO */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              src={heroImg}
+              alt="Piatti vegetali colorati su tavolo rustico"
+              className="w-full h-full object-cover"
+              width={1920}
+              height={1080}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/50" />
+          </div>
+          <div className="relative container py-20 lg:py-28">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border text-sm font-medium mb-6 animate-fade-up">
+                <Sparkles className="size-4 text-primary" />
+                <span>{restaurants.length} ristoranti eco-friendly in Italia</span>
               </div>
-              <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                Ristoranti <span className="italic text-gradient-warm">eco-friendly</span>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                Mangia <span className="italic text-gradient-warm">consapevole</span>, ovunque tu sia
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-                Geolocalizzazione avanzata per individuare ristoranti, negozi bio e servizi sostenibili. Prenotazioni in tempo reale.
+              <p className="text-lg text-muted-foreground mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+                Una mappa interattiva di ristoranti veg, bio e km 0 selezionati in tutta Italia. Scopri menu, foto, recensioni e prenota in tempo reale.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 max-w-2xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+              <div className="flex flex-col sm:flex-row gap-3 max-w-xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
                 <div className="relative flex-1">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
-                  <Input placeholder="La tua città o quartiere..." className="pl-12 h-14 rounded-xl text-base border-border bg-card" />
+                  <Input
+                    placeholder="Es. Milano, Roma Trastevere, Firenze..."
+                    className="pl-12 h-14 rounded-xl text-base bg-card shadow-soft"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  />
                 </div>
-                <Button size="lg" variant="outline" className="h-14 px-6 rounded-xl gap-2"><Filter className="size-4" /> Filtri</Button>
-                <Button size="lg" className="h-14 px-8 rounded-xl shadow-elegant">Cerca</Button>
+                <Button size="lg" onClick={handleSearch} disabled={geocoding} className="h-14 px-8 rounded-xl shadow-elegant">
+                  {geocoding ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4 mr-2" />}
+                  Cerca zona
+                </Button>
               </div>
+
+              {originLabel && (
+                <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-sm animate-fade-up">
+                  <MapPin className="size-3.5 text-primary" />
+                  <span className="text-foreground">Centrato su <strong>{originLabel}</strong></span>
+                  <button onClick={clearOrigin} className="hover:bg-primary/20 rounded-full p-0.5">
+                    <X className="size-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>
 
-        <section className="py-16">
+        {/* FILTERS + MAP */}
+        <section className="py-12">
           <div className="container">
-            <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
-              <div>
-                <div className="inline-flex items-center gap-2 text-sm text-primary font-medium mb-2">
-                  <MapIcon className="size-4" />
-                  Esplora sulla mappa
-                </div>
-                <h2 className="font-display text-3xl font-bold">Locali geolocalizzati in Italia</h2>
-                <p className="text-muted-foreground mt-1">Clicca su un pin per vedere dettagli e prenotare</p>
-              </div>
-            </div>
-            <RestaurantMap
-              restaurants={restaurants}
-              activeId={activeId}
-              onMarkerClick={(id) => setActiveId(id)}
-            />
-          </div>
-        </section>
-
-        <section className="pb-20">
-          <div className="container">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <h2 className="font-display text-3xl font-bold">Vicino a te</h2>
-                <p className="text-muted-foreground mt-1">{restaurants.length} ristoranti disponibili</p>
-              </div>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {restaurants.map((r, i) => {
-                const extra = restaurantsExtra[r.id];
-                const isActive = activeId === r.id;
-                return (
-                  <article
-                    key={r.id}
-                    onClick={() => setActiveId(r.id)}
-                    className={`group rounded-2xl bg-card border overflow-hidden hover-lift animate-fade-up cursor-pointer transition-colors ${isActive ? "border-primary ring-2 ring-primary/30" : "border-border/60"}`}
-                    style={{ animationDelay: `${i * 0.06}s` }}
+            <div className="grid lg:grid-cols-[280px_1fr] gap-6">
+              {/* FILTERS */}
+              <aside className="bg-card rounded-2xl border border-border/60 p-5 h-fit lg:sticky lg:top-28 space-y-5 shadow-soft">
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <Label className="text-sm font-semibold">Tipo di cucina</Label>
+                  </div>
+                  <Select
+                    value={filters.cuisine}
+                    onValueChange={(v) => setFilters((f) => ({ ...f, cuisine: v as any }))}
                   >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <img src={r.img} alt={r.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width={1024} height={768} />
-                      <div className="absolute top-3 left-3">
-                        {r.available ? (
-                          <Badge className="bg-primary text-primary-foreground gap-1.5">
-                            <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
-                            Disponibile ora
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary">Completo stasera</Badge>
-                        )}
-                      </div>
+                    <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-popover z-50">
+                      <SelectItem value="all">Tutte le cucine</SelectItem>
+                      {Object.entries(CUISINE_LABELS).map(([k, v]) => (
+                        <SelectItem key={k} value={k}>{v}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label className="text-sm font-semibold mb-1 block">Fascia di prezzo</Label>
+                  <Select
+                    value={filters.price}
+                    onValueChange={(v) => setFilters((f) => ({ ...f, price: v as any }))}
+                  >
+                    <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-popover z-50">
+                      <SelectItem value="all">Qualsiasi</SelectItem>
+                      <SelectItem value="€">€ Economico</SelectItem>
+                      <SelectItem value="€€">€€ Medio</SelectItem>
+                      <SelectItem value="€€€">€€€ Alto</SelectItem>
+                      <SelectItem value="€€€€">€€€€ Premium</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {filters.origin && (
+                  <div>
+                    <Label className="text-sm font-semibold mb-2 block">
+                      Raggio di ricerca: <span className="text-primary">{filters.radiusKm} km</span>
+                    </Label>
+                    <Slider
+                      value={[filters.radiusKm]}
+                      min={2}
+                      max={100}
+                      step={1}
+                      onValueChange={(v) => setFilters((f) => ({ ...f, radiusKm: v[0] }))}
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between gap-3 pt-2 border-t border-border/60">
+                  <Label htmlFor="avail" className="text-sm font-semibold cursor-pointer">
+                    Solo disponibili ora
+                  </Label>
+                  <Switch
+                    id="avail"
+                    checked={filters.availableOnly}
+                    onCheckedChange={(v) => setFilters((f) => ({ ...f, availableOnly: v }))}
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-sm font-semibold mb-1 block">Cerca per nome</Label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <Input
+                      value={filters.search}
+                      onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+                      placeholder="Nome ristorante..."
+                      className="pl-9 bg-background"
+                    />
+                  </div>
+                </div>
+
+                <div className="text-center pt-2 border-t border-border/60">
+                  <div className="text-3xl font-display font-bold text-primary">{filtered.length}</div>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wide">
+                    {filtered.length === 1 ? "ristorante trovato" : "ristoranti trovati"}
+                  </div>
+                </div>
+              </aside>
+
+              {/* MAP */}
+              <div>
+                <div className="flex items-end justify-between mb-4 flex-wrap gap-3">
+                  <div>
+                    <div className="inline-flex items-center gap-2 text-sm text-primary font-medium mb-1">
+                      <MapIcon className="size-4" />
+                      Esplora sulla mappa
                     </div>
-                    <div className="p-5">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">{r.name}</h3>
-                        <div className="flex items-center gap-1 shrink-0 text-sm font-semibold">
-                          <Star className="size-4 fill-tertiary text-tertiary" />
-                          {r.rating}
+                    <h2 className="font-display text-2xl sm:text-3xl font-bold">
+                      {originLabel ? `Vicino a ${originLabel.split(",")[0]}` : "Locali in tutta Italia"}
+                    </h2>
+                  </div>
+                </div>
+                {loading ? (
+                  <div className="h-[480px] rounded-2xl bg-muted grid place-items-center">
+                    <Loader2 className="size-6 animate-spin text-primary" />
+                  </div>
+                ) : (
+                  <RestaurantMap
+                    restaurants={markers}
+                    activeId={activeId}
+                    onMarkerClick={(id) => {
+                      setActiveId(id);
+                      const r = filtered.find((x) => x.id === id);
+                      if (r) openDetail(r);
+                    }}
+                    origin={filters.origin}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* LIST */}
+        <section className="pb-24">
+          <div className="container">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl font-bold">
+                  {originLabel ? "Ordinati per distanza" : "Tutti i ristoranti"}
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  Clicca una scheda per vedere menu, foto, recensioni e prenotare
+                </p>
+              </div>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="text-center py-20 bg-card rounded-2xl border border-border/60">
+                <Leaf className="size-10 mx-auto text-muted-foreground mb-3" />
+                <h3 className="font-display text-xl font-semibold mb-2">Nessun ristorante con questi filtri</h3>
+                <p className="text-muted-foreground text-sm">Prova ad ampliare il raggio o rimuovere alcuni filtri.</p>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filtered.map((r, i) => {
+                  const isActive = activeId === r.id;
+                  return (
+                    <article
+                      key={r.id}
+                      onClick={() => {
+                        setActiveId(r.id);
+                        openDetail(r);
+                      }}
+                      onMouseEnter={() => setActiveId(r.id)}
+                      className={`group rounded-2xl bg-card border overflow-hidden hover-lift animate-fade-up cursor-pointer transition-all ${
+                        isActive ? "border-primary ring-2 ring-primary/30" : "border-border/60"
+                      }`}
+                      style={{ animationDelay: `${Math.min(i, 12) * 0.04}s` }}
+                    >
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        {r.cover_image && (
+                          <img
+                            src={r.cover_image}
+                            alt={r.name}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            width={1024}
+                            height={768}
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
+                          {r.available_now ? (
+                            <Badge className="bg-primary text-primary-foreground gap-1.5">
+                              <span className="size-2 rounded-full bg-primary-foreground animate-pulse" />
+                              Disponibile
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary">Completo</Badge>
+                          )}
+                          {r._distance != null && (
+                            <Badge variant="outline" className="bg-background/90 backdrop-blur-sm">
+                              {r._distance < 1 ? `${Math.round(r._distance * 1000)} m` : `${r._distance.toFixed(1)} km`}
+                            </Badge>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
-                        <span className="flex items-center gap-1"><MapPin className="size-3.5" />{r.city} · {extra.distance}</span>
-                        <span>·</span>
-                        <span>{r.price}</span>
+                      <div className="p-5">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <h3 className="font-display text-lg font-semibold leading-tight group-hover:text-primary transition-colors">
+                            {r.name}
+                          </h3>
+                          <div className="flex items-center gap-1 shrink-0 text-sm font-semibold">
+                            <Star className="size-4 fill-tertiary text-tertiary" />
+                            {r.rating?.toFixed(1) ?? "—"}
+                          </div>
+                        </div>
+                        {r.short_description && (
+                          <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                            {r.short_description}
+                          </p>
+                        )}
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                          <MapPin className="size-3.5" />
+                          <span>{r.city}</span>
+                          <span>·</span>
+                          <span className="font-semibold text-foreground">{r.price}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {r.cuisine.slice(0, 2).map((c) => (
+                            <span key={c} className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground capitalize">
+                              <Leaf className="size-3 inline mr-1" />
+                              {CUISINE_LABELS[c] || c}
+                            </span>
+                          ))}
+                        </div>
+                        <Button
+                          className="w-full rounded-lg"
+                          disabled={!r.available_now}
+                          size="sm"
+                          variant={r.available_now ? "default" : "secondary"}
+                        >
+                          <Clock className="size-4 mr-2" />
+                          {r.available_now ? "Vedi e prenota" : "Lista d'attesa"}
+                        </Button>
                       </div>
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {extra.tags.map((t) => (
-                          <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground">
-                            <Leaf className="size-3 inline mr-1" />
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                      <Button className="w-full rounded-lg" disabled={!r.available} size="sm">
-                        <Clock className="size-4 mr-2" />
-                        {r.available ? "Prenota live" : "Lista d'attesa"}
-                      </Button>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
       </main>
       <Footer />
+
+      <RestaurantDetailDialog
+        restaurant={dialogRestaurant}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 }
