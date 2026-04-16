@@ -68,6 +68,75 @@ export type Database = {
         }
         Relationships: []
       }
+      recipes: {
+        Row: {
+          created_at: string
+          cuisines: string[] | null
+          diets: string[] | null
+          difficulty: Database["public"]["Enums"]["recipe_difficulty"]
+          dish_types: string[] | null
+          eco_score: number | null
+          external_id: string | null
+          id: string
+          image: string | null
+          ingredients: Json
+          instructions: Json
+          nutrition: Json | null
+          ready_in_minutes: number | null
+          servings: number | null
+          slug: string
+          source: string
+          source_url: string | null
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cuisines?: string[] | null
+          diets?: string[] | null
+          difficulty?: Database["public"]["Enums"]["recipe_difficulty"]
+          dish_types?: string[] | null
+          eco_score?: number | null
+          external_id?: string | null
+          id?: string
+          image?: string | null
+          ingredients?: Json
+          instructions?: Json
+          nutrition?: Json | null
+          ready_in_minutes?: number | null
+          servings?: number | null
+          slug: string
+          source?: string
+          source_url?: string | null
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cuisines?: string[] | null
+          diets?: string[] | null
+          difficulty?: Database["public"]["Enums"]["recipe_difficulty"]
+          dish_types?: string[] | null
+          eco_score?: number | null
+          external_id?: string | null
+          id?: string
+          image?: string | null
+          ingredients?: Json
+          instructions?: Json
+          nutrition?: Json | null
+          ready_in_minutes?: number | null
+          servings?: number | null
+          slug?: string
+          source?: string
+          source_url?: string | null
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       restaurant_menu_items: {
         Row: {
           allergens: string[] | null
@@ -419,6 +488,7 @@ export type Database = {
         | "km_zero"
       plan_tier: "free" | "pro" | "business"
       price_range: "€" | "€€" | "€€€" | "€€€€"
+      recipe_difficulty: "facile" | "media" | "difficile"
       reservation_status: "pending" | "confirmed" | "cancelled" | "completed"
     }
     CompositeTypes: {
@@ -559,6 +629,7 @@ export const Constants = {
       ],
       plan_tier: ["free", "pro", "business"],
       price_range: ["€", "€€", "€€€", "€€€€"],
+      recipe_difficulty: ["facile", "media", "difficile"],
       reservation_status: ["pending", "confirmed", "cancelled", "completed"],
     },
   },
