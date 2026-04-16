@@ -18,7 +18,7 @@ async function importRecipes() {
     for (const rec of recipes) {
       await Recipe.create({
         title: rec.title,
-        ingredients: rec.extendedIngredients.map(ing => ing.original),
+        ingredients: JSON.stringify(rec.extendedIngredients.map(ing => ing.original)),
         instructions: rec.instructions || "Instructions not available",
         preparation_time: rec.readyInMinutes + " min"
       });

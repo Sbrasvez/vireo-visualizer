@@ -108,5 +108,10 @@ export default {
       },
     },
   },
+  safelist: [
+    { pattern: /bg-vireo-(leaf|sun|earth|sky|cream)\/\d+/ },
+    { pattern: /text-vireo-(leaf|sun|earth|sky|cream)/ },
+    { pattern: /border-vireo-(leaf|sun|earth|sky|cream)/ },
+  ],
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

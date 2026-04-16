@@ -11,6 +11,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  build: {
+    outDir: "public",
+    emptyOutDir: true,
+  },
   plugins: [react()],
   resolve: {
     alias: {

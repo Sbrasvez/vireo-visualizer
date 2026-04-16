@@ -27,6 +27,10 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/voice', voiceCommandRoutes);
 app.use('/api/blog', blogRoutes);
 
+// Auth routes (signup/login via Supabase)
+const { router: authRoutes } = require('./index');
+app.use('/api/auth', authRoutes);
+
 app.get('/', (req, res) => {
   res.send('Welcome to Vireo – Smart Living, Green Future');
 });
