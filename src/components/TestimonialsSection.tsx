@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Quote, Star } from "lucide-react";
 
 const testimonials = [
@@ -22,39 +23,40 @@ const testimonials = [
 ];
 
 export default function TestimonialsSection() {
+  const { t } = useTranslation();
   return (
     <section className="py-24 sm:py-32 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-4">Voci della community</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-4">{t("testimonials.kicker")}</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold mb-5 text-balance">
-            Una community che cresce <span className="italic text-gradient-leaf">ogni giorno</span>
+            {t("testimonials.title_1")} <span className="italic text-gradient-leaf">{t("testimonials.title_2")}</span>
           </h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
+          {testimonials.map((tt, i) => (
             <figure
-              key={t.name}
+              key={tt.name}
               className="rounded-3xl border border-border/60 bg-card p-8 hover-lift animate-fade-up relative"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               <Quote className="absolute top-6 right-6 size-8 text-primary/15" />
               <div className="flex gap-0.5 mb-4">
-                {Array.from({ length: t.rating }).map((_, j) => (
+                {Array.from({ length: tt.rating }).map((_, j) => (
                   <Star key={j} className="size-4 fill-tertiary text-tertiary" />
                 ))}
               </div>
               <blockquote className="text-foreground/90 leading-relaxed mb-6">
-                "{t.text}"
+                "{tt.text}"
               </blockquote>
               <figcaption className="flex items-center gap-3">
                 <div className="size-11 rounded-full gradient-leaf flex items-center justify-center text-primary-foreground font-display font-bold">
-                  {t.name.charAt(0)}
+                  {tt.name.charAt(0)}
                 </div>
                 <div>
-                  <div className="font-semibold text-sm">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
+                  <div className="font-semibold text-sm">{tt.name}</div>
+                  <div className="text-xs text-muted-foreground">{tt.role}</div>
                 </div>
               </figcaption>
             </figure>
