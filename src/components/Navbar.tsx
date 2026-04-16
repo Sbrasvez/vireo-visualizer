@@ -69,6 +69,7 @@ export default function Navbar() {
               <Button variant="ghost" size="sm" onClick={signOut}>
                 <LogOut className="size-4 mr-1" /> Esci
               </Button>
+            </>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
