@@ -47,8 +47,9 @@ export default function Navbar() {
                   key={l.href}
                   to={l.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                  className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                 >
+                  <l.icon className="size-4" />
                   {l.label}
                 </Link>
               ))}
