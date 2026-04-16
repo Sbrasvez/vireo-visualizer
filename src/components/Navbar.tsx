@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Leaf, ChefHat, Utensils, ShoppingBag, BookOpen } from "lucide-react";
+import { Leaf, ChefHat, Utensils, ShoppingBag, BookOpen, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { label: "Ricette", href: "/recipes", icon: ChefHat },
@@ -13,6 +14,7 @@ const navLinks = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -27,7 +29,6 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
       <nav className="container flex items-center justify-between h-16">
-        {/* Logo + dropdown */}
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((v) => !v)}
@@ -57,14 +58,27 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Auth buttons */}
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/login">Accedi</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link to="/signup">Inizia gratis</Link>
-          </Button>
+          {user ? (
+            <>
+              <span className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground">
+                <User className="size-4" />
+                {user.user_metadata?.full_name || user.email}
+              </span>
+              <Button variant="ghost" size="sm" onClick={signOut}>
+                <LogOut className="size-4 mr-1" /> Esci
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">Accedi</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link to="/signup">Inizia gratis</Link>
+              </Button>
+            </>
+          )}
         </div>
       </nav>
     </header>
