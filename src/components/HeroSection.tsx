@@ -20,9 +20,9 @@ export default function HeroSection() {
           </div>
 
           <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight mb-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-            Vivi <span className="text-primary">smart</span>,{" "}
+            Vivi <span className="text-secondary">smart</span>,{" "}
             <br className="hidden sm:block" />
-            scegli <span className="text-secondary">green</span>
+            scegli <span className="text-primary">green</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto mb-10 animate-fade-up" style={{ animationDelay: "0.2s" }}>
