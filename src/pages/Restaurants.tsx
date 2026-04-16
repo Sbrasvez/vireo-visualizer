@@ -72,14 +72,14 @@ export default function Restaurants() {
   const handleSearch = async () => {
     const q = searchInput.trim();
     if (!q) {
-      toast({ title: "Inserisci una città o un indirizzo", variant: "destructive" });
+      toast({ title: t("restaurants.geo_no_location_title"), variant: "destructive" });
       return;
     }
     const result = await geocode(q);
     if (!result) {
       toast({
-        title: "Nessuna località trovata",
-        description: "Prova con una città italiana, es. 'Milano Navigli' o 'Roma Trastevere'",
+        title: t("restaurants.geo_not_found_title"),
+        description: t("restaurants.geo_not_found_desc"),
         variant: "destructive",
       });
       return;
@@ -91,7 +91,7 @@ export default function Restaurants() {
     }));
     setOriginLabel(result.name);
     toast({
-      title: "Posizione impostata",
+      title: t("restaurants.geo_set_title"),
       description: result.name,
     });
   };
