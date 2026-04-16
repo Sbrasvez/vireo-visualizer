@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { Utensils, MapPin, ShoppingBag, Bot, Mic, BookOpen } from "lucide-react";
 import featureRestaurant from "@/assets/feature-restaurant.jpg";
 import featureMarket from "@/assets/feature-market.jpg";
@@ -8,18 +9,18 @@ export default function FeaturesSection() {
   const { t } = useTranslation();
 
   const features = [
-    { icon: Utensils, title: t("features.items.recipes_title"), description: t("features.items.recipes_desc"), color: "bg-primary/10 text-primary" },
-    { icon: MapPin, title: t("features.items.map_title"), description: t("features.items.map_desc"), color: "bg-tertiary/15 text-tertiary" },
-    { icon: ShoppingBag, title: t("features.items.market_title"), description: t("features.items.market_desc"), color: "bg-secondary/15 text-secondary" },
-    { icon: Bot, title: t("features.items.ai_title"), description: t("features.items.ai_desc"), color: "bg-vireo-leaf/10 text-vireo-leaf" },
-    { icon: Mic, title: t("features.items.voice_title"), description: t("features.items.voice_desc"), color: "bg-vireo-clay/20 text-vireo-terracotta" },
-    { icon: BookOpen, title: t("features.items.blog_title"), description: t("features.items.blog_desc"), color: "bg-primary/10 text-primary" },
+    { icon: Utensils, title: t("features.items.recipes_title"), description: t("features.items.recipes_desc"), color: "bg-primary/10 text-primary", to: "/recipes" },
+    { icon: MapPin, title: t("features.items.map_title"), description: t("features.items.map_desc"), color: "bg-tertiary/15 text-tertiary", to: "/restaurants" },
+    { icon: ShoppingBag, title: t("features.items.market_title"), description: t("features.items.market_desc"), color: "bg-secondary/15 text-secondary", to: "/marketplace" },
+    { icon: Bot, title: t("features.items.ai_title"), description: t("features.items.ai_desc"), color: "bg-vireo-leaf/10 text-vireo-leaf", to: "/ai" },
+    { icon: Mic, title: t("features.items.voice_title"), description: t("features.items.voice_desc"), color: "bg-vireo-clay/20 text-vireo-terracotta", to: "/ai" },
+    { icon: BookOpen, title: t("features.items.blog_title"), description: t("features.items.blog_desc"), color: "bg-primary/10 text-primary", to: "/blog" },
   ];
 
   const showcase = [
-    { src: featureRestaurant, alt: t("features.items.map_title"), label: t("nav.restaurants"), value: "500+" },
-    { src: featureMarket, alt: t("features.items.market_title"), label: t("nav.marketplace"), value: "1.2k" },
-    { src: featureAI, alt: t("features.items.ai_title"), label: "AI", value: "24/7" },
+    { src: featureRestaurant, alt: t("features.items.map_title"), label: t("nav.restaurants"), value: "500+", to: "/restaurants" },
+    { src: featureMarket, alt: t("features.items.market_title"), label: t("nav.marketplace"), value: "1.2k", to: "/marketplace" },
+    { src: featureAI, alt: t("features.items.ai_title"), label: "AI", value: "24/7", to: "/ai" },
   ];
 
   return (
@@ -35,9 +36,10 @@ export default function FeaturesSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-20">
           {showcase.map((item, i) => (
-            <div
+            <Link
               key={item.label}
-              className="group relative aspect-[4/5] sm:aspect-[3/4] rounded-3xl overflow-hidden hover-lift animate-fade-up"
+              to={item.to}
+              className="group relative aspect-[4/5] sm:aspect-[3/4] rounded-3xl overflow-hidden hover-lift animate-fade-up block"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               <img
@@ -53,23 +55,24 @@ export default function FeaturesSection() {
                 <div className="font-display text-3xl font-bold">{item.value}</div>
                 <div className="text-sm uppercase tracking-widest opacity-90">{item.label}</div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((f, i) => (
-            <div
+            <Link
               key={f.title}
-              className="group rounded-2xl border border-border/60 bg-card p-7 hover-lift animate-fade-up"
+              to={f.to}
+              className="group rounded-2xl border border-border/60 bg-card p-7 hover-lift animate-fade-up block"
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               <div className={`inline-flex items-center justify-center size-12 rounded-xl ${f.color} mb-5 transition-transform group-hover:scale-110 group-hover:rotate-3`}>
                 <f.icon className="size-6" />
               </div>
-              <h3 className="font-display text-xl font-semibold mb-2">{f.title}</h3>
+              <h3 className="font-display text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{f.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{f.description}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

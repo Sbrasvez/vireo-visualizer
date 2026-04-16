@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Clock, Leaf, Flame, ChefHat } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { RecipeRow } from "@/hooks/useRecipes";
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function RecipeCard({ recipe, index = 0 }: Props) {
+  const { t } = useTranslation();
   const cal = recipe.nutrition?.calories ? Math.round(recipe.nutrition.calories) : null;
   return (
     <Link
@@ -50,7 +52,7 @@ export default function RecipeCard({ recipe, index = 0 }: Props) {
             {recipe.ready_in_minutes && (
               <span className="flex items-center gap-1.5">
                 <Clock className="size-4" />
-                {recipe.ready_in_minutes} min
+                {recipe.ready_in_minutes} {t("recipes.min")}
               </span>
             )}
             {cal && (
@@ -61,9 +63,9 @@ export default function RecipeCard({ recipe, index = 0 }: Props) {
             )}
           </div>
           <div className="flex flex-wrap gap-1.5">
-            {(recipe.diets || []).slice(0, 3).map((t) => (
-              <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
-                {t}
+            {(recipe.diets || []).slice(0, 3).map((tag) => (
+              <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
+                {tag}
               </span>
             ))}
           </div>
