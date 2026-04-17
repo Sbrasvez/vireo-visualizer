@@ -167,9 +167,9 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
     }
     if (origin) {
       const el = document.createElement("div");
-      el.className = "vireo-origin-pin";
-      el.innerHTML = `<span class="vireo-origin-dot"></span><span class="vireo-origin-pulse"></span>`;
-      originMarkerRef.current = new mapboxgl.Marker({ element: el })
+      el.className = "vireo-origin-root";
+      el.innerHTML = `<div class="vireo-origin-inner"><span class="vireo-origin-dot"></span><span class="vireo-origin-pulse"></span></div>`;
+      originMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([origin.lng, origin.lat])
         .addTo(map);
       map.flyTo({ center: [origin.lng, origin.lat], zoom: 11, duration: 1200 });
