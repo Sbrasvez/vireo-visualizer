@@ -17,7 +17,9 @@
     "ai_chat": "AI Chat",
     "shopping_list": "Liste de courses",
     "cart": "Panier",
-    "wishlist": "Favoris"
+    "wishlist": "Favoris",
+    "back": "Retour",
+    "home": "Accueil"
   },
   "wishlist": {
     "badge": "Vos favoris",
