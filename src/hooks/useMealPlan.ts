@@ -47,7 +47,7 @@ export function useCurrentMealPlan() {
         .eq("week_start", weekStart)
         .maybeSingle();
       if (error) throw error;
-      return data as MealPlan | null;
+      return data ? (data as unknown as MealPlan) : null;
     },
   });
 }
@@ -67,7 +67,7 @@ export function useGenerateMealPlan() {
       );
       if (error) throw new Error(error.message);
       if (data?.error) throw new Error(data.error);
-      return data.plan as MealPlan;
+      return data.plan as unknown as MealPlan;
     },
     onSuccess: () => {
       toast.success("Piano settimanale generato!");
