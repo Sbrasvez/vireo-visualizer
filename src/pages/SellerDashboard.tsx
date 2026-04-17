@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ import { useMySeller } from "@/hooks/useSeller";
 import { useMyProducts, useCreateProduct, useDeleteProduct, useUpdateProduct } from "@/hooks/useSellerProducts";
 import { useSellerOrders, useUpdateFulfillment } from "@/hooks/useSellerOrders";
 import { formatEur } from "@/lib/catalog";
-import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, Truck, MessageCircleQuestion } from "lucide-react";
+import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, MessageCircleQuestion } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useSellerQuestions, useAnswerQuestion } from "@/hooks/useProductQuestions";
@@ -25,6 +26,7 @@ import { useSellerQuestions, useAnswerQuestion } from "@/hooks/useProductQuestio
 const CATEGORIES = ["kitchen", "home", "personal", "reuse", "bio", "fashion", "beauty", "garden"];
 
 export default function SellerDashboard() {
+  const { t, i18n } = useTranslation();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { data: seller, isLoading: loadingSeller } = useMySeller();
@@ -76,17 +78,18 @@ export default function SellerDashboard() {
   }
 
   if (seller.status !== "approved") {
+    const statusLabel = t(`sell_apply.status_${seller.status}` as any);
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
         <main className="flex-1 pt-32 container max-w-2xl">
           <Card>
             <CardHeader>
-              <CardTitle>Candidatura {seller.status}</CardTitle>
+              <CardTitle>{t("seller_dashboard.candidacy", { status: statusLabel })}</CardTitle>
               <CardDescription>
-                {seller.status === "pending" && "Stiamo valutando la tua candidatura. Riceverai una risposta entro 48h."}
-                {seller.status === "rejected" && (seller.rejection_reason || "La candidatura è stata rifiutata.")}
-                {seller.status === "suspended" && "Il tuo account è temporaneamente sospeso."}
+                {seller.status === "pending" && t("seller_dashboard.candidacy_pending")}
+                {seller.status === "rejected" && (seller.rejection_reason || t("seller_dashboard.candidacy_rejected"))}
+                {seller.status === "suspended" && t("seller_dashboard.candidacy_suspended")}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -106,9 +109,9 @@ export default function SellerDashboard() {
       if (error) throw error;
       const { data } = supabase.storage.from("seller-assets").getPublicUrl(path);
       setForm((f) => ({ ...f, image_url: data.publicUrl }));
-      toast.success("Immagine caricata");
+      toast.success(t("seller_dashboard.image_uploaded"));
     } catch (e: any) {
-      toast.error(e.message ?? "Errore upload");
+      toast.error(e.message ?? t("seller_dashboard.upload_error"));
     } finally {
       setUploading(false);
     }
@@ -118,7 +121,7 @@ export default function SellerDashboard() {
     e.preventDefault();
     const price = Math.round(parseFloat(form.price_eur || "0") * 100);
     if (!form.name || price < 50) {
-      toast.error("Nome e prezzo (min 0,50€) obbligatori");
+      toast.error(t("seller_dashboard.name_price_required"));
       return;
     }
     await createProduct.mutateAsync({
@@ -166,33 +169,46 @@ export default function SellerDashboard() {
         <div className="container max-w-6xl">
           <div className="flex items-start justify-between mb-8 flex-wrap gap-4">
             <div>
-              <Badge className="mb-2">Venditore approvato</Badge>
+              <Badge className="mb-2">{t("seller_dashboard.approved_badge")}</Badge>
               <h1 className="font-display text-4xl font-bold">{seller.business_name}</h1>
               <p className="text-muted-foreground">
-                Commissione: {Math.round(seller.commission_rate * 100)}% · Slug: /store/{seller.slug}
+                {t("seller_dashboard.commission")}: {Math.round(seller.commission_rate * 100)}% · Slug: /store/{seller.slug}
               </p>
             </div>
             <Button asChild variant="outline">
               <a href={`/store/${seller.slug}`} target="_blank" rel="noreferrer">
-                <Eye className="size-4 mr-2" /> Vedi store pubblico
+                <Eye className="size-4 mr-2" /> {t("seller_dashboard.view_public")}
               </a>
             </Button>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <StatBlock icon={Wallet} label="Ricavi netti" value={formatEur(stats.revenue)} />
-            <StatBlock icon={ShoppingBag} label="Ordini totali" value={String(stats.orders)} />
-            <StatBlock icon={Package} label="Prodotti pubblicati" value={`${stats.published}/${stats.products}`} />
-            <StatBlock icon={TrendingUp} label="Rating" value={(seller.rating ?? 0).toFixed(1)} />
+            <StatBlock icon={Wallet} label={t("seller_dashboard.stat_revenue")} value={formatEur(stats.revenue)} />
+            <StatBlock icon={ShoppingBag} label={t("seller_dashboard.stat_orders")} value={String(stats.orders)} />
+            <StatBlock
+              icon={Package}
+              label={t("seller_dashboard.stat_published")}
+              value={`${stats.published}/${stats.products}`}
+            />
+            <StatBlock icon={TrendingUp} label={t("seller_dashboard.stat_rating")} value={(seller.rating ?? 0).toFixed(1)} />
           </div>
 
           <Tabs defaultValue="products">
             <TabsList>
-              <TabsTrigger value="products">Prodotti ({products.length})</TabsTrigger>
-              <TabsTrigger value="orders">Ordini ({orders.length})</TabsTrigger>
+              <TabsTrigger value="products">
+                {t("seller_dashboard.tab_products")} ({products.length})
+              </TabsTrigger>
+              <TabsTrigger value="orders">
+                {t("seller_dashboard.tab_orders")} ({orders.length})
+              </TabsTrigger>
               <TabsTrigger value="questions" className="gap-2">
                 <MessageCircleQuestion className="size-4" />
-                Domande {unansweredCount > 0 && <Badge variant="secondary" className="h-5">{unansweredCount}</Badge>}
+                {t("seller_dashboard.tab_questions")}{" "}
+                {unansweredCount > 0 && (
+                  <Badge variant="secondary" className="h-5">
+                    {unansweredCount}
+                  </Badge>
+                )}
               </TabsTrigger>
             </TabsList>
 
@@ -201,77 +217,133 @@ export default function SellerDashboard() {
                 <Dialog open={openCreate} onOpenChange={setOpenCreate}>
                   <DialogTrigger asChild>
                     <Button>
-                      <Plus className="size-4 mr-2" /> Nuovo prodotto
+                      <Plus className="size-4 mr-2" /> {t("seller_dashboard.new_product")}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                      <DialogTitle>Nuovo prodotto</DialogTitle>
-                      <DialogDescription>Verrà pubblicato subito sul marketplace.</DialogDescription>
+                      <DialogTitle>{t("seller_dashboard.new_product")}</DialogTitle>
+                      <DialogDescription>{t("seller_dashboard.new_product_desc")}</DialogDescription>
                     </DialogHeader>
                     <form onSubmit={submitProduct} className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Nome *</Label>
+                        <Label>{t("seller_dashboard.name")} *</Label>
                         <Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Descrizione</Label>
-                        <Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                        <Label>{t("seller_dashboard.description")}</Label>
+                        <Textarea
+                          rows={3}
+                          value={form.description}
+                          onChange={(e) => setForm({ ...form, description: e.target.value })}
+                        />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                          <Label>Prezzo (€) *</Label>
-                          <Input type="number" step="0.01" min="0.50" required value={form.price_eur} onChange={(e) => setForm({ ...form, price_eur: e.target.value })} />
+                          <Label>{t("seller_dashboard.price")} *</Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="0.50"
+                            required
+                            value={form.price_eur}
+                            onChange={(e) => setForm({ ...form, price_eur: e.target.value })}
+                          />
                         </div>
                         <div className="space-y-2">
-                          <Label>Prezzo barrato (€)</Label>
-                          <Input type="number" step="0.01" min="0" value={form.compare_eur} onChange={(e) => setForm({ ...form, compare_eur: e.target.value })} />
+                          <Label>{t("seller_dashboard.compare_price")}</Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={form.compare_eur}
+                            onChange={(e) => setForm({ ...form, compare_eur: e.target.value })}
+                          />
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                          <Label>Categoria</Label>
+                          <Label>{t("seller_dashboard.category")}</Label>
                           <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {CATEGORIES.map((c) => (
+                                <SelectItem key={c} value={c}>
+                                  {t(`sell_apply.categories.${c}` as any)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
                           </Select>
                         </div>
                         <div className="space-y-2">
-                          <Label>Spedizione (€)</Label>
-                          <Input type="number" step="0.01" min="0" value={form.shipping_eur} onChange={(e) => setForm({ ...form, shipping_eur: e.target.value })} />
+                          <Label>{t("seller_dashboard.shipping")}</Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={form.shipping_eur}
+                            onChange={(e) => setForm({ ...form, shipping_eur: e.target.value })}
+                          />
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                          <Label>Stock</Label>
-                          <Input type="number" min="0" disabled={form.unlimited_stock} value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} />
+                          <Label>{t("seller_dashboard.stock")}</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            disabled={form.unlimited_stock}
+                            value={form.stock}
+                            onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                          />
                         </div>
                         <div className="flex items-end gap-2">
-                          <Switch id="unlimited" checked={form.unlimited_stock} onCheckedChange={(v) => setForm({ ...form, unlimited_stock: v })} />
-                          <Label htmlFor="unlimited" className="cursor-pointer">Stock illimitato</Label>
+                          <Switch
+                            id="unlimited"
+                            checked={form.unlimited_stock}
+                            onCheckedChange={(v) => setForm({ ...form, unlimited_stock: v })}
+                          />
+                          <Label htmlFor="unlimited" className="cursor-pointer">
+                            {t("seller_dashboard.unlimited_stock")}
+                          </Label>
                         </div>
                       </div>
                       <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
-                          <Switch id="reused" checked={form.is_reused} onCheckedChange={(v) => setForm({ ...form, is_reused: v })} />
-                          <Label htmlFor="reused">Riuso</Label>
+                          <Switch
+                            id="reused"
+                            checked={form.is_reused}
+                            onCheckedChange={(v) => setForm({ ...form, is_reused: v })}
+                          />
+                          <Label htmlFor="reused">{t("seller_dashboard.reused")}</Label>
                         </div>
                         <div className="flex items-center gap-2">
                           <Switch id="bio" checked={form.is_bio} onCheckedChange={(v) => setForm({ ...form, is_bio: v })} />
-                          <Label htmlFor="bio">Bio</Label>
+                          <Label htmlFor="bio">{t("seller_dashboard.bio")}</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Switch id="pub" checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} />
-                          <Label htmlFor="pub">Pubblica</Label>
+                          <Switch
+                            id="pub"
+                            checked={form.is_published}
+                            onCheckedChange={(v) => setForm({ ...form, is_published: v })}
+                          />
+                          <Label htmlFor="pub">{t("seller_dashboard.publish")}</Label>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label>Immagine</Label>
-                        <Input type="file" accept="image/*" disabled={uploading} onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
+                        <Label>{t("seller_dashboard.image")}</Label>
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          disabled={uploading}
+                          onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])}
+                        />
                         {form.image_url && <img src={form.image_url} alt="" className="size-24 rounded-lg object-cover" />}
                       </div>
                       <Button type="submit" className="w-full" disabled={createProduct.isPending || uploading}>
-                        {createProduct.isPending ? "Pubblicazione..." : "Pubblica prodotto"}
+                        {createProduct.isPending ? t("seller_dashboard.publishing") : t("seller_dashboard.publish_product")}
                       </Button>
                     </form>
                   </DialogContent>
@@ -279,30 +351,74 @@ export default function SellerDashboard() {
               </div>
 
               {products.length === 0 ? (
-                <Card><CardContent className="py-16 text-center text-muted-foreground">Nessun prodotto. Pubblica il primo!</CardContent></Card>
+                <Card>
+                  <CardContent className="py-16 text-center text-muted-foreground">
+                    {t("seller_dashboard.no_products")}
+                  </CardContent>
+                </Card>
               ) : (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {products.map((p) => (
                     <Card key={p.id}>
                       <div className="aspect-square bg-muted overflow-hidden rounded-t-xl">
-                        {p.primary_image ? <img src={p.primary_image} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full grid place-items-center text-muted-foreground"><Package className="size-12" /></div>}
+                        {p.primary_image ? (
+                          <img src={p.primary_image} alt={p.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full grid place-items-center text-muted-foreground">
+                            <Package className="size-12" />
+                          </div>
+                        )}
                       </div>
                       <CardContent className="p-4 space-y-2">
                         <div className="flex items-center gap-2">
-                          {!p.is_published && <Badge variant="secondary"><EyeOff className="size-3 mr-1" />Bozza</Badge>}
-                          {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
-                          {p.is_reused && <Badge variant="secondary">Riuso</Badge>}
+                          {!p.is_published && (
+                            <Badge variant="secondary">
+                              <EyeOff className="size-3 mr-1" />
+                              {t("seller_dashboard.draft")}
+                            </Badge>
+                          )}
+                          {p.is_bio && (
+                            <Badge className="bg-tertiary text-tertiary-foreground">
+                              {t("seller_dashboard.bio")}
+                            </Badge>
+                          )}
+                          {p.is_reused && (
+                            <Badge variant="secondary">{t("seller_dashboard.reused")}</Badge>
+                          )}
                         </div>
                         <h3 className="font-display font-semibold line-clamp-2 min-h-[2.5em]">{p.name}</h3>
                         <div className="flex items-center justify-between">
                           <span className="font-bold">{formatEur(p.price_cents)}</span>
-                          <span className="text-xs text-muted-foreground">{p.unlimited_stock ? "∞" : `${p.stock} pz`}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {p.unlimited_stock ? "∞" : `${p.stock} pz`}
+                          </span>
                         </div>
                         <div className="flex gap-2 pt-2">
-                          <Button size="sm" variant="outline" className="flex-1" onClick={() => updateProduct.mutate({ id: p.id, patch: { is_published: !p.is_published } })}>
-                            {p.is_published ? <><EyeOff className="size-3 mr-1" />Nascondi</> : <><Eye className="size-3 mr-1" />Pubblica</>}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => updateProduct.mutate({ id: p.id, patch: { is_published: !p.is_published } })}
+                          >
+                            {p.is_published ? (
+                              <>
+                                <EyeOff className="size-3 mr-1" />
+                                {t("seller_dashboard.hide")}
+                              </>
+                            ) : (
+                              <>
+                                <Eye className="size-3 mr-1" />
+                                {t("seller_dashboard.publish_short")}
+                              </>
+                            )}
                           </Button>
-                          <Button size="sm" variant="ghost" onClick={() => { if (confirm("Eliminare?")) deleteProduct.mutate(p.id); }}>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              if (confirm(t("seller_dashboard.confirm_delete"))) deleteProduct.mutate(p.id);
+                            }}
+                          >
                             <Trash2 className="size-4" />
                           </Button>
                         </div>
@@ -315,34 +431,46 @@ export default function SellerDashboard() {
 
             <TabsContent value="orders" className="mt-6">
               {orders.length === 0 ? (
-                <Card><CardContent className="py-16 text-center text-muted-foreground">Nessun ordine ancora.</CardContent></Card>
+                <Card>
+                  <CardContent className="py-16 text-center text-muted-foreground">
+                    {t("seller_dashboard.no_orders")}
+                  </CardContent>
+                </Card>
               ) : (
                 <div className="space-y-3">
                   {orders.map((o) => (
                     <Card key={o.id}>
                       <CardContent className="p-4 flex items-center gap-4 flex-wrap">
-                        {o.product_image && <img src={o.product_image} alt="" className="size-16 rounded-lg object-cover" />}
+                        {o.product_image && (
+                          <img src={o.product_image} alt="" className="size-16 rounded-lg object-cover" />
+                        )}
                         <div className="flex-1 min-w-[180px]">
                           <h4 className="font-semibold">{o.product_name}</h4>
                           <p className="text-sm text-muted-foreground">
                             ×{o.quantity} · {o.order?.customer_email}
                           </p>
-                          <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleDateString()}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(o.created_at).toLocaleDateString(i18n.language)}
+                          </p>
                         </div>
                         <div className="text-right">
                           <div className="font-bold">{formatEur(o.seller_amount_cents)}</div>
-                          <div className="text-xs text-muted-foreground">su {formatEur(o.line_total_cents)}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {t("seller_dashboard.of_total", { total: formatEur(o.line_total_cents) })}
+                          </div>
                         </div>
                         <Select
                           value={o.fulfillment_status}
                           onValueChange={(v) => updateFulfillment.mutate({ itemId: o.id, status: v as any })}
                         >
-                          <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="w-36">
+                            <SelectValue />
+                          </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="pending">In attesa</SelectItem>
-                            <SelectItem value="shipped">Spedito</SelectItem>
-                            <SelectItem value="delivered">Consegnato</SelectItem>
-                            <SelectItem value="cancelled">Annullato</SelectItem>
+                            <SelectItem value="pending">{t("seller_dashboard.fulfillment.pending")}</SelectItem>
+                            <SelectItem value="shipped">{t("seller_dashboard.fulfillment.shipped")}</SelectItem>
+                            <SelectItem value="delivered">{t("seller_dashboard.fulfillment.delivered")}</SelectItem>
+                            <SelectItem value="cancelled">{t("seller_dashboard.fulfillment.cancelled")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </CardContent>
@@ -354,7 +482,11 @@ export default function SellerDashboard() {
 
             <TabsContent value="questions" className="mt-6">
               {questions.length === 0 ? (
-                <Card><CardContent className="py-16 text-center text-muted-foreground">Nessuna domanda ancora dai clienti.</CardContent></Card>
+                <Card>
+                  <CardContent className="py-16 text-center text-muted-foreground">
+                    {t("seller_dashboard.no_questions")}
+                  </CardContent>
+                </Card>
               ) : (
                 <div className="space-y-3">
                   {questions.map((q) => (
@@ -403,6 +535,7 @@ function QuestionRow({
   onAnswer: (answer: string) => void;
   isPending: boolean;
 }) {
+  const { t, i18n } = useTranslation();
   const [draft, setDraft] = useState(question.answer ?? "");
   const [editing, setEditing] = useState(!question.answer);
   const isAnswered = !!question.answer;
@@ -430,41 +563,59 @@ function QuestionRow({
             <p className="text-sm mt-1">
               <span className="font-medium">{question.author_name}</span>{" "}
               <span className="text-muted-foreground">
-                · {new Date(question.created_at).toLocaleDateString("it-IT", { day: "numeric", month: "short" })}
+                ·{" "}
+                {new Date(question.created_at).toLocaleDateString(i18n.language, {
+                  day: "numeric",
+                  month: "short",
+                })}
               </span>
             </p>
             <p className="leading-relaxed mt-1">{question.question}</p>
           </div>
           {isAnswered && !editing && (
-            <Badge className="bg-primary/10 text-primary border-0">Risposto</Badge>
+            <Badge className="bg-primary/10 text-primary border-0">{t("seller_dashboard.answered")}</Badge>
           )}
         </div>
 
         {editing ? (
           <div className="space-y-2 pt-2 border-t border-border/50">
             <Label htmlFor={`a-${question.id}`} className="text-xs">
-              {isAnswered ? "Modifica risposta" : "La tua risposta"}
+              {isAnswered ? t("seller_dashboard.edit_answer") : t("seller_dashboard.your_answer")}
             </Label>
             <Textarea
               id={`a-${question.id}`}
               rows={3}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Rispondi al cliente..."
+              placeholder={t("seller_dashboard.answer_placeholder")}
               maxLength={2000}
             />
             <div className="flex justify-end gap-2">
               {isAnswered && (
-                <Button variant="ghost" size="sm" onClick={() => { setDraft(question.answer ?? ""); setEditing(false); }}>
-                  Annulla
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setDraft(question.answer ?? "");
+                    setEditing(false);
+                  }}
+                >
+                  {t("common.cancel")}
                 </Button>
               )}
               <Button
                 size="sm"
-                onClick={() => { onAnswer(draft); setEditing(false); }}
+                onClick={() => {
+                  onAnswer(draft);
+                  setEditing(false);
+                }}
                 disabled={isPending || draft.trim().length < 1}
               >
-                {isPending ? "Invio..." : isAnswered ? "Aggiorna" : "Pubblica risposta"}
+                {isPending
+                  ? t("seller_dashboard.sending")
+                  : isAnswered
+                    ? t("seller_dashboard.update_answer")
+                    : t("seller_dashboard.publish_answer")}
               </Button>
             </div>
           </div>
@@ -472,7 +623,7 @@ function QuestionRow({
           <div className="rounded-xl bg-primary/5 border border-primary/20 p-3 flex items-start justify-between gap-3">
             <p className="text-sm leading-relaxed whitespace-pre-line flex-1">{question.answer}</p>
             <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
-              Modifica
+              {t("seller_dashboard.edit")}
             </Button>
           </div>
         )}

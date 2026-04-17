@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   Check,
@@ -68,7 +69,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
           type="button"
           onClick={() => onChange(i)}
           className="transition-transform hover:scale-110"
-          aria-label={`${i} stelle`}
+          aria-label={`${i} stars`}
         >
           <Star
             className={cn(
@@ -84,7 +85,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
   );
 }
 
-function ProductCardSmall({ p, onAdd }: { p: SellerProduct; onAdd: (p: SellerProduct) => void }) {
+function ProductCardSmall({ p, onAdd, addLabel }: { p: SellerProduct; onAdd: (p: SellerProduct) => void; addLabel: string }) {
   return (
     <article className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift">
       <Link to={`/product/${p.slug}`} className="block aspect-square overflow-hidden bg-muted">
@@ -111,7 +112,7 @@ function ProductCardSmall({ p, onAdd }: { p: SellerProduct; onAdd: (p: SellerPro
         <div className="flex items-center justify-between">
           <span className="font-semibold">{formatEur(p.price_cents)}</span>
           <Button size="sm" variant="secondary" onClick={() => onAdd(p)} className="gap-1">
-            <Plus className="size-4" /> Aggiungi
+            <Plus className="size-4" /> {addLabel}
           </Button>
         </div>
       </div>
@@ -120,6 +121,7 @@ function ProductCardSmall({ p, onAdd }: { p: SellerProduct; onAdd: (p: SellerPro
 }
 
 export default function ProductDetail() {
+  const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -143,6 +145,13 @@ export default function ProductDetail() {
   const [title, setTitle] = useState(myReview?.title ?? "");
   const [body, setBody] = useState(myReview?.body ?? "");
   const [questionText, setQuestionText] = useState("");
+
+  const dateFmt = (iso: string, withYear = true) =>
+    new Date(iso).toLocaleDateString(i18n.language, {
+      day: "numeric",
+      month: "short",
+      ...(withYear ? { year: "numeric" } : {}),
+    });
 
   if (isLoading) {
     return (
@@ -169,13 +178,11 @@ export default function ProductDetail() {
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
         <main className="flex-1 pt-28 container max-w-3xl text-center space-y-4">
-          <h1 className="font-display text-3xl">Prodotto non trovato</h1>
-          <p className="text-muted-foreground">
-            Il prodotto che cerchi non esiste o non è più disponibile.
-          </p>
+          <h1 className="font-display text-3xl">{t("product_detail.not_found")}</h1>
+          <p className="text-muted-foreground">{t("product_detail.not_found_desc")}</p>
           <Button asChild>
             <Link to="/marketplace">
-              <ArrowLeft className="size-4 mr-2" /> Torna al marketplace
+              <ArrowLeft className="size-4 mr-2" /> {t("product_detail.back_to_marketplace")}
             </Link>
           </Button>
         </main>
@@ -214,7 +221,7 @@ export default function ProductDetail() {
     );
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1500);
-    toast({ title: "Aggiunto al carrello", description: product.name });
+    toast({ title: t("product_detail.added_toast"), description: product.name });
   };
 
   const handleAddRelated = (p: SellerProduct) => {
@@ -229,13 +236,13 @@ export default function ProductDetail() {
       shippingCents: p.shipping_cents,
       kind: "seller_product",
     });
-    toast({ title: "Aggiunto al carrello", description: p.name });
+    toast({ title: t("product_detail.added_toast"), description: p.name });
   };
 
   const handleSubmitReview = (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
-      toast({ title: "Login richiesto", description: "Accedi per lasciare una recensione" });
+      toast({ title: t("reviews.login_required"), description: t("reviews.login_required_desc") });
       return;
     }
     upsertReview.mutate({
@@ -243,14 +250,14 @@ export default function ProductDetail() {
       title: title.trim() || undefined,
       body: body.trim() || undefined,
       author_name:
-        (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Cliente",
+        (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Customer",
     });
   };
 
   const handleAskQuestion = (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
-      toast({ title: "Login richiesto", description: "Accedi per fare una domanda" });
+      toast({ title: t("qa.login_required"), description: t("qa.login_required_desc") });
       return;
     }
     if (questionText.trim().length < 3) return;
@@ -258,11 +265,13 @@ export default function ProductDetail() {
       {
         question: questionText,
         author_name:
-          (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Cliente",
+          (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Customer",
       },
       { onSuccess: () => setQuestionText("") },
     );
   };
+
+  const sellerName = product.seller?.business_name ?? t("qa.the_seller");
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -271,7 +280,7 @@ export default function ProductDetail() {
         <div className="container max-w-6xl">
           <Button asChild variant="ghost" size="sm" className="mb-6 gap-2">
             <Link to="/marketplace">
-              <ArrowLeft className="size-4" /> Marketplace
+              <ArrowLeft className="size-4" /> {t("product_detail.back")}
             </Link>
           </Button>
 
@@ -298,12 +307,12 @@ export default function ProductDetail() {
                 <div className="absolute top-4 right-4 flex flex-col gap-2">
                   {product.is_reused && (
                     <Badge className="bg-tertiary text-tertiary-foreground gap-1">
-                      <Recycle className="size-3" /> Riuso
+                      <Recycle className="size-3" /> {t("marketplace.reuse_badge")}
                     </Badge>
                   )}
                   {product.is_bio && (
                     <Badge className="bg-primary text-primary-foreground gap-1">
-                      <Leaf className="size-3" /> Bio
+                      <Leaf className="size-3" /> {t("seller_dashboard.bio")}
                     </Badge>
                   )}
                 </div>
@@ -342,7 +351,10 @@ export default function ProductDetail() {
                       {product.seller.business_name[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <span>Venduto da <span className="font-medium text-foreground">{product.seller.business_name}</span></span>
+                  <span>
+                    {t("product_detail.sold_by")}{" "}
+                    <span className="font-medium text-foreground">{product.seller.business_name}</span>
+                  </span>
                 </Link>
               )}
 
@@ -353,7 +365,8 @@ export default function ProductDetail() {
                 <div className="flex items-center gap-3 text-sm">
                   <Stars value={Number(product.rating ?? 0)} />
                   <span className="text-muted-foreground">
-                    {Number(product.rating ?? 0).toFixed(1)} · {product.reviews_count} recensioni
+                    {Number(product.rating ?? 0).toFixed(1)} ·{" "}
+                    {t("product_detail.reviews_count", { count: product.reviews_count })}
                   </span>
                 </div>
               </div>
@@ -377,16 +390,16 @@ export default function ProductDetail() {
                 <span className="inline-flex items-center gap-1.5">
                   <Truck className="size-4" />
                   {product.shipping_cents === 0
-                    ? "Spedizione gratuita"
-                    : `Spedizione ${formatEur(product.shipping_cents)}`}
+                    ? t("product_detail.free_shipping")
+                    : t("product_detail.shipping", { price: formatEur(product.shipping_cents) })}
                 </span>
                 <span>·</span>
                 <span className={cn(inStock ? "text-primary" : "text-destructive")}>
                   {inStock
                     ? product.unlimited_stock
-                      ? "Disponibile"
-                      : `${product.stock} disponibili`
-                    : "Esaurito"}
+                      ? t("product_detail.available")
+                      : t("product_detail.available_count", { count: product.stock })
+                    : t("product_detail.out_of_stock")}
                 </span>
               </div>
 
@@ -397,7 +410,7 @@ export default function ProductDetail() {
                     type="button"
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
                     className="size-10 grid place-items-center text-muted-foreground hover:text-foreground transition"
-                    aria-label="Diminuisci"
+                    aria-label={t("product_detail.decrease")}
                   >
                     <Minus className="size-4" />
                   </button>
@@ -406,7 +419,7 @@ export default function ProductDetail() {
                     type="button"
                     onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
                     className="size-10 grid place-items-center text-muted-foreground hover:text-foreground transition"
-                    aria-label="Aumenta"
+                    aria-label={t("product_detail.increase")}
                   >
                     <Plus className="size-4" />
                   </button>
@@ -419,11 +432,11 @@ export default function ProductDetail() {
                 >
                   {justAdded ? (
                     <>
-                      <Check className="size-5" /> Aggiunto!
+                      <Check className="size-5" /> {t("product_detail.added")}
                     </>
                   ) : (
                     <>
-                      <ShoppingBag className="size-5" /> Aggiungi al carrello
+                      <ShoppingBag className="size-5" /> {t("product_detail.add_to_cart")}
                     </>
                   )}
                 </Button>
@@ -431,9 +444,9 @@ export default function ProductDetail() {
 
               {product.tags && product.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {product.tags.map((t) => (
-                    <Badge key={t} variant="secondary" className="font-normal">
-                      {t}
+                  {product.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="font-normal">
+                      {tag}
                     </Badge>
                   ))}
                 </div>
@@ -444,7 +457,9 @@ export default function ProductDetail() {
           {/* Description */}
           {product.description && (
             <section className="mt-16 max-w-3xl">
-              <h2 className="font-display text-2xl font-semibold mb-4">Descrizione</h2>
+              <h2 className="font-display text-2xl font-semibold mb-4">
+                {t("product_detail.description")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                 {product.description}
               </p>
@@ -455,11 +470,14 @@ export default function ProductDetail() {
           <section className="mt-16">
             <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
               <div>
-                <h2 className="font-display text-2xl font-semibold">Recensioni</h2>
+                <h2 className="font-display text-2xl font-semibold">{t("reviews.title")}</h2>
                 <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                   <Stars value={Number(product.rating ?? 0)} />
                   <span>
-                    {Number(product.rating ?? 0).toFixed(1)} su 5 · {product.reviews_count} recensioni
+                    {t("product_detail.rating_summary", {
+                      rating: Number(product.rating ?? 0).toFixed(1),
+                      count: product.reviews_count,
+                    })}
                   </span>
                 </div>
               </div>
@@ -472,37 +490,37 @@ export default function ProductDetail() {
                 className="rounded-2xl border border-border/60 bg-card p-6 space-y-4 mb-8"
               >
                 <div>
-                  <Label className="mb-2 block">Il tuo voto</Label>
+                  <Label className="mb-2 block">{t("reviews.your_rating")}</Label>
                   <StarPicker value={rating} onChange={setRating} />
                 </div>
                 <div>
                   <Label htmlFor="review-title" className="mb-2 block">
-                    Titolo (opzionale)
+                    {t("reviews.title_label")}
                   </Label>
                   <Input
                     id="review-title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Riassumi la tua esperienza"
+                    placeholder={t("reviews.title_placeholder")}
                     maxLength={120}
                   />
                 </div>
                 <div>
                   <Label htmlFor="review-body" className="mb-2 block">
-                    Recensione (opzionale)
+                    {t("reviews.body_label")}
                   </Label>
                   <Textarea
                     id="review-body"
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
-                    placeholder="Cosa ti è piaciuto? Cosa miglioreresti?"
+                    placeholder={t("reviews.body_placeholder")}
                     rows={4}
                     maxLength={2000}
                   />
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-xs text-muted-foreground">
-                    {myReview ? "Stai aggiornando la tua recensione esistente." : "Pubblica la tua recensione."}
+                    {myReview ? t("reviews.updating_existing") : t("reviews.publish_yours")}
                   </p>
                   <div className="flex gap-2">
                     {myReview && (
@@ -512,29 +530,31 @@ export default function ProductDetail() {
                         onClick={() => deleteReview.mutate()}
                         disabled={deleteReview.isPending}
                       >
-                        Elimina
+                        {t("reviews.delete")}
                       </Button>
                     )}
                     <Button type="submit" disabled={upsertReview.isPending}>
-                      {upsertReview.isPending ? "Invio..." : myReview ? "Aggiorna" : "Pubblica"}
+                      {upsertReview.isPending
+                        ? t("reviews.sending")
+                        : myReview
+                          ? t("reviews.update")
+                          : t("reviews.publish")}
                     </Button>
                   </div>
                 </div>
               </form>
             ) : (
               <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-6 text-center mb-8">
-                <p className="text-muted-foreground mb-3">Accedi per lasciare una recensione</p>
+                <p className="text-muted-foreground mb-3">{t("reviews.login_to_review")}</p>
                 <Button asChild variant="outline">
-                  <Link to="/login">Accedi</Link>
+                  <Link to="/login">{t("reviews.login")}</Link>
                 </Button>
               </div>
             )}
 
             {/* Reviews list */}
             {reviews.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">
-                Nessuna recensione ancora. Sii il primo!
-              </p>
+              <p className="text-muted-foreground text-center py-8">{t("reviews.empty")}</p>
             ) : (
               <div className="space-y-4">
                 {reviews.map((r) => (
@@ -547,13 +567,7 @@ export default function ProductDetail() {
                         <p className="font-medium">{r.author_name}</p>
                         <Stars value={r.rating} size={14} />
                       </div>
-                      <time className="text-xs text-muted-foreground">
-                        {new Date(r.created_at).toLocaleDateString("it-IT", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </time>
+                      <time className="text-xs text-muted-foreground">{dateFmt(r.created_at)}</time>
                     </header>
                     {r.title && <h3 className="font-medium mt-2">{r.title}</h3>}
                     {r.body && <p className="text-muted-foreground mt-1 leading-relaxed">{r.body}</p>}
@@ -569,11 +583,17 @@ export default function ProductDetail() {
               <div>
                 <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
                   <MessageCircleQuestion className="size-6 text-primary" />
-                  Domande e risposte
+                  {t("qa.title")}
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {questions.length} {questions.length === 1 ? "domanda" : "domande"} ·
-                  Risposte direttamente da {product.seller?.business_name ?? "il venditore"}
+                  {t("qa.subtitle_other", {
+                    count: questions.length,
+                    brand: sellerName,
+                    defaultValue_one: t("qa.subtitle_one", {
+                      count: questions.length,
+                      brand: sellerName,
+                    }),
+                  })}
                 </p>
               </div>
             </div>
@@ -584,43 +604,39 @@ export default function ProductDetail() {
                 className="rounded-2xl border border-border/60 bg-card p-6 space-y-3 mb-8"
               >
                 <Label htmlFor="question-text" className="block">
-                  Fai una domanda sul prodotto
+                  {t("qa.ask_label")}
                 </Label>
                 <Textarea
                   id="question-text"
                   value={questionText}
                   onChange={(e) => setQuestionText(e.target.value)}
-                  placeholder="Es. Le dimensioni sono adatte a... ? La spedizione è eco-friendly?"
+                  placeholder={t("qa.ask_placeholder")}
                   rows={3}
                   maxLength={1000}
                   required
                   minLength={3}
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">
-                    {questionText.length}/1000
-                  </span>
+                  <span className="text-xs text-muted-foreground">{questionText.length}/1000</span>
                   <Button
                     type="submit"
                     disabled={askQuestion.isPending || questionText.trim().length < 3}
                   >
-                    {askQuestion.isPending ? "Invio..." : "Pubblica domanda"}
+                    {askQuestion.isPending ? t("qa.sending") : t("qa.publish_question")}
                   </Button>
                 </div>
               </form>
             ) : (
               <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-6 text-center mb-8">
-                <p className="text-muted-foreground mb-3">Accedi per fare una domanda</p>
+                <p className="text-muted-foreground mb-3">{t("qa.login_to_ask")}</p>
                 <Button asChild variant="outline">
-                  <Link to="/login">Accedi</Link>
+                  <Link to="/login">{t("qa.login")}</Link>
                 </Button>
               </div>
             )}
 
             {questions.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">
-                Nessuna domanda ancora. Fai la prima!
-              </p>
+              <p className="text-muted-foreground text-center py-8">{t("qa.empty")}</p>
             ) : (
               <div className="space-y-4">
                 {questions.map((q) => (
@@ -632,11 +648,7 @@ export default function ProductDetail() {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-muted-foreground">
                           <span className="font-medium text-foreground">{q.author_name}</span>{" "}
-                          ha chiesto · {new Date(q.created_at).toLocaleDateString("it-IT", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
+                          {t("qa.asked")} · {dateFmt(q.created_at)}
                         </p>
                         <p className="mt-1 leading-relaxed">{q.question}</p>
                       </div>
@@ -647,7 +659,7 @@ export default function ProductDetail() {
                           size="icon"
                           onClick={() => deleteQuestion.mutate(q.id)}
                           disabled={deleteQuestion.isPending}
-                          aria-label="Elimina domanda"
+                          aria-label={t("qa.delete")}
                         >
                           <Trash2 className="size-4" />
                         </Button>
@@ -657,13 +669,10 @@ export default function ProductDetail() {
                     {q.answer ? (
                       <div className="rounded-xl bg-primary/5 border border-primary/20 p-4">
                         <p className="text-xs font-medium text-primary mb-1">
-                          Risposta di {product.seller?.business_name ?? "il venditore"}
+                          {t("qa.answer_by", { brand: sellerName })}
                           {q.answered_at && (
                             <span className="text-muted-foreground font-normal">
-                              {" "}· {new Date(q.answered_at).toLocaleDateString("it-IT", {
-                                day: "numeric",
-                                month: "short",
-                              })}
+                              {" "}· {dateFmt(q.answered_at, false)}
                             </span>
                           )}
                         </p>
@@ -671,7 +680,7 @@ export default function ProductDetail() {
                       </div>
                     ) : (
                       <p className="text-xs text-muted-foreground italic">
-                        In attesa di risposta dal venditore
+                        {t("qa.awaiting_answer")}
                       </p>
                     )}
                   </article>
@@ -685,17 +694,22 @@ export default function ProductDetail() {
             <section className="mt-16">
               <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
                 <h2 className="font-display text-2xl font-semibold">
-                  Altri prodotti di {product.seller?.business_name}
+                  {t("product_detail.related", { brand: product.seller?.business_name ?? "" })}
                 </h2>
                 {product.seller && (
                   <Button asChild variant="ghost" size="sm">
-                    <Link to={`/store/${product.seller.slug}`}>Vedi tutti</Link>
+                    <Link to={`/store/${product.seller.slug}`}>{t("product_detail.see_all")}</Link>
                   </Button>
                 )}
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {related.slice(0, 4).map((p) => (
-                  <ProductCardSmall key={p.id} p={p} onAdd={handleAddRelated} />
+                  <ProductCardSmall
+                    key={p.id}
+                    p={p}
+                    onAdd={handleAddRelated}
+                    addLabel={t("seller_dashboard.publish_short")}
+                  />
                 ))}
               </div>
             </section>
