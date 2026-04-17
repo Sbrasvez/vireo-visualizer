@@ -38,6 +38,109 @@ export type Database = {
         }
         Relationships: []
       }
+      community_post_comments: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_post_likes: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          body: string | null
+          comments_count: number
+          created_at: string
+          id: string
+          image_url: string | null
+          likes_count: number
+          recipe_external_id: string | null
+          recipe_title: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          comments_count?: number
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          likes_count?: number
+          recipe_external_id?: string | null
+          recipe_title?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          comments_count?: number
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          likes_count?: number
+          recipe_external_id?: string | null
+          recipe_title?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       magic_bag_reservations: {
         Row: {
           collected_at: string | null
@@ -146,6 +249,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      meal_plans: {
+        Row: {
+          created_at: string
+          id: string
+          plan_data: Json
+          preferences: Json
+          updated_at: string
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          plan_data?: Json
+          preferences?: Json
+          updated_at?: string
+          user_id: string
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          plan_data?: Json
+          preferences?: Json
+          updated_at?: string
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: []
       }
       order_items: {
         Row: {
