@@ -31,6 +31,7 @@ import SellApply from "./pages/SellApply.tsx";
 import SellerDashboard from "./pages/SellerDashboard.tsx";
 import AdminSellers from "./pages/AdminSellers.tsx";
 import Store from "./pages/Store.tsx";
+import ProductDetail from "./pages/ProductDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 
@@ -71,6 +72,7 @@ const App = () => (
               <Route path="/seller/dashboard" element={<SellerDashboard />} />
               <Route path="/admin/sellers" element={<AdminSellers />} />
               <Route path="/store/:slug" element={<Store />} />
+              <Route path="/product/:slug" element={<ProductDetail />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
