@@ -555,6 +555,8 @@
     "description": "Description",
     "related": "More products by {{brand}}",
     "see_all": "See all",
+    "add": "Add",
+    "rating_stars": "{{count}} stars",
     "reviews_short": "{{count}} reviews",
     "reviews_count": "{{count}} reviews",
     "rating_summary": "{{rating}} out of 5 · {{count}} reviews"

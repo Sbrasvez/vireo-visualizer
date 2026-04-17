@@ -553,6 +553,8 @@
     "description": "Description",
     "related": "Autres produits de {{brand}}",
     "see_all": "Voir tout",
+    "add": "Ajouter",
+    "rating_stars": "{{count}} étoiles",
     "reviews_short": "{{count}} avis",
     "reviews_count": "{{count}} avis",
     "rating_summary": "{{rating}} sur 5 · {{count}} avis"
