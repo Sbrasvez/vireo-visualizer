@@ -15,13 +15,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
+import { useShoppingList } from "@/hooks/useShoppingList";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { ShoppingCart } from "lucide-react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { user, signOut } = useAuth();
   const { count: cartCount } = useCart();
+  const { uncheckedCount: shopCount } = useShoppingList();
   const { t } = useTranslation();
 
   const navLinks = [
@@ -76,6 +79,18 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
+          {user && (
+            <Button variant="ghost" size="sm" asChild className="relative hidden sm:inline-flex">
+              <Link to="/shopping-list" aria-label={t("nav.shopping_list", "Lista spesa")}>
+                <ShoppingCart className="size-4" />
+                {shopCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-tertiary text-tertiary-foreground text-[10px] font-bold">
+                    {shopCount}
+                  </span>
+                )}
+              </Link>
+            </Button>
+          )}
           <Button variant="ghost" size="sm" asChild className="relative">
             <Link to="/cart" aria-label={t("nav.cart", "Carrello")}>
               <ShoppingBag className="size-4" />

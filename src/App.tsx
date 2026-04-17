@@ -5,7 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
+import { ShoppingListProvider } from "@/hooks/useShoppingList";
 import Index from "./pages/Index.tsx";
+import ShoppingList from "./pages/ShoppingList.tsx";
 import Recipes from "./pages/Recipes.tsx";
 import RecipeDetail from "./pages/RecipeDetail.tsx";
 import Restaurants from "./pages/Restaurants.tsx";
@@ -34,6 +36,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
+            <ShoppingListProvider>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/recipes" element={<Recipes />} />
@@ -51,10 +54,12 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ai" element={<AIChat />} />
+              <Route path="/shopping-list" element={<ShoppingList />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
             <AIAssistantFAB />
+            </ShoppingListProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>
