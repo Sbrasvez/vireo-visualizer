@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSellerBySlug } from "@/hooks/useSeller";
@@ -13,6 +14,7 @@ import { formatEur } from "@/lib/catalog";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Store() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { data: seller, isLoading: loadingSeller } = useSellerBySlug(slug);
   const { data: products = [], isLoading: loadingProducts } = useMarketplaceProducts({ sellerId: seller?.id });
@@ -34,7 +36,7 @@ export default function Store() {
     });
     setJustAdded(p.id);
     setTimeout(() => setJustAdded((cur) => (cur === p.id ? null : cur)), 1200);
-    toast({ title: "Aggiunto al carrello", description: p.name });
+    toast({ title: t("store.added_title"), description: p.name });
   };
 
   if (loadingSeller) {
@@ -55,8 +57,8 @@ export default function Store() {
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
         <main className="flex-1 pt-32 container max-w-2xl text-center">
-          <h1 className="font-display text-3xl font-bold mb-4">Store non trovato</h1>
-          <Button asChild><Link to="/marketplace"><ArrowLeft className="size-4 mr-2" />Torna al marketplace</Link></Button>
+          <h1 className="font-display text-3xl font-bold mb-4">{t("store.not_found")}</h1>
+          <Button asChild><Link to="/marketplace"><ArrowLeft className="size-4 mr-2" />{t("store.back_to_marketplace")}</Link></Button>
         </main>
         <Footer />
       </div>
@@ -87,15 +89,15 @@ export default function Store() {
               <div className="flex-1 min-w-[200px]">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <h1 className="font-display text-3xl md:text-4xl font-bold">{seller.business_name}</h1>
-                  {seller.is_demo && <Badge variant="secondary">Demo</Badge>}
-                  <Badge className="bg-primary/10 text-primary">Verificato</Badge>
+                  {seller.is_demo && <Badge variant="secondary">{t("store.demo")}</Badge>}
+                  <Badge className="bg-primary/10 text-primary">{t("store.verified")}</Badge>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
                   <span className="flex items-center gap-1">
                     <Star className="size-4 fill-tertiary text-tertiary" />
                     <strong className="text-foreground">{(seller.rating ?? 0).toFixed(1)}</strong>
                   </span>
-                  <span>{seller.total_orders} ordini</span>
+                  <span>{t("store.orders", { count: seller.total_orders })}</span>
                   {seller.category && <Badge variant="outline">{seller.category}</Badge>}
                 </div>
                 {seller.description && <p className="text-muted-foreground">{seller.description}</p>}
@@ -103,7 +105,7 @@ export default function Store() {
             </div>
           </div>
 
-          <h2 className="font-display text-2xl font-bold mt-12 mb-6">Prodotti ({products.length})</h2>
+          <h2 className="font-display text-2xl font-bold mt-12 mb-6">{t("store.products_count", { count: products.length })}</h2>
 
           {loadingProducts ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -112,7 +114,7 @@ export default function Store() {
           ) : products.length === 0 ? (
             <div className="text-center py-16 rounded-2xl border border-border/60 bg-card">
               <ShoppingBag className="size-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Nessun prodotto pubblicato.</p>
+              <p className="text-muted-foreground">{t("store.no_products")}</p>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -126,8 +128,8 @@ export default function Store() {
                       <img src={img} alt={p.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                       <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                         {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
-                        {p.is_reused && <Badge variant="secondary" className="gap-1"><Recycle className="size-3" />Riuso</Badge>}
-                        {outOfStock && <Badge variant="destructive">Esaurito</Badge>}
+                        {p.is_reused && <Badge variant="secondary" className="gap-1"><Recycle className="size-3" />{t("seller_dashboard.reused")}</Badge>}
+                        {outOfStock && <Badge variant="destructive">{t("store.out_of_stock")}</Badge>}
                       </div>
                     </Link>
                     <div className="p-4">

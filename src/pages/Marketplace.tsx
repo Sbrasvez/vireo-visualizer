@@ -95,7 +95,7 @@ export default function Marketplace() {
                 <Button asChild size="lg" variant="outline" className="h-14 px-6 rounded-xl">
                   <Link to="/sell">
                     <Store className="size-4 mr-2" />
-                    Diventa venditore
+                    {t("marketplace.become_seller")}
                   </Link>
                 </Button>
               </div>
@@ -108,7 +108,7 @@ export default function Marketplace() {
                     className="px-4 py-1.5 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
                     onClick={() => setCategory(c.key)}
                   >
-                    {c.label}
+                    {t(`marketplace.categories.${c.key}`, c.label)}
                   </Badge>
                 ))}
                 <Badge
@@ -116,7 +116,7 @@ export default function Marketplace() {
                   className="px-4 py-1.5 cursor-pointer hover:bg-secondary hover:text-secondary-foreground transition-colors text-sm gap-1"
                   onClick={() => setReusedOnly((v) => !v)}
                 >
-                  <Recycle className="size-3" /> Solo riuso
+                  <Recycle className="size-3" /> {t("marketplace.reused_only")}
                 </Badge>
               </div>
             </div>
@@ -141,8 +141,8 @@ export default function Marketplace() {
             ) : visible.length === 0 ? (
               <div className="text-center py-20 rounded-2xl border border-border/60 bg-card">
                 <ShoppingBag className="size-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="font-display text-xl font-semibold mb-2">Nessun prodotto trovato</h3>
-                <p className="text-sm text-muted-foreground">Prova a cambiare filtro o ricerca.</p>
+                <h3 className="font-display text-xl font-semibold mb-2">{t("marketplace.no_results")}</h3>
+                <p className="text-sm text-muted-foreground">{t("marketplace.no_results_desc")}</p>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -177,10 +177,10 @@ export default function Marketplace() {
                           {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
                           {p.is_reused && (
                             <Badge variant="secondary" className="bg-secondary/90 text-secondary-foreground gap-1">
-                              <Recycle className="size-3" /> Riuso
+                              <Recycle className="size-3" /> {t("marketplace.reuse_badge")}
                             </Badge>
                           )}
-                          {outOfStock && <Badge variant="destructive">Esaurito</Badge>}
+                          {outOfStock && <Badge variant="destructive">{t("marketplace.out_of_stock")}</Badge>}
                         </div>
                       </Link>
                       <div className="p-4">
