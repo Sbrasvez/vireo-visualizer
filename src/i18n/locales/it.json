@@ -335,5 +335,33 @@
     "save": "Salva",
     "cancel": "Annulla",
     "close": "Chiudi"
+  },
+  "ai": {
+    "title": "Vireo AI",
+    "subtitle": "Il tuo assistente per uno stile di vita green",
+    "empty_title": "Come posso aiutarti oggi?",
+    "empty_desc": "Chiedimi ricette vegane, consigli sostenibili, idee per ridurre lo spreco o suggerimenti su ristoranti eco-friendly.",
+    "placeholder": "Scrivi un messaggio o usa il microfono…",
+    "thinking": "Sto pensando…",
+    "voice": "Input vocale",
+    "voice_unsupported": "Il tuo browser non supporta l'input vocale",
+    "remaining": "{{count}} rimasti",
+    "unlimited": "Messaggi illimitati",
+    "low_quota": "Ti restano {{count}} messaggi AI oggi.",
+    "upgrade": "Passa a Pro",
+    "quota_title": "Limite giornaliero raggiunto",
+    "quota_desc": "Hai usato i {{limit}} messaggi AI gratuiti di oggi. Passa a Pro per messaggi illimitati.",
+    "rate_title": "Troppe richieste",
+    "rate_desc": "Riprova tra qualche secondo.",
+    "credits_title": "Crediti AI esauriti",
+    "credits_desc": "Aggiungi crediti al tuo workspace per continuare.",
+    "error_title": "Errore",
+    "error_desc": "Qualcosa è andato storto. Riprova.",
+    "suggestions": [
+      "Suggeriscimi 3 ricette vegane veloci con ingredienti di stagione",
+      "Come posso ridurre gli sprechi alimentari in cucina?",
+      "Quali sono le proteine vegetali più sostenibili?",
+      "Crea un menu settimanale plant-based bilanciato"
+    ]
   }
 }
