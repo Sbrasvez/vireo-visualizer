@@ -146,8 +146,8 @@ export function useCreateProduct(sellerId: string | undefined) {
 export function useUpdateProduct() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, patch }: { id: string; patch: Partial<SellerProduct> }) => {
-      const { error } = await supabase.from("seller_products").update(patch).eq("id", id);
+    mutationFn: async ({ id, patch }: { id: string; patch: Partial<Omit<SellerProduct, "seller">> }) => {
+      const { error } = await supabase.from("seller_products").update(patch as any).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
