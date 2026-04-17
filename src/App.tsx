@@ -36,6 +36,7 @@ import Wishlist from "./pages/Wishlist.tsx";
 import PublicWishlist from "./pages/PublicWishlist.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
         <AuthProvider>
           <CartProvider>
             <ShoppingListProvider>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/recipes" element={<Recipes />} />
