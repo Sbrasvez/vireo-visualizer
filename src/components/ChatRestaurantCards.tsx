@@ -46,7 +46,7 @@ export function ChatRestaurantCards({ data }: { data: RestaurantCardData[] }) {
               />
               <div className="absolute top-2 left-2 flex gap-1">
                 {r.available_now && (
-                  <span className="text-[10px] px-2 py-0.5 bg-green-600/90 text-white rounded-full font-semibold backdrop-blur">
+                  <span className="text-[10px] px-2 py-0.5 bg-primary/90 text-primary-foreground rounded-full font-semibold backdrop-blur">
                     {t("restaurants.available", "Disponibile")}
                   </span>
                 )}
@@ -69,7 +69,7 @@ export function ChatRestaurantCards({ data }: { data: RestaurantCardData[] }) {
               </div>
               {r.rating ? (
                 <span className="inline-flex items-center gap-0.5 text-xs text-foreground shrink-0">
-                  <Star className="size-3 fill-amber-400 text-amber-400" />
+                  <Star className="size-3 fill-tertiary text-tertiary" />
                   <span className="font-semibold">{r.rating}</span>
                   {r.reviews_count ? (
                     <span className="text-muted-foreground">({r.reviews_count})</span>
