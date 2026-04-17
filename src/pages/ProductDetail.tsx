@@ -27,7 +27,13 @@ import {
   useUpsertProductReview,
   useDeleteProductReview,
 } from "@/hooks/useProductReviews";
+import {
+  useProductQuestions,
+  useAskProductQuestion,
+  useDeleteProductQuestion,
+} from "@/hooks/useProductQuestions";
 import { useCart } from "@/hooks/useCart";
+import { MessageCircleQuestion, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { formatEur } from "@/lib/catalog";
