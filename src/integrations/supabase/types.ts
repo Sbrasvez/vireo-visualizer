@@ -250,6 +250,145 @@ export type Database = {
           },
         ]
       }
+      marketplace_order_items: {
+        Row: {
+          commission_rate: number
+          created_at: string
+          fulfillment_status: string
+          id: string
+          line_total_cents: number
+          order_id: string
+          platform_fee_cents: number
+          product_id: string | null
+          product_image: string | null
+          product_name: string
+          quantity: number
+          seller_amount_cents: number
+          seller_id: string | null
+          tracking_number: string | null
+          unit_amount_cents: number
+        }
+        Insert: {
+          commission_rate?: number
+          created_at?: string
+          fulfillment_status?: string
+          id?: string
+          line_total_cents: number
+          order_id: string
+          platform_fee_cents: number
+          product_id?: string | null
+          product_image?: string | null
+          product_name: string
+          quantity?: number
+          seller_amount_cents: number
+          seller_id?: string | null
+          tracking_number?: string | null
+          unit_amount_cents: number
+        }
+        Update: {
+          commission_rate?: number
+          created_at?: string
+          fulfillment_status?: string
+          id?: string
+          line_total_cents?: number
+          order_id?: string
+          platform_fee_cents?: number
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string
+          quantity?: number
+          seller_amount_cents?: number
+          seller_id?: string | null
+          tracking_number?: string | null
+          unit_amount_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "seller_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_order_items_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_orders: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_email: string
+          customer_name: string | null
+          environment: string
+          id: string
+          paid_at: string | null
+          platform_fee_cents: number
+          sellers_total_cents: number
+          shipping_address: Json | null
+          shipping_cents: number
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          subtotal_cents: number
+          total_cents: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_email: string
+          customer_name?: string | null
+          environment?: string
+          id?: string
+          paid_at?: string | null
+          platform_fee_cents?: number
+          sellers_total_cents?: number
+          shipping_address?: Json | null
+          shipping_cents?: number
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          subtotal_cents: number
+          total_cents: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_email?: string
+          customer_name?: string | null
+          environment?: string
+          id?: string
+          paid_at?: string | null
+          platform_fee_cents?: number
+          sellers_total_cents?: number
+          shipping_address?: Json | null
+          shipping_cents?: number
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       meal_plans: {
         Row: {
           created_at: string
@@ -767,6 +906,191 @@ export type Database = {
         }
         Relationships: []
       }
+      seller_products: {
+        Row: {
+          category: string
+          compare_at_price_cents: number | null
+          created_at: string
+          currency: string
+          description: string | null
+          external_id: string | null
+          id: string
+          images: string[]
+          is_bio: boolean
+          is_published: boolean
+          is_reused: boolean
+          name: string
+          price_cents: number
+          primary_image: string | null
+          rating: number | null
+          reviews_count: number
+          sales_count: number
+          seller_id: string
+          shipping_cents: number
+          short_description: string | null
+          slug: string
+          stock: number
+          tags: string[] | null
+          unlimited_stock: boolean
+          updated_at: string
+          views_count: number
+          weight_grams: number | null
+        }
+        Insert: {
+          category?: string
+          compare_at_price_cents?: number | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          external_id?: string | null
+          id?: string
+          images?: string[]
+          is_bio?: boolean
+          is_published?: boolean
+          is_reused?: boolean
+          name: string
+          price_cents: number
+          primary_image?: string | null
+          rating?: number | null
+          reviews_count?: number
+          sales_count?: number
+          seller_id: string
+          shipping_cents?: number
+          short_description?: string | null
+          slug: string
+          stock?: number
+          tags?: string[] | null
+          unlimited_stock?: boolean
+          updated_at?: string
+          views_count?: number
+          weight_grams?: number | null
+        }
+        Update: {
+          category?: string
+          compare_at_price_cents?: number | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          external_id?: string | null
+          id?: string
+          images?: string[]
+          is_bio?: boolean
+          is_published?: boolean
+          is_reused?: boolean
+          name?: string
+          price_cents?: number
+          primary_image?: string | null
+          rating?: number | null
+          reviews_count?: number
+          sales_count?: number
+          seller_id?: string
+          shipping_cents?: number
+          short_description?: string | null
+          slug?: string
+          stock?: number
+          tags?: string[] | null
+          unlimited_stock?: boolean
+          updated_at?: string
+          views_count?: number
+          weight_grams?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seller_products_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sellers: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          business_name: string
+          category: string | null
+          commission_rate: number
+          country: string | null
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          is_demo: boolean
+          logo_url: string | null
+          phone: string | null
+          rating: number | null
+          rejection_reason: string | null
+          slug: string
+          status: Database["public"]["Enums"]["seller_status"]
+          stripe_account_id: string | null
+          stripe_payouts_enabled: boolean
+          total_orders: number
+          total_sales_cents: number
+          updated_at: string
+          user_id: string | null
+          vat_number: string | null
+          website: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          business_name: string
+          category?: string | null
+          commission_rate?: number
+          country?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_demo?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          rating?: number | null
+          rejection_reason?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["seller_status"]
+          stripe_account_id?: string | null
+          stripe_payouts_enabled?: boolean
+          total_orders?: number
+          total_sales_cents?: number
+          updated_at?: string
+          user_id?: string | null
+          vat_number?: string | null
+          website?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          business_name?: string
+          category?: string | null
+          commission_rate?: number
+          country?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_demo?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          rating?: number | null
+          rejection_reason?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["seller_status"]
+          stripe_account_id?: string | null
+          stripe_payouts_enabled?: boolean
+          total_orders?: number
+          total_sales_cents?: number
+          updated_at?: string
+          user_id?: string | null
+          vat_number?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -848,6 +1172,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -855,6 +1200,13 @@ export type Database = {
     Functions: {
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
+        Returns: boolean
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
         Returns: boolean
       }
       reserve_magic_bag: {
@@ -880,6 +1232,7 @@ export type Database = {
       }
     }
     Enums: {
+      app_role: "customer" | "seller" | "admin"
       cuisine_type:
         | "vegano"
         | "vegetariano"
@@ -893,6 +1246,7 @@ export type Database = {
       price_range: "€" | "€€" | "€€€" | "€€€€"
       recipe_difficulty: "facile" | "media" | "difficile"
       reservation_status: "pending" | "confirmed" | "cancelled" | "completed"
+      seller_status: "pending" | "approved" | "suspended" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1020,6 +1374,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["customer", "seller", "admin"],
       cuisine_type: [
         "vegano",
         "vegetariano",
@@ -1034,6 +1389,7 @@ export const Constants = {
       price_range: ["€", "€€", "€€€", "€€€€"],
       recipe_difficulty: ["facile", "media", "difficile"],
       reservation_status: ["pending", "confirmed", "cancelled", "completed"],
+      seller_status: ["pending", "approved", "suspended", "rejected"],
     },
   },
 } as const
