@@ -81,18 +81,26 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
     const bounds = new mapboxgl.LngLatBounds();
 
     restaurants.forEach((r) => {
-      const el = document.createElement("button");
-      el.type = "button";
+      // CRITICAL: Mapbox writes `transform: translate(Xpx, Ypx) translate(-50%, -100%)`
+      // (with anchor:"bottom") onto this root element on EVERY frame. We must NOT
+      // add any CSS transform, transition, animation, margin, or layout-affecting
+      // property to this root — otherwise the pin drifts during pan/zoom.
+      // All visual styling lives on inner children with absolute positioning.
+      const el = document.createElement("div");
+      el.setAttribute("role", "button");
+      el.setAttribute("tabindex", "0");
       el.setAttribute("aria-label", `${r.name}, ${r.city}`);
-      el.className = "vireo-marker";
+      el.className = "vireo-marker-root";
       el.innerHTML = `
-        <span class="vireo-marker-dot ${r.available ? "is-available" : "is-busy"}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.4c1.7 8.7-1.4 14.5-8.2 17.6Z"/>
-            <path d="M2 22c1.5-7 6-13 12-15"/>
-          </svg>
-        </span>
-        <span class="vireo-marker-pulse"></span>
+        <div class="vireo-marker-inner">
+          <span class="vireo-marker-pulse" aria-hidden="true"></span>
+          <span class="vireo-marker-dot ${r.available ? "is-available" : "is-busy"}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.4c1.7 8.7-1.4 14.5-8.2 17.6Z"/>
+              <path d="M2 22c1.5-7 6-13 12-15"/>
+            </svg>
+          </span>
+        </div>
       `;
       el.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -159,9 +167,9 @@ export default function RestaurantMap({ restaurants, activeId, onMarkerClick, or
     }
     if (origin) {
       const el = document.createElement("div");
-      el.className = "vireo-origin-pin";
-      el.innerHTML = `<span class="vireo-origin-dot"></span><span class="vireo-origin-pulse"></span>`;
-      originMarkerRef.current = new mapboxgl.Marker({ element: el })
+      el.className = "vireo-origin-root";
+      el.innerHTML = `<div class="vireo-origin-inner"><span class="vireo-origin-dot"></span><span class="vireo-origin-pulse"></span></div>`;
+      originMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: "center" })
         .setLngLat([origin.lng, origin.lat])
         .addTo(map);
       map.flyTo({ center: [origin.lng, origin.lat], zoom: 11, duration: 1200 });
