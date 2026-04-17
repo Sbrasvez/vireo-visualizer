@@ -48,54 +48,161 @@ serve(async (req) => {
 });
 
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
-  // For one-time payments (Marketplace), record an order with line items
-  if (session.mode === "payment") {
-    const stripe = createStripeClient(env);
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-      expand: ["data.price.product"],
-      limit: 50,
-    });
+  if (session.mode !== "payment") return;
 
-    const userId = session.metadata?.userId || null;
-
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .upsert(
-        {
-          user_id: userId,
-          stripe_session_id: session.id,
-          stripe_payment_intent_id: session.payment_intent || null,
-          customer_email: session.customer_details?.email || session.customer_email || "unknown@example.com",
-          amount_total: session.amount_total || 0,
-          currency: session.currency || "eur",
-          status: "paid",
-          shipping_name: session.shipping_details?.name || session.collected_information?.shipping_details?.name || null,
-          shipping_address: session.shipping_details?.address || session.collected_information?.shipping_details?.address || null,
-          environment: env,
-        },
-        { onConflict: "stripe_session_id" },
-      )
-      .select()
-      .single();
-
-    if (orderError) {
-      console.error("Failed to upsert order", orderError);
-      return;
-    }
-
-    // Insert items (idempotent: delete then insert)
-    await supabase.from("order_items").delete().eq("order_id", order.id);
-    const items = lineItems.data.map((li: any) => ({
-      order_id: order.id,
-      price_id: li.price?.metadata?.lovable_external_id || li.price?.lookup_key || li.price?.id,
-      product_id: li.price?.product?.metadata?.lovable_external_id || (typeof li.price?.product === "string" ? li.price.product : li.price?.product?.id) || "unknown",
-      product_name: li.description || li.price?.product?.name || "Item",
-      quantity: li.quantity || 1,
-      unit_amount: li.price?.unit_amount || 0,
-    }));
-    if (items.length > 0) await supabase.from("order_items").insert(items);
+  const isMarketplace = session.metadata?.marketplace === "1";
+  if (isMarketplace) {
+    await recordMarketplaceOrder(session, env);
+  } else {
+    await recordLegacyOrder(session, env);
   }
-  // For subscriptions, the subscription.created event handles persistence
+}
+
+async function recordMarketplaceOrder(session: any, env: StripeEnv) {
+  let metaItems: Array<{
+    product_id: string;
+    seller_id: string;
+    product_name: string;
+    product_image: string | null;
+    unit_amount_cents: number;
+    quantity: number;
+    shipping_cents: number;
+    commission_rate: number;
+  }> = [];
+  try {
+    metaItems = JSON.parse(session.metadata?.items || "[]");
+  } catch (e) {
+    console.error("Bad marketplace metadata.items", e);
+    return;
+  }
+
+  const shippingCents = parseInt(session.metadata?.shipping_cents || "0", 10);
+  const subtotalCents = metaItems.reduce((s, it) => s + it.unit_amount_cents * it.quantity, 0);
+  const totalCents = session.amount_total ?? subtotalCents + shippingCents;
+  const platformFeeCents = metaItems.reduce(
+    (s, it) => s + Math.round(it.unit_amount_cents * it.quantity * it.commission_rate),
+    0,
+  );
+  const sellersTotalCents = subtotalCents - platformFeeCents;
+
+  const userId = session.metadata?.userId || null;
+
+  const { data: order, error: orderErr } = await supabase
+    .from("marketplace_orders")
+    .upsert(
+      {
+        user_id: userId,
+        stripe_session_id: session.id,
+        stripe_payment_intent_id: session.payment_intent || null,
+        customer_email: session.customer_details?.email || session.customer_email || "unknown@example.com",
+        customer_name: session.customer_details?.name || session.collected_information?.shipping_details?.name || null,
+        currency: session.currency || "eur",
+        subtotal_cents: subtotalCents,
+        shipping_cents: shippingCents,
+        platform_fee_cents: platformFeeCents,
+        sellers_total_cents: sellersTotalCents,
+        total_cents: totalCents,
+        status: "paid",
+        paid_at: new Date().toISOString(),
+        shipping_address: session.shipping_details?.address || session.collected_information?.shipping_details?.address || null,
+        environment: env,
+      },
+      { onConflict: "stripe_session_id" },
+    )
+    .select()
+    .single();
+
+  if (orderErr) {
+    console.error("Failed to upsert marketplace order", orderErr);
+    return;
+  }
+
+  // Idempotent items
+  await supabase.from("marketplace_order_items").delete().eq("order_id", order.id);
+
+  const items = metaItems.map((it) => {
+    const lineTotal = it.unit_amount_cents * it.quantity;
+    const fee = Math.round(lineTotal * it.commission_rate);
+    return {
+      order_id: order.id,
+      product_id: it.product_id,
+      seller_id: it.seller_id,
+      product_name: it.product_name,
+      product_image: it.product_image,
+      unit_amount_cents: it.unit_amount_cents,
+      quantity: it.quantity,
+      line_total_cents: lineTotal,
+      commission_rate: it.commission_rate,
+      platform_fee_cents: fee,
+      seller_amount_cents: lineTotal - fee,
+      fulfillment_status: "pending",
+    };
+  });
+
+  if (items.length > 0) {
+    const { error: itemsErr } = await supabase.from("marketplace_order_items").insert(items);
+    if (itemsErr) console.error("Failed to insert marketplace items", itemsErr);
+  }
+
+  // Decrement stock (best-effort)
+  for (const it of metaItems) {
+    await supabase.rpc("decrement_product_stock", { _id: it.product_id, _qty: it.quantity }).then(
+      () => {},
+      async () => {
+        // Fallback if RPC doesn't exist: read-modify-write
+        const { data: p } = await supabase.from("seller_products").select("stock, unlimited_stock").eq("id", it.product_id).maybeSingle();
+        if (p && !p.unlimited_stock) {
+          await supabase.from("seller_products").update({ stock: Math.max(0, p.stock - it.quantity) }).eq("id", it.product_id);
+        }
+      },
+    );
+  }
+}
+
+async function recordLegacyOrder(session: any, env: StripeEnv) {
+  const stripe = createStripeClient(env);
+  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+    expand: ["data.price.product"],
+    limit: 50,
+  });
+
+  const userId = session.metadata?.userId || null;
+
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .upsert(
+      {
+        user_id: userId,
+        stripe_session_id: session.id,
+        stripe_payment_intent_id: session.payment_intent || null,
+        customer_email: session.customer_details?.email || session.customer_email || "unknown@example.com",
+        amount_total: session.amount_total || 0,
+        currency: session.currency || "eur",
+        status: "paid",
+        shipping_name: session.shipping_details?.name || session.collected_information?.shipping_details?.name || null,
+        shipping_address: session.shipping_details?.address || session.collected_information?.shipping_details?.address || null,
+        environment: env,
+      },
+      { onConflict: "stripe_session_id" },
+    )
+    .select()
+    .single();
+
+  if (orderError) {
+    console.error("Failed to upsert order", orderError);
+    return;
+  }
+
+  await supabase.from("order_items").delete().eq("order_id", order.id);
+  const items = lineItems.data.map((li: any) => ({
+    order_id: order.id,
+    price_id: li.price?.metadata?.lovable_external_id || li.price?.lookup_key || li.price?.id,
+    product_id: li.price?.product?.metadata?.lovable_external_id || (typeof li.price?.product === "string" ? li.price.product : li.price?.product?.id) || "unknown",
+    product_name: li.description || li.price?.product?.name || "Item",
+    quantity: li.quantity || 1,
+    unit_amount: li.price?.unit_amount || 0,
+  }));
+  if (items.length > 0) await supabase.from("order_items").insert(items);
 }
 
 async function upsertSubscription(subscription: any, env: StripeEnv) {
