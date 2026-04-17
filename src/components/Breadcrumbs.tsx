@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronRight, Home } from "lucide-react";
 
@@ -8,7 +8,6 @@ import { ChevronRight, Home } from "lucide-react";
  */
 export default function Breadcrumbs() {
   const location = useLocation();
-  const params = useParams();
   const { t } = useTranslation();
 
   if (location.pathname === "/") return null;
