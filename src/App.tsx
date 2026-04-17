@@ -37,6 +37,8 @@ import PublicWishlist from "./pages/PublicWishlist.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 import ScrollToTop from "@/components/ScrollToTop";
+import BackButtonFAB from "@/components/BackButtonFAB";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const queryClient = new QueryClient();
 
