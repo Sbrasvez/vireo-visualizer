@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import { Clock, CheckCircle2, XCircle, Store } from "lucide-react";
 const CATEGORIES = ["kitchen", "home", "personal", "reuse", "bio", "fashion", "beauty", "garden"];
 
 export default function SellApply() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { data: mySeller, isLoading: loadingSeller } = useMySeller();
@@ -80,10 +82,10 @@ export default function SellApply() {
                     </CardTitle>
                     <CardDescription>
                       <Badge variant={mySeller.status === "approved" ? "default" : "secondary"}>
-                        {mySeller.status === "approved" && "Approvato"}
-                        {mySeller.status === "pending" && "In revisione"}
-                        {mySeller.status === "rejected" && "Rifiutato"}
-                        {mySeller.status === "suspended" && "Sospeso"}
+                        {mySeller.status === "approved" && t("sell_apply.status_approved")}
+                        {mySeller.status === "pending" && t("sell_apply.status_pending")}
+                        {mySeller.status === "rejected" && t("sell_apply.status_rejected")}
+                        {mySeller.status === "suspended" && t("sell_apply.status_suspended")}
                       </Badge>
                     </CardDescription>
                   </div>
@@ -92,17 +94,17 @@ export default function SellApply() {
               <CardContent className="space-y-4">
                 {mySeller.status === "pending" && (
                   <p className="text-muted-foreground">
-                    Stiamo valutando la tua candidatura. Riceverai una risposta entro 48 ore.
+                    {t("sell_apply.pending_msg")}
                   </p>
                 )}
                 {mySeller.status === "approved" && (
                   <>
                     <p className="text-muted-foreground">
-                      Congratulazioni! Il tuo store è attivo. Inizia a pubblicare prodotti.
+                      {t("sell_apply.approved_msg")}
                     </p>
                     <Button asChild>
                       <Link to="/seller/dashboard">
-                        <Store className="size-4 mr-2" /> Vai alla dashboard
+                        <Store className="size-4 mr-2" /> {t("sell_apply.go_to_dashboard")}
                       </Link>
                     </Button>
                   </>
@@ -110,11 +112,11 @@ export default function SellApply() {
                 {mySeller.status === "rejected" && (
                   <>
                     <p className="text-muted-foreground">
-                      Purtroppo non possiamo accettare la tua candidatura.
+                      {t("sell_apply.rejected_msg")}
                     </p>
                     {mySeller.rejection_reason && (
                       <p className="text-sm bg-muted p-3 rounded-lg">
-                        <strong>Motivo:</strong> {mySeller.rejection_reason}
+                        <strong>{t("sell_apply.rejected_reason")}</strong> {mySeller.rejection_reason}
                       </p>
                     )}
                   </>
@@ -133,14 +135,14 @@ export default function SellApply() {
       <Navbar />
       <main className="flex-1 pt-28 pb-16">
         <div className="container max-w-2xl">
-          <h1 className="font-display text-4xl font-bold mb-2">Diventa venditore</h1>
+          <h1 className="font-display text-4xl font-bold mb-2">{t("sell_apply.title")}</h1>
           <p className="text-muted-foreground mb-8">
-            Ti rispondiamo entro 48h. Commissione del 15% solo sulle vendite. Nessun costo fisso.
+            {t("sell_apply.subtitle")}
           </p>
 
           <form onSubmit={onSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="business_name">Nome attività *</Label>
+              <Label htmlFor="business_name">{t("sell_apply.business_name")} *</Label>
               <Input
                 id="business_name"
                 required
@@ -151,12 +153,12 @@ export default function SellApply() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Descrizione brand *</Label>
+              <Label htmlFor="description">{t("sell_apply.description")} *</Label>
               <Textarea
                 id="description"
                 required
                 rows={4}
-                placeholder="Cosa vendi? Cosa rende il tuo brand sostenibile?"
+                placeholder={t("sell_apply.description_placeholder")}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
               />
@@ -164,7 +166,7 @@ export default function SellApply() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="category">Categoria principale</Label>
+                <Label htmlFor="category">{t("sell_apply.category")}</Label>
                 <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
                   <SelectTrigger id="category">
                     <SelectValue />
@@ -172,14 +174,14 @@ export default function SellApply() {
                   <SelectContent>
                     {CATEGORIES.map((c) => (
                       <SelectItem key={c} value={c}>
-                        {c}
+                        {t(`sell_apply.categories.${c}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="vat_number">P.IVA / Codice fiscale</Label>
+                <Label htmlFor="vat_number">{t("sell_apply.vat")}</Label>
                 <Input
                   id="vat_number"
                   value={form.vat_number}
@@ -190,7 +192,7 @@ export default function SellApply() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email contatto</Label>
+                <Label htmlFor="email">{t("sell_apply.email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -199,7 +201,7 @@ export default function SellApply() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Telefono</Label>
+                <Label htmlFor="phone">{t("sell_apply.phone")}</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -210,7 +212,7 @@ export default function SellApply() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="website">Sito web (opzionale)</Label>
+              <Label htmlFor="website">{t("sell_apply.website")}</Label>
               <Input
                 id="website"
                 type="url"
@@ -221,7 +223,7 @@ export default function SellApply() {
             </div>
 
             <Button type="submit" size="lg" className="w-full" disabled={apply.isPending}>
-              {apply.isPending ? "Invio in corso..." : "Invia candidatura"}
+              {apply.isPending ? t("sell_apply.submitting") : t("sell_apply.submit")}
             </Button>
           </form>
         </div>

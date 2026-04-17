@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import { CheckCircle2, XCircle, ShieldOff, ExternalLink } from "lucide-react";
 import { formatEur } from "@/lib/catalog";
 
 export default function AdminSellers() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { has: isAdmin, isLoading: roleLoading } = useHasRole("admin");
@@ -50,8 +52,8 @@ export default function AdminSellers() {
           <Card>
             <CardHeader>
               <ShieldOff className="size-10 text-destructive mb-2" />
-              <CardTitle>Accesso negato</CardTitle>
-              <CardDescription>Solo gli amministratori possono accedere a questa pagina.</CardDescription>
+              <CardTitle>{t("admin_sellers.access_denied")}</CardTitle>
+              <CardDescription>{t("admin_sellers.access_denied_desc")}</CardDescription>
             </CardHeader>
           </Card>
         </main>
@@ -67,26 +69,29 @@ export default function AdminSellers() {
     setRejectReason("");
   };
 
+  const pendingItems = pending.filter((s) => s.status === "pending");
+  const otherItems = pending.filter((s) => s.status !== "pending");
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-28 pb-16">
         <div className="container max-w-5xl">
-          <h1 className="font-display text-4xl font-bold mb-2">Gestione venditori</h1>
-          <p className="text-muted-foreground mb-8">Approva, rifiuta o sospendi i venditori del marketplace.</p>
+          <h1 className="font-display text-4xl font-bold mb-2">{t("admin_sellers.title")}</h1>
+          <p className="text-muted-foreground mb-8">{t("admin_sellers.subtitle")}</p>
 
           <Tabs defaultValue="pending">
             <TabsList>
-              <TabsTrigger value="pending">In attesa ({pending.filter((s) => s.status === "pending").length})</TabsTrigger>
-              <TabsTrigger value="approved">Approvati ({approved.length})</TabsTrigger>
-              <TabsTrigger value="rejected">Rifiutati/sospesi ({pending.filter((s) => s.status !== "pending").length})</TabsTrigger>
+              <TabsTrigger value="pending">{t("admin_sellers.tab_pending")} ({pendingItems.length})</TabsTrigger>
+              <TabsTrigger value="approved">{t("admin_sellers.tab_approved")} ({approved.length})</TabsTrigger>
+              <TabsTrigger value="rejected">{t("admin_sellers.tab_rejected")} ({otherItems.length})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="pending" className="mt-6 space-y-3">
-              {pending.filter((s) => s.status === "pending").length === 0 ? (
-                <Card><CardContent className="py-12 text-center text-muted-foreground">Nessuna candidatura in attesa.</CardContent></Card>
+              {pendingItems.length === 0 ? (
+                <Card><CardContent className="py-12 text-center text-muted-foreground">{t("admin_sellers.no_pending")}</CardContent></Card>
               ) : (
-                pending.filter((s) => s.status === "pending").map((s) => (
+                pendingItems.map((s) => (
                   <Card key={s.id}>
                     <CardContent className="p-5 flex flex-wrap items-start gap-4">
                       <div className="flex-1 min-w-[240px]">
@@ -95,7 +100,7 @@ export default function AdminSellers() {
                         <div className="flex flex-wrap gap-2 mt-2 text-xs text-muted-foreground">
                           {s.email && <span>📧 {s.email}</span>}
                           {s.phone && <span>📞 {s.phone}</span>}
-                          {s.vat_number && <span>VAT: {s.vat_number}</span>}
+                          {s.vat_number && <span>{t("admin_sellers.vat")}: {s.vat_number}</span>}
                           {s.category && <Badge variant="outline">{s.category}</Badge>}
                           {s.website && (
                             <a href={s.website} target="_blank" rel="noreferrer" className="underline inline-flex items-center gap-1">
@@ -106,21 +111,21 @@ export default function AdminSellers() {
                       </div>
                       <div className="flex gap-2">
                         <Button size="sm" onClick={() => review.mutate({ sellerId: s.id, decision: "approved" })}>
-                          <CheckCircle2 className="size-4 mr-1" /> Approva
+                          <CheckCircle2 className="size-4 mr-1" /> {t("admin_sellers.approve")}
                         </Button>
                         <Dialog open={rejectId === s.id} onOpenChange={(o) => !o && setRejectId(null)}>
                           <DialogTrigger asChild>
                             <Button size="sm" variant="outline" onClick={() => setRejectId(s.id)}>
-                              <XCircle className="size-4 mr-1" /> Rifiuta
+                              <XCircle className="size-4 mr-1" /> {t("admin_sellers.reject")}
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Motivo rifiuto</DialogTitle>
+                              <DialogTitle>{t("admin_sellers.reject_reason_title")}</DialogTitle>
                             </DialogHeader>
-                            <Label>Spiega al candidato</Label>
+                            <Label>{t("admin_sellers.reject_reason_label")}</Label>
                             <Textarea rows={4} value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} />
-                            <Button onClick={submitReject} disabled={!rejectReason}>Conferma rifiuto</Button>
+                            <Button onClick={submitReject} disabled={!rejectReason}>{t("admin_sellers.confirm_reject")}</Button>
                           </DialogContent>
                         </Dialog>
                       </div>
@@ -137,16 +142,16 @@ export default function AdminSellers() {
                     <div className="flex-1 min-w-[240px]">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-display text-lg font-bold">{s.business_name}</h3>
-                        {s.is_demo && <Badge variant="secondary">Demo</Badge>}
+                        {s.is_demo && <Badge variant="secondary">{t("admin_sellers.demo")}</Badge>}
                       </div>
                       <p className="text-sm text-muted-foreground">/store/{s.slug}</p>
                       <div className="flex gap-4 mt-2 text-sm">
-                        <span>Ricavi: <strong>{formatEur(s.total_sales_cents)}</strong></span>
-                        <span>Ordini: <strong>{s.total_orders}</strong></span>
+                        <span>{t("admin_sellers.revenue")}: <strong>{formatEur(s.total_sales_cents)}</strong></span>
+                        <span>{t("admin_sellers.orders")}: <strong>{s.total_orders}</strong></span>
                       </div>
                     </div>
                     <Button size="sm" variant="outline" onClick={() => review.mutate({ sellerId: s.id, decision: "suspended" })}>
-                      Sospendi
+                      {t("admin_sellers.suspend")}
                     </Button>
                   </CardContent>
                 </Card>
@@ -154,7 +159,7 @@ export default function AdminSellers() {
             </TabsContent>
 
             <TabsContent value="rejected" className="mt-6 space-y-3">
-              {pending.filter((s) => s.status !== "pending").map((s) => (
+              {otherItems.map((s) => (
                 <Card key={s.id}>
                   <CardContent className="p-5 flex flex-wrap items-center gap-4">
                     <div className="flex-1 min-w-[240px]">
@@ -163,7 +168,7 @@ export default function AdminSellers() {
                       {s.rejection_reason && <p className="text-sm text-muted-foreground mt-2">{s.rejection_reason}</p>}
                     </div>
                     <Button size="sm" onClick={() => review.mutate({ sellerId: s.id, decision: "approved" })}>
-                      <CheckCircle2 className="size-4 mr-1" /> Riattiva
+                      <CheckCircle2 className="size-4 mr-1" /> {t("admin_sellers.reactivate")}
                     </Button>
                   </CardContent>
                 </Card>
