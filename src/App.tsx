@@ -37,6 +37,8 @@ import PublicWishlist from "./pages/PublicWishlist.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 import ScrollToTop from "@/components/ScrollToTop";
+import BackButtonFAB from "@/components/BackButtonFAB";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +52,7 @@ const App = () => (
           <CartProvider>
             <ShoppingListProvider>
             <ScrollToTop />
+            <Breadcrumbs />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/recipes" element={<Recipes />} />
@@ -82,6 +85,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <BackButtonFAB />
             <AIAssistantFAB />
             </ShoppingListProvider>
           </CartProvider>
