@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -257,7 +256,7 @@ export default function RestaurantDetailDialog({
             </TabsTrigger>
           </TabsList>
 
-          <ScrollArea className="flex-1 px-6 py-5">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 py-5">
             <TabsContent value="info" className="mt-0 space-y-5">
               {restaurant.description && (
                 <p className="text-base leading-relaxed text-foreground/90">
@@ -500,7 +499,7 @@ export default function RestaurantDetailDialog({
                 </div>
               )}
             </TabsContent>
-          </ScrollArea>
+          </div>
         </Tabs>
       </DialogContent>
     </Dialog>
