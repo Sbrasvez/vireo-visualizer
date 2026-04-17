@@ -491,7 +491,7 @@ export default function ProductDetail() {
               >
                 <div>
                   <Label className="mb-2 block">{t("reviews.your_rating")}</Label>
-                  <StarPicker value={rating} onChange={setRating} />
+                  <StarPicker value={rating} onChange={setRating} ariaLabel={(n) => t("product_detail.rating_stars", { count: n })} />
                 </div>
                 <div>
                   <Label htmlFor="review-title" className="mb-2 block">
@@ -708,7 +708,7 @@ export default function ProductDetail() {
                     key={p.id}
                     p={p}
                     onAdd={handleAddRelated}
-                    addLabel={t("seller_dashboard.publish_short")}
+                    addLabel={t("product_detail.add")}
                   />
                 ))}
               </div>
