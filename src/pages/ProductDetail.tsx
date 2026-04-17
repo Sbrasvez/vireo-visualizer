@@ -247,7 +247,23 @@ export default function ProductDetail() {
     });
   };
 
-  return (
+  const handleAskQuestion = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      toast({ title: "Login richiesto", description: "Accedi per fare una domanda" });
+      return;
+    }
+    if (questionText.trim().length < 3) return;
+    askQuestion.mutate(
+      {
+        question: questionText,
+        author_name:
+          (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Cliente",
+      },
+      { onSuccess: () => setQuestionText("") },
+    );
+  };
+
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-24 pb-16">
