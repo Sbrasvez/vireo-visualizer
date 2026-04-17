@@ -11,13 +11,24 @@ import {
   User,
   LayoutDashboard,
   Tag,
+  PackageOpen,
+  Heart,
+  CalendarDays,
+  Users,
+  Sparkles,
+  Store,
+  ShieldCheck,
+  ShoppingCart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { useShoppingList } from "@/hooks/useShoppingList";
+import { useHasRole } from "@/hooks/useUserRole";
+import { useMySeller } from "@/hooks/useSeller";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { ShoppingCart } from "lucide-react";
+
+type NavItem = { label: string; href: string; icon: typeof ChefHat };
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,14 +37,33 @@ export default function Navbar() {
   const { count: cartCount } = useCart();
   const { uncheckedCount: shopCount } = useShoppingList();
   const { t } = useTranslation();
+  const { has: isAdmin } = useHasRole("admin");
+  const { data: mySeller } = useMySeller();
 
-  const navLinks = [
+  const exploreLinks: NavItem[] = [
     { label: t("nav.recipes"), href: "/recipes", icon: ChefHat },
     { label: t("nav.restaurants"), href: "/restaurants", icon: Utensils },
+    { label: "Anti-spreco", href: "/surplus", icon: PackageOpen },
     { label: t("nav.marketplace"), href: "/marketplace", icon: ShoppingBag },
+    { label: "Meal Plan AI", href: "/meal-plan", icon: CalendarDays },
+    { label: "Community", href: "/community", icon: Users },
+    { label: t("nav.ai_chat"), href: "/ai", icon: Sparkles },
     { label: t("nav.blog"), href: "/blog", icon: BookOpen },
-    { label: t("nav.pricing"), href: "/pricing", icon: Tag },
   ];
+
+  const accountLinks: NavItem[] = user
+    ? [
+        { label: t("nav.dashboard"), href: "/dashboard", icon: LayoutDashboard },
+        { label: t("nav.wishlist", "Wishlist"), href: "/wishlist", icon: Heart },
+        { label: t("nav.shopping_list", "Lista spesa"), href: "/shopping-list", icon: ShoppingCart },
+        { label: t("nav.profile"), href: "/profile", icon: User },
+        { label: t("nav.pricing"), href: "/pricing", icon: Tag },
+        ...(mySeller
+          ? [{ label: "Seller Dashboard", href: "/seller/dashboard", icon: Store }]
+          : [{ label: "Diventa venditore", href: "/sell", icon: Store }]),
+        ...(isAdmin ? [{ label: "Admin Sellers", href: "/admin/sellers", icon: ShieldCheck }] : []),
+      ]
+    : [{ label: t("nav.pricing"), href: "/pricing", icon: Tag }];
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -44,6 +74,18 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const renderItem = (l: NavItem) => (
+    <Link
+      key={l.href}
+      to={l.href}
+      onClick={() => setMenuOpen(false)}
+      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+    >
+      <l.icon className="size-4" />
+      {l.label}
+    </Link>
+  );
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
@@ -61,18 +103,31 @@ export default function Navbar() {
           </Link>
 
           {menuOpen && (
-            <div className="absolute top-full left-0 mt-2 w-52 bg-background border border-border rounded-xl shadow-lg py-1 animate-fade-up z-50">
-              {navLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  to={l.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-                >
-                  <l.icon className="size-4" />
-                  {l.label}
-                </Link>
-              ))}
+            <div className="absolute top-full left-0 mt-2 w-64 max-h-[80vh] overflow-y-auto bg-background border border-border rounded-xl shadow-lg py-1 animate-fade-up z-50">
+              <div className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                {t("nav.explore")}
+              </div>
+              {exploreLinks.map(renderItem)}
+              <div className="my-1 border-t border-border" />
+              <div className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                {t("nav.account")}
+              </div>
+              {accountLinks.map(renderItem)}
+              {user && (
+                <>
+                  <div className="my-1 border-t border-border" />
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      signOut();
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                  >
+                    <LogOut className="size-4" />
+                    {t("nav.logout")}
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -108,12 +163,12 @@ export default function Navbar() {
                   <LayoutDashboard className="size-4 mr-1" /> {t("nav.dashboard")}
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
                 <Link to="/profile">
                   <User className="size-4 mr-1" /> <span className="hidden sm:inline">{t("nav.profile")}</span>
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" onClick={signOut}>
+              <Button variant="ghost" size="sm" onClick={signOut} className="hidden sm:inline-flex">
                 <LogOut className="size-4 sm:mr-1" /> <span className="hidden sm:inline">{t("nav.logout")}</span>
               </Button>
             </>
