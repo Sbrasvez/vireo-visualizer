@@ -17,9 +17,10 @@ import { useMySeller } from "@/hooks/useSeller";
 import { useMyProducts, useCreateProduct, useDeleteProduct, useUpdateProduct } from "@/hooks/useSellerProducts";
 import { useSellerOrders, useUpdateFulfillment } from "@/hooks/useSellerOrders";
 import { formatEur } from "@/lib/catalog";
-import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, Truck } from "lucide-react";
+import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, Truck, MessageCircleQuestion } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useSellerQuestions, useAnswerQuestion } from "@/hooks/useProductQuestions";
 
 const CATEGORIES = ["kitchen", "home", "personal", "reuse", "bio", "fashion", "beauty", "garden"];
 
@@ -33,6 +34,9 @@ export default function SellerDashboard() {
   const deleteProduct = useDeleteProduct();
   const updateProduct = useUpdateProduct();
   const updateFulfillment = useUpdateFulfillment();
+  const { data: questions = [] } = useSellerQuestions(seller?.id);
+  const answerQuestion = useAnswerQuestion();
+  const unansweredCount = questions.filter((q) => !q.answer).length;
 
   const [openCreate, setOpenCreate] = useState(false);
   const [form, setForm] = useState({
@@ -186,6 +190,10 @@ export default function SellerDashboard() {
             <TabsList>
               <TabsTrigger value="products">Prodotti ({products.length})</TabsTrigger>
               <TabsTrigger value="orders">Ordini ({orders.length})</TabsTrigger>
+              <TabsTrigger value="questions" className="gap-2">
+                <MessageCircleQuestion className="size-4" />
+                Domande {unansweredCount > 0 && <Badge variant="secondary" className="h-5">{unansweredCount}</Badge>}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="products" className="mt-6">
@@ -343,6 +351,23 @@ export default function SellerDashboard() {
                 </div>
               )}
             </TabsContent>
+
+            <TabsContent value="questions" className="mt-6">
+              {questions.length === 0 ? (
+                <Card><CardContent className="py-16 text-center text-muted-foreground">Nessuna domanda ancora dai clienti.</CardContent></Card>
+              ) : (
+                <div className="space-y-3">
+                  {questions.map((q) => (
+                    <QuestionRow
+                      key={q.id}
+                      question={q}
+                      onAnswer={(answer) => answerQuestion.mutate({ id: q.id, answer })}
+                      isPending={answerQuestion.isPending}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
           </Tabs>
         </div>
       </main>
@@ -364,6 +389,93 @@ function StatBlock({ icon: Icon, label, value }: { icon: any; label: string; val
             <div className="font-display text-xl font-bold">{value}</div>
           </div>
         </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function QuestionRow({
+  question,
+  onAnswer,
+  isPending,
+}: {
+  question: import("@/hooks/useProductQuestions").SellerQuestion;
+  onAnswer: (answer: string) => void;
+  isPending: boolean;
+}) {
+  const [draft, setDraft] = useState(question.answer ?? "");
+  const [editing, setEditing] = useState(!question.answer);
+  const isAnswered = !!question.answer;
+
+  return (
+    <Card>
+      <CardContent className="p-5 space-y-3">
+        <div className="flex items-start gap-3 flex-wrap">
+          {question.product?.primary_image && (
+            <img
+              src={question.product.primary_image}
+              alt={question.product.name}
+              className="size-14 rounded-lg object-cover"
+            />
+          )}
+          <div className="flex-1 min-w-[180px]">
+            <a
+              href={`/product/${question.product?.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs text-muted-foreground hover:text-primary"
+            >
+              {question.product?.name}
+            </a>
+            <p className="text-sm mt-1">
+              <span className="font-medium">{question.author_name}</span>{" "}
+              <span className="text-muted-foreground">
+                · {new Date(question.created_at).toLocaleDateString("it-IT", { day: "numeric", month: "short" })}
+              </span>
+            </p>
+            <p className="leading-relaxed mt-1">{question.question}</p>
+          </div>
+          {isAnswered && !editing && (
+            <Badge className="bg-primary/10 text-primary border-0">Risposto</Badge>
+          )}
+        </div>
+
+        {editing ? (
+          <div className="space-y-2 pt-2 border-t border-border/50">
+            <Label htmlFor={`a-${question.id}`} className="text-xs">
+              {isAnswered ? "Modifica risposta" : "La tua risposta"}
+            </Label>
+            <Textarea
+              id={`a-${question.id}`}
+              rows={3}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="Rispondi al cliente..."
+              maxLength={2000}
+            />
+            <div className="flex justify-end gap-2">
+              {isAnswered && (
+                <Button variant="ghost" size="sm" onClick={() => { setDraft(question.answer ?? ""); setEditing(false); }}>
+                  Annulla
+                </Button>
+              )}
+              <Button
+                size="sm"
+                onClick={() => { onAnswer(draft); setEditing(false); }}
+                disabled={isPending || draft.trim().length < 1}
+              >
+                {isPending ? "Invio..." : isAnswered ? "Aggiorna" : "Pubblica risposta"}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-xl bg-primary/5 border border-primary/20 p-3 flex items-start justify-between gap-3">
+            <p className="text-sm leading-relaxed whitespace-pre-line flex-1">{question.answer}</p>
+            <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
+              Modifica
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

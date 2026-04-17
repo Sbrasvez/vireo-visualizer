@@ -27,7 +27,13 @@ import {
   useUpsertProductReview,
   useDeleteProductReview,
 } from "@/hooks/useProductReviews";
+import {
+  useProductQuestions,
+  useAskProductQuestion,
+  useDeleteProductQuestion,
+} from "@/hooks/useProductQuestions";
 import { useCart } from "@/hooks/useCart";
+import { MessageCircleQuestion, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { formatEur } from "@/lib/catalog";
@@ -123,8 +129,11 @@ export default function ProductDetail() {
   const { data: reviews = [] } = useProductReviews(product?.id);
   const { data: myReview } = useMyProductReview(product?.id);
   const { data: related = [] } = useRelatedProducts(product?.seller_id, product?.id);
+  const { data: questions = [] } = useProductQuestions(product?.id);
   const upsertReview = useUpsertProductReview(product?.id);
   const deleteReview = useDeleteProductReview(product?.id);
+  const askQuestion = useAskProductQuestion(product?.id);
+  const deleteQuestion = useDeleteProductQuestion(product?.id);
 
   const [activeImage, setActiveImage] = useState(0);
   const [qty, setQty] = useState(1);
@@ -133,6 +142,7 @@ export default function ProductDetail() {
   const [rating, setRating] = useState(myReview?.rating ?? 5);
   const [title, setTitle] = useState(myReview?.title ?? "");
   const [body, setBody] = useState(myReview?.body ?? "");
+  const [questionText, setQuestionText] = useState("");
 
   if (isLoading) {
     return (
@@ -235,6 +245,23 @@ export default function ProductDetail() {
       author_name:
         (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Cliente",
     });
+  };
+
+  const handleAskQuestion = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      toast({ title: "Login richiesto", description: "Accedi per fare una domanda" });
+      return;
+    }
+    if (questionText.trim().length < 3) return;
+    askQuestion.mutate(
+      {
+        question: questionText,
+        author_name:
+          (user.user_metadata?.full_name as string) ?? user.email?.split("@")[0] ?? "Cliente",
+      },
+      { onSuccess: () => setQuestionText("") },
+    );
   };
 
   return (
@@ -530,6 +557,123 @@ export default function ProductDetail() {
                     </header>
                     {r.title && <h3 className="font-medium mt-2">{r.title}</h3>}
                     {r.body && <p className="text-muted-foreground mt-1 leading-relaxed">{r.body}</p>}
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Q&A */}
+          <section className="mt-16">
+            <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+              <div>
+                <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
+                  <MessageCircleQuestion className="size-6 text-primary" />
+                  Domande e risposte
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {questions.length} {questions.length === 1 ? "domanda" : "domande"} ·
+                  Risposte direttamente da {product.seller?.business_name ?? "il venditore"}
+                </p>
+              </div>
+            </div>
+
+            {user ? (
+              <form
+                onSubmit={handleAskQuestion}
+                className="rounded-2xl border border-border/60 bg-card p-6 space-y-3 mb-8"
+              >
+                <Label htmlFor="question-text" className="block">
+                  Fai una domanda sul prodotto
+                </Label>
+                <Textarea
+                  id="question-text"
+                  value={questionText}
+                  onChange={(e) => setQuestionText(e.target.value)}
+                  placeholder="Es. Le dimensioni sono adatte a... ? La spedizione è eco-friendly?"
+                  rows={3}
+                  maxLength={1000}
+                  required
+                  minLength={3}
+                />
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">
+                    {questionText.length}/1000
+                  </span>
+                  <Button
+                    type="submit"
+                    disabled={askQuestion.isPending || questionText.trim().length < 3}
+                  >
+                    {askQuestion.isPending ? "Invio..." : "Pubblica domanda"}
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-6 text-center mb-8">
+                <p className="text-muted-foreground mb-3">Accedi per fare una domanda</p>
+                <Button asChild variant="outline">
+                  <Link to="/login">Accedi</Link>
+                </Button>
+              </div>
+            )}
+
+            {questions.length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">
+                Nessuna domanda ancora. Fai la prima!
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {questions.map((q) => (
+                  <article
+                    key={q.id}
+                    className="rounded-2xl border border-border/60 bg-card p-5 space-y-3"
+                  >
+                    <header className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-muted-foreground">
+                          <span className="font-medium text-foreground">{q.author_name}</span>{" "}
+                          ha chiesto · {new Date(q.created_at).toLocaleDateString("it-IT", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </p>
+                        <p className="mt-1 leading-relaxed">{q.question}</p>
+                      </div>
+                      {user?.id === q.user_id && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteQuestion.mutate(q.id)}
+                          disabled={deleteQuestion.isPending}
+                          aria-label="Elimina domanda"
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      )}
+                    </header>
+
+                    {q.answer ? (
+                      <div className="rounded-xl bg-primary/5 border border-primary/20 p-4">
+                        <p className="text-xs font-medium text-primary mb-1">
+                          Risposta di {product.seller?.business_name ?? "il venditore"}
+                          {q.answered_at && (
+                            <span className="text-muted-foreground font-normal">
+                              {" "}· {new Date(q.answered_at).toLocaleDateString("it-IT", {
+                                day: "numeric",
+                                month: "short",
+                              })}
+                            </span>
+                          )}
+                        </p>
+                        <p className="leading-relaxed whitespace-pre-line">{q.answer}</p>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-muted-foreground italic">
+                        In attesa di risposta dal venditore
+                      </p>
+                    )}
                   </article>
                 ))}
               </div>
