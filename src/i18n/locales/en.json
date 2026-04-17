@@ -338,6 +338,8 @@
   },
   "ai": {
     "fab_tooltip": "Ask Vireo AI",
+    "no_recipes_found": "No recipes found. Try changing the filters.",
+    "no_restaurants_found": "No restaurants found. Try widening the search area.",
     "title": "Vireo AI",
     "subtitle": "Your assistant for a green lifestyle",
     "empty_title": "How can I help you today?",
