@@ -38,6 +38,115 @@ export type Database = {
         }
         Relationships: []
       }
+      magic_bag_reservations: {
+        Row: {
+          collected_at: string | null
+          created_at: string
+          id: string
+          magic_bag_id: string
+          pickup_code: string
+          quantity: number
+          reserved_at: string
+          status: string
+          total_price: number
+          user_id: string
+        }
+        Insert: {
+          collected_at?: string | null
+          created_at?: string
+          id?: string
+          magic_bag_id: string
+          pickup_code?: string
+          quantity?: number
+          reserved_at?: string
+          status?: string
+          total_price: number
+          user_id: string
+        }
+        Update: {
+          collected_at?: string | null
+          created_at?: string
+          id?: string
+          magic_bag_id?: string
+          pickup_code?: string
+          quantity?: number
+          reserved_at?: string
+          status?: string
+          total_price?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "magic_bag_reservations_magic_bag_id_fkey"
+            columns: ["magic_bag_id"]
+            isOneToOne: false
+            referencedRelation: "magic_bags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      magic_bags: {
+        Row: {
+          category: string
+          co2_saved_kg: number
+          created_at: string
+          description: string | null
+          discounted_price: number
+          id: string
+          image_url: string | null
+          is_active: boolean
+          original_price: number
+          pickup_end: string
+          pickup_start: string
+          quantity_available: number
+          restaurant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          co2_saved_kg?: number
+          created_at?: string
+          description?: string | null
+          discounted_price: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          original_price: number
+          pickup_end: string
+          pickup_start: string
+          quantity_available?: number
+          restaurant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          co2_saved_kg?: number
+          created_at?: string
+          description?: string | null
+          discounted_price?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          original_price?: number
+          pickup_end?: string
+          pickup_start?: string
+          quantity_available?: number
+          restaurant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "magic_bags_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string | null
@@ -614,6 +723,27 @@ export type Database = {
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
+      }
+      reserve_magic_bag: {
+        Args: { _bag_id: string; _quantity?: number }
+        Returns: {
+          collected_at: string | null
+          created_at: string
+          id: string
+          magic_bag_id: string
+          pickup_code: string
+          quantity: number
+          reserved_at: string
+          status: string
+          total_price: number
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "magic_bag_reservations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
