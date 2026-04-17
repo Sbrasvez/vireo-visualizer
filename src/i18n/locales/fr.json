@@ -335,5 +335,33 @@
     "save": "Sauvegarder",
     "cancel": "Annuler",
     "close": "Fermer"
+  },
+  "ai": {
+    "title": "Vireo AI",
+    "subtitle": "Votre assistant pour un mode de vie green",
+    "empty_title": "Comment puis-je vous aider aujourd'hui ?",
+    "empty_desc": "Demandez-moi des recettes vegan, des conseils durables, des idées anti-gaspillage ou des restaurants éco-responsables.",
+    "placeholder": "Écrivez un message ou utilisez le micro…",
+    "thinking": "Je réfléchis…",
+    "voice": "Entrée vocale",
+    "voice_unsupported": "Votre navigateur ne prend pas en charge la saisie vocale",
+    "remaining": "{{count}} restants",
+    "unlimited": "Messages illimités",
+    "low_quota": "Il vous reste {{count}} messages IA aujourd'hui.",
+    "upgrade": "Passer à Pro",
+    "quota_title": "Limite quotidienne atteinte",
+    "quota_desc": "Vous avez utilisé vos {{limit}} messages IA gratuits du jour. Passez à Pro pour des messages illimités.",
+    "rate_title": "Trop de requêtes",
+    "rate_desc": "Veuillez réessayer dans quelques secondes.",
+    "credits_title": "Crédits IA épuisés",
+    "credits_desc": "Ajoutez des crédits à votre espace pour continuer.",
+    "error_title": "Erreur",
+    "error_desc": "Une erreur est survenue. Veuillez réessayer.",
+    "suggestions": [
+      "Suggère-moi 3 recettes vegan rapides avec des ingrédients de saison",
+      "Comment réduire le gaspillage alimentaire en cuisine ?",
+      "Quelles sont les protéines végétales les plus durables ?",
+      "Crée un menu hebdomadaire végétal équilibré"
+    ]
   }
 }

@@ -335,5 +335,33 @@
     "save": "Speichern",
     "cancel": "Abbrechen",
     "close": "Schließen"
+  },
+  "ai": {
+    "title": "Vireo AI",
+    "subtitle": "Dein Assistent für einen grünen Lebensstil",
+    "empty_title": "Wie kann ich dir heute helfen?",
+    "empty_desc": "Frag mich nach veganen Rezepten, nachhaltigen Tipps, Ideen gegen Lebensmittelverschwendung oder umweltfreundlichen Restaurants.",
+    "placeholder": "Schreibe eine Nachricht oder nutze das Mikrofon…",
+    "thinking": "Denke nach…",
+    "voice": "Spracheingabe",
+    "voice_unsupported": "Dein Browser unterstützt keine Spracheingabe",
+    "remaining": "{{count}} übrig",
+    "unlimited": "Unbegrenzte Nachrichten",
+    "low_quota": "Dir bleiben heute noch {{count}} AI-Nachrichten.",
+    "upgrade": "Auf Pro upgraden",
+    "quota_title": "Tageslimit erreicht",
+    "quota_desc": "Du hast deine {{limit}} kostenlosen AI-Nachrichten für heute aufgebraucht. Upgrade auf Pro für unbegrenzte Nachrichten.",
+    "rate_title": "Zu viele Anfragen",
+    "rate_desc": "Bitte versuche es in wenigen Sekunden erneut.",
+    "credits_title": "AI-Guthaben aufgebraucht",
+    "credits_desc": "Füge deinem Workspace Guthaben hinzu, um fortzufahren.",
+    "error_title": "Fehler",
+    "error_desc": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "suggestions": [
+      "Schlag mir 3 schnelle vegane Rezepte mit saisonalen Zutaten vor",
+      "Wie kann ich Lebensmittelverschwendung in der Küche reduzieren?",
+      "Welche pflanzlichen Proteine sind am nachhaltigsten?",
+      "Erstelle einen ausgewogenen wöchentlichen pflanzenbasierten Speiseplan"
+    ]
   }
 }
