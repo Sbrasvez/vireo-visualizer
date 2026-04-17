@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -52,6 +53,36 @@ export default function Restaurants() {
   });
 
   const filtered = useFilteredRestaurants(restaurants, filters);
+
+  // Handle ?focus=:slug deep link from AI chat (and elsewhere)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const focusedSlugRef = useRef<string | null>(null);
+  useEffect(() => {
+    const slug = searchParams.get("focus");
+    if (!slug || loading) return;
+    if (focusedSlugRef.current === slug) return;
+    const target = restaurants.find((r) => r.slug === slug);
+    if (!target) return;
+    focusedSlugRef.current = slug;
+    // Center the map on the restaurant and surface it
+    setFilters((f) => ({
+      ...f,
+      origin: { lat: target.lat, lng: target.lng },
+      radiusKm: Math.max(f.radiusKm, 5),
+      cuisine: "all",
+      price: "all",
+      availableOnly: false,
+      search: "",
+    }));
+    setOriginLabel(`${target.name} · ${target.city}`);
+    setActiveId(target.id);
+    setDialogRestaurant(target);
+    setDialogOpen(true);
+    // Clean the URL so reopening dialog after closing isn't forced
+    const next = new URLSearchParams(searchParams);
+    next.delete("focus");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, restaurants, loading, setSearchParams]);
 
   const markers: RestaurantMarker[] = useMemo(
     () =>
