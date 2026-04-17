@@ -91,6 +91,7 @@ export function useRestaurantDetails(restaurantId: string | null) {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
+  const [refreshTick, setRefreshTick] = useState(0);
 
   useEffect(() => {
     if (!restaurantId) return;
@@ -123,9 +124,11 @@ export function useRestaurantDetails(restaurantId: string | null) {
     return () => {
       cancel = true;
     };
-  }, [restaurantId]);
+  }, [restaurantId, refreshTick]);
 
-  return { menu, photos, reviews, loading };
+  const refresh = () => setRefreshTick((t) => t + 1);
+
+  return { menu, photos, reviews, loading, refresh };
 }
 
 // Haversine distance in km

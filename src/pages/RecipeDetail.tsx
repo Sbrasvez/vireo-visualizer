@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Clock, Users, Flame, Leaf, ChefHat, Minus, Plus, ExternalLink, Bookmark } from "lucide-react";
+import { ArrowLeft, Clock, Users, Flame, Leaf, ChefHat, Minus, Plus, ExternalLink, Bookmark, ShoppingCart } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRecipeBySlug } from "@/hooks/useRecipes";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useShoppingList } from "@/hooks/useShoppingList";
 import { toast } from "sonner";
 
 function fmtAmount(n: number): string {
@@ -24,6 +25,7 @@ export default function RecipeDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { data: recipe, isLoading } = useRecipeBySlug(slug);
   const { user } = useAuth();
+  const { addItems } = useShoppingList();
   const [servings, setServings] = useState<number | null>(null);
   const [doneSteps, setDoneSteps] = useState<Set<number>>(new Set());
 
@@ -56,6 +58,21 @@ export default function RecipeDetail() {
     } as never);
     if (error) toast.error(t("recipes.save_error"));
     else toast.success(t("recipes.save_success"));
+  };
+
+  const handleAddToShoppingList = () => {
+    if (!recipe) return;
+    addItems(
+      scaledIngredients.map((ing) => ({
+        name: ing.name,
+        amount: ing.scaledAmount,
+        unit: ing.unit,
+        category: "",
+        recipeId: recipe.id,
+        recipeTitle: recipe.title,
+      })),
+    );
+    toast.success(t("recipes.added_to_shopping_list", { count: scaledIngredients.length }));
   };
 
   if (isLoading) {
@@ -138,7 +155,10 @@ export default function RecipeDetail() {
             )}
             <span className="flex items-center gap-2"><Users className="size-5 text-primary" /><strong className="text-foreground">{currentServings}</strong> {t("recipes.servings")}</span>
             {cal && <span className="flex items-center gap-2"><Flame className="size-5 text-primary" /><strong className="text-foreground">{cal}</strong> kcal</span>}
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto flex gap-2 flex-wrap">
+              <Button variant="default" size="sm" onClick={handleAddToShoppingList}>
+                <ShoppingCart className="size-4 mr-2" />{t("recipes.add_to_shopping_list")}
+              </Button>
               <Button variant="outline" size="sm" onClick={handleSave}>
                 <Bookmark className="size-4 mr-2" />{t("recipes.save")}
               </Button>
