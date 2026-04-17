@@ -14,7 +14,9 @@
     "language": "Idioma",
     "explore": "Explorar",
     "account": "Cuenta",
-    "ai_chat": "AI Chat"
+    "ai_chat": "AI Chat",
+    "shopping_list": "Lista de compras",
+    "cart": "Carrito"
   },
   "hero": {
     "badge": "IA para una vida sostenible",

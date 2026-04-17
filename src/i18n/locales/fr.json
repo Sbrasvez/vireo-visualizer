@@ -14,7 +14,9 @@
     "language": "Langue",
     "explore": "Explorer",
     "account": "Compte",
-    "ai_chat": "AI Chat"
+    "ai_chat": "AI Chat",
+    "shopping_list": "Liste de courses",
+    "cart": "Panier"
   },
   "hero": {
     "badge": "IA pour un mode de vie durable",

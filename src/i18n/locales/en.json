@@ -14,7 +14,9 @@
     "language": "Language",
     "explore": "Explore",
     "account": "Account",
-    "ai_chat": "AI Chat"
+    "ai_chat": "AI Chat",
+    "shopping_list": "Shopping list",
+    "cart": "Cart"
   },
   "hero": {
     "badge": "AI-Powered Sustainable Living",

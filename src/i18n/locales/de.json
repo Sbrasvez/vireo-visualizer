@@ -14,7 +14,9 @@
     "language": "Sprache",
     "explore": "Entdecken",
     "account": "Konto",
-    "ai_chat": "AI Chat"
+    "ai_chat": "AI Chat",
+    "shopping_list": "Einkaufsliste",
+    "cart": "Warenkorb"
   },
   "hero": {
     "badge": "KI für nachhaltiges Leben",
