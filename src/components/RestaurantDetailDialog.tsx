@@ -42,6 +42,7 @@ import {
   useRestaurantDetails,
 } from "@/hooks/useRestaurants";
 import { useToast } from "@/hooks/use-toast";
+import { ReviewForm } from "@/components/ReviewForm";
 
 interface Props {
   restaurant: Restaurant | null;
@@ -73,7 +74,7 @@ export default function RestaurantDetailDialog({
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
-  const { menu, photos, reviews, loading } = useRestaurantDetails(
+  const { menu, photos, reviews, loading, refresh } = useRestaurantDetails(
     restaurant?.id ?? null,
   );
   const dateLocale = ({ it, en: enUS, es, fr, de } as any)[i18n.language] || it;
@@ -370,6 +371,7 @@ export default function RestaurantDetailDialog({
             </TabsContent>
 
             <TabsContent value="reviews" className="mt-0 space-y-4">
+              <ReviewForm restaurantId={restaurant.id} onSubmitted={refresh} />
               {reviews.length === 0 && (
                 <p className="text-muted-foreground text-sm">{t("restaurant_dialog.no_reviews")}</p>
               )}
