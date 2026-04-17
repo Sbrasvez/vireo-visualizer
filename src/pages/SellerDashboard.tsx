@@ -351,6 +351,23 @@ export default function SellerDashboard() {
                 </div>
               )}
             </TabsContent>
+
+            <TabsContent value="questions" className="mt-6">
+              {questions.length === 0 ? (
+                <Card><CardContent className="py-16 text-center text-muted-foreground">Nessuna domanda ancora dai clienti.</CardContent></Card>
+              ) : (
+                <div className="space-y-3">
+                  {questions.map((q) => (
+                    <QuestionRow
+                      key={q.id}
+                      question={q}
+                      onAnswer={(answer) => answerQuestion.mutate({ id: q.id, answer })}
+                      isPending={answerQuestion.isPending}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
           </Tabs>
         </div>
       </main>
