@@ -337,6 +337,7 @@
     "close": "Close"
   },
   "ai": {
+    "fab_tooltip": "Ask Vireo AI",
     "title": "Vireo AI",
     "subtitle": "Your assistant for a green lifestyle",
     "empty_title": "How can I help you today?",

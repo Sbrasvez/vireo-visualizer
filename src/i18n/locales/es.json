@@ -337,6 +337,7 @@
     "close": "Cerrar"
   },
   "ai": {
+    "fab_tooltip": "Pregunta a Vireo AI",
     "title": "Vireo AI",
     "subtitle": "Tu asistente para un estilo de vida verde",
     "empty_title": "¿En qué puedo ayudarte hoy?",
