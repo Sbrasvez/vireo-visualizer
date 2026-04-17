@@ -14,6 +14,8 @@ import {
 import DashboardLayout from "@/components/DashboardLayout";
 import { StatCard } from "@/components/StatCard";
 import { SkeletonCard } from "@/components/SkeletonCard";
+import { CO2Tracker } from "@/components/CO2Tracker";
+import { GreenScore } from "@/components/GreenScore";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -100,6 +102,12 @@ export default function Dashboard() {
           <StatCard label={t("dashboard.reservations")} value={stats.reservations} icon={Calendar} accent="secondary" loading={statsLoading} />
           <StatCard label={t("dashboard.orders")} value={stats.orders} hint={t("dashboard.marketplace_hint")} icon={ShoppingBag} accent="tertiary" loading={statsLoading} />
           <StatCard label={t("dashboard.co2_saved")} value={`${stats.co2KgSaved} kg`} hint={t("dashboard.co2_hint")} icon={Leaf} accent="primary" loading={statsLoading} />
+        </section>
+
+        {/* CO2 + Green Score */}
+        <section className="grid lg:grid-cols-2 gap-4">
+          <CO2Tracker />
+          <GreenScore />
         </section>
 
         {/* Upgrade banner */}

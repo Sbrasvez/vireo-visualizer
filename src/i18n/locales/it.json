@@ -14,7 +14,85 @@
     "language": "Lingua",
     "explore": "Esplora",
     "account": "Account",
-    "ai_chat": "AI Chat"
+    "ai_chat": "AI Chat",
+    "shopping_list": "Lista della spesa",
+    "cart": "Carrello"
+  },
+  "shopping_list": {
+    "title": "Lista della spesa",
+    "subtitle": "{{count}} prodotti da prendere",
+    "share": "Condividi",
+    "copied": "Lista copiata negli appunti",
+    "clear_checked": "Rimuovi spuntati",
+    "clear_all": "Svuota",
+    "empty_title": "La tua lista è vuota",
+    "empty_desc": "Aggiungi gli ingredienti direttamente dalle ricette per organizzare la spesa.",
+    "browse_recipes": "Esplora ricette",
+    "from": "da",
+    "categories.vegetables": "Verdure",
+    "categories.fruits": "Frutta",
+    "categories.grains": "Cereali e pane",
+    "categories.legumes": "Legumi e proteine veg",
+    "categories.dairy": "Latticini e alternative",
+    "categories.nuts_seeds": "Frutta secca e semi",
+    "categories.condiments": "Condimenti e spezie",
+    "categories.sweeteners": "Dolcificanti",
+    "categories.drinks": "Bevande",
+    "categories.other": "Altro"
+  },
+  "co2": {
+    "title": "CO₂ risparmiata",
+    "saved": "totali",
+    "this_week": "{{kg}} kg questa settimana",
+    "last_7": "Ultimi 7 giorni",
+    "eq_car": "Equivale a",
+    "eq_flights": "Voli evitati",
+    "flights_unit": "voli",
+    "how_calculated": "Come la calcoliamo",
+    "rule_recipe": "+2.5 kg per ogni ricetta veg salvata",
+    "rule_reservation": "+1.8 kg per ogni prenotazione eco"
+  },
+  "green_score": {
+    "title": "Green Score",
+    "points": "punti",
+    "to_next": "al livello {{level}}",
+    "recipes": "Ricette",
+    "reservations": "Tavoli",
+    "reviews": "Recensioni",
+    "orders": "Ordini",
+    "badges": "Badge sbloccati",
+    "badge_first_recipe": "Prima ricetta",
+    "badge_explorer": "Explorer",
+    "badge_reviewer": "Recensore",
+    "badge_shopper": "Shopper",
+    "badge_collector": "Collezionista",
+    "levels": {
+      "seedling": "Germoglio",
+      "sprout": "Pianta",
+      "leaf": "Foglia",
+      "branch": "Ramo",
+      "tree": "Albero",
+      "forest": "Foresta"
+    }
+  },
+  "feature_gate": {
+    "title": "Disponibile con {{plan}}",
+    "desc": "Sblocca questa funzionalità passando a un piano superiore.",
+    "upgrade": "Scopri i piani",
+    "locked": "Solo Pro"
+  },
+  "review_form": {
+    "title": "Lascia una recensione",
+    "title_field": "Titolo",
+    "title_placeholder": "Riassumi la tua esperienza",
+    "body_field": "Recensione",
+    "body_placeholder": "Com'è stata la tua esperienza? Cosa hai mangiato?",
+    "submit": "Pubblica recensione",
+    "rating_required": "Seleziona un voto",
+    "body_required": "Scrivi qualche parola sulla tua esperienza",
+    "success": "Recensione pubblicata, grazie!",
+    "error": "Errore nella pubblicazione",
+    "login_required": "Accedi per lasciare una recensione."
   },
   "hero": {
     "badge": "AI per uno stile di vita sostenibile",
@@ -141,7 +219,9 @@
     "not_found_title": "Ricetta non trovata",
     "not_found_desc": "La ricetta che stai cercando non esiste o è stata rimossa.",
     "decrease_servings": "Riduci porzioni",
-    "increase_servings": "Aumenta porzioni"
+    "increase_servings": "Aumenta porzioni",
+    "add_to_shopping_list": "Aggiungi alla lista spesa",
+    "added_to_shopping_list": "{{count}} ingredienti aggiunti alla lista spesa"
   },
   "restaurants": {
     "badge_count": "{{count}} ristoranti eco-friendly in Italia",
