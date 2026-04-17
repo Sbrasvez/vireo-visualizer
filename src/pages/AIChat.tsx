@@ -12,8 +12,21 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { usePlan } from "@/hooks/usePlan";
 import { cn } from "@/lib/utils";
+import { ChatRecipeCards, type RecipeCardData } from "@/components/ChatRecipeCards";
+import {
+  ChatRestaurantCards,
+  type RestaurantCardData,
+} from "@/components/ChatRestaurantCards";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type CardBlock =
+  | { kind: "recipes"; data: RecipeCardData[] }
+  | { kind: "restaurants"; data: RestaurantCardData[] };
+
+type Msg = {
+  role: "user" | "assistant";
+  content: string;
+  cards?: CardBlock[];
+};
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
@@ -24,6 +37,7 @@ export default function AIChat() {
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [listening, setListening] = useState(false);
+  const [userGeo, setUserGeo] = useState<{ lat: number; lng: number } | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -33,8 +47,23 @@ export default function AIChat() {
   const limit = 10;
   const remaining = Math.max(0, limit - used);
 
+  // Try to obtain geolocation once (silent — no popup spam if denied)
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserGeo({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => {
+        /* user denied / unavailable: model will fall back to city in text */
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 5 * 60 * 1000 },
+    );
+  }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages, streaming]);
 
   const suggestions = t("ai.suggestions", { returnObjects: true }) as string[];
@@ -82,6 +111,17 @@ export default function AIChat() {
     setStreaming(false);
   };
 
+  // Helper: mutate the last assistant message in state
+  const updateLastAssistant = (mutator: (m: Msg) => Msg) => {
+    setMessages((prev) => {
+      const copy = prev.slice();
+      const i = copy.length - 1;
+      if (i < 0 || copy[i].role !== "assistant") return prev;
+      copy[i] = mutator(copy[i]);
+      return copy;
+    });
+  };
+
   const send = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || streaming) return;
@@ -100,6 +140,9 @@ export default function AIChat() {
       const token = sess.session?.access_token;
       if (!token) throw new Error("no_session");
 
+      // Strip cards from history sent to backend (model only needs role+content)
+      const wireMessages = next.map((m) => ({ role: m.role, content: m.content }));
+
       const resp = await fetch(CHAT_URL, {
         method: "POST",
         headers: {
@@ -107,7 +150,11 @@ export default function AIChat() {
           Authorization: `Bearer ${token}`,
           apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
         },
-        body: JSON.stringify({ messages: next, lang: i18n.language }),
+        body: JSON.stringify({
+          messages: wireMessages,
+          lang: i18n.language,
+          user_location: userGeo,
+        }),
         signal: ctrl.signal,
       });
 
@@ -120,27 +167,39 @@ export default function AIChat() {
             variant: "destructive",
           });
         } else {
-          toast({ title: t("ai.rate_title"), description: t("ai.rate_desc"), variant: "destructive" });
+          toast({
+            title: t("ai.rate_title"),
+            description: t("ai.rate_desc"),
+            variant: "destructive",
+          });
         }
         setMessages(messages);
         setStreaming(false);
         return;
       }
       if (resp.status === 402) {
-        toast({ title: t("ai.credits_title"), description: t("ai.credits_desc"), variant: "destructive" });
+        toast({
+          title: t("ai.credits_title"),
+          description: t("ai.credits_desc"),
+          variant: "destructive",
+        });
         setMessages(messages);
         setStreaming(false);
         return;
       }
       if (!resp.ok || !resp.body) {
-        toast({ title: t("ai.error_title"), description: t("ai.error_desc"), variant: "destructive" });
+        toast({
+          title: t("ai.error_title"),
+          description: t("ai.error_desc"),
+          variant: "destructive",
+        });
         setMessages(messages);
         setStreaming(false);
         return;
       }
 
       // Add empty assistant placeholder
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "", cards: [] }]);
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -167,14 +226,37 @@ export default function AIChat() {
           }
           try {
             const parsed = JSON.parse(json);
+
+            // Custom Vireo events
+            if (parsed.vireo === "cards") {
+              const block: CardBlock | null =
+                parsed.kind === "recipes"
+                  ? { kind: "recipes", data: parsed.data ?? [] }
+                  : parsed.kind === "restaurants"
+                    ? { kind: "restaurants", data: parsed.data ?? [] }
+                    : null;
+              if (block) {
+                updateLastAssistant((m) => ({
+                  ...m,
+                  cards: [...(m.cards ?? []), block],
+                }));
+              }
+              continue;
+            }
+            if (parsed.vireo === "error") {
+              toast({
+                title: t("ai.error_title"),
+                description: t("ai.error_desc"),
+                variant: "destructive",
+              });
+              continue;
+            }
+
+            // Standard token delta
             const delta = parsed.choices?.[0]?.delta?.content;
             if (delta) {
               assistant += delta;
-              setMessages((prev) => {
-                const copy = prev.slice();
-                copy[copy.length - 1] = { role: "assistant", content: assistant };
-                return copy;
-              });
+              updateLastAssistant((m) => ({ ...m, content: assistant }));
             }
           } catch {
             buffer = line + "\n" + buffer;
@@ -185,7 +267,11 @@ export default function AIChat() {
     } catch (e: any) {
       if (e?.name !== "AbortError") {
         console.error(e);
-        toast({ title: t("ai.error_title"), description: t("ai.error_desc"), variant: "destructive" });
+        toast({
+          title: t("ai.error_title"),
+          description: t("ai.error_desc"),
+          variant: "destructive",
+        });
       }
     } finally {
       setStreaming(false);
@@ -274,11 +360,20 @@ export default function AIChat() {
                   )}
                 >
                   {m.role === "assistant" ? (
-                    <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-2 prose-headings:mb-1">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {m.content || "…"}
-                      </ReactMarkdown>
-                    </div>
+                    <>
+                      <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-headings:mt-2 prose-headings:mb-1">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {m.content || (m.cards && m.cards.length > 0 ? "" : "…")}
+                        </ReactMarkdown>
+                      </div>
+                      {m.cards?.map((block, bi) =>
+                        block.kind === "recipes" ? (
+                          <ChatRecipeCards key={bi} data={block.data} />
+                        ) : (
+                          <ChatRestaurantCards key={bi} data={block.data} />
+                        ),
+                      )}
+                    </>
                   ) : (
                     <span className="whitespace-pre-wrap">{m.content}</span>
                   )}

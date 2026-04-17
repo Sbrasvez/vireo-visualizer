@@ -338,6 +338,8 @@
   },
   "ai": {
     "fab_tooltip": "Chiedi a Vireo AI",
+    "no_recipes_found": "Nessuna ricetta trovata. Prova a cambiare i filtri.",
+    "no_restaurants_found": "Nessun ristorante trovato. Prova ad ampliare l'area di ricerca.",
     "title": "Vireo AI",
     "subtitle": "Il tuo assistente per uno stile di vita green",
     "empty_title": "Come posso aiutarti oggi?",
