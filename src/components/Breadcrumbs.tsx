@@ -13,6 +13,12 @@ export default function Breadcrumbs() {
 
   if (location.pathname === "/") return null;
 
+  // Pages that use DashboardLayout already have their own sidebar header — skip breadcrumbs there.
+  const SIDEBAR_ROUTES = ["/dashboard", "/ai", "/shopping-list", "/surplus", "/meal-plan", "/community"];
+  if (SIDEBAR_ROUTES.some((r) => location.pathname === r || location.pathname.startsWith(`${r}/`))) {
+    return null;
+  }
+
   const segments = location.pathname.split("/").filter(Boolean);
   if (segments.length === 0) return null;
 
