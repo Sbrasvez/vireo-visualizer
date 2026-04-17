@@ -190,6 +190,10 @@ export default function SellerDashboard() {
             <TabsList>
               <TabsTrigger value="products">Prodotti ({products.length})</TabsTrigger>
               <TabsTrigger value="orders">Ordini ({orders.length})</TabsTrigger>
+              <TabsTrigger value="questions" className="gap-2">
+                <MessageCircleQuestion className="size-4" />
+                Domande {unansweredCount > 0 && <Badge variant="secondary" className="h-5">{unansweredCount}</Badge>}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="products" className="mt-6">
