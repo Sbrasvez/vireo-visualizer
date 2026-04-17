@@ -60,7 +60,7 @@ function Stars({ value, size = 16 }: { value: number; size?: number }) {
   );
 }
 
-function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+function StarPicker({ value, onChange, ariaLabel }: { value: number; onChange: (v: number) => void; ariaLabel: (n: number) => string }) {
   return (
     <div className="inline-flex gap-1">
       {[1, 2, 3, 4, 5].map((i) => (
@@ -69,7 +69,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
           type="button"
           onClick={() => onChange(i)}
           className="transition-transform hover:scale-110"
-          aria-label={`${i} stars`}
+          aria-label={ariaLabel(i)}
         >
           <Star
             className={cn(
