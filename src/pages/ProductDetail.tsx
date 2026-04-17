@@ -34,6 +34,7 @@ import {
   useDeleteProductQuestion,
 } from "@/hooks/useProductQuestions";
 import { useCart } from "@/hooks/useCart";
+import { WishlistButton } from "@/components/WishlistButton";
 import { MessageCircleQuestion, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -440,6 +441,7 @@ export default function ProductDetail() {
                     </>
                   )}
                 </Button>
+                <WishlistButton productId={product.id} variant="full" />
               </div>
 
               {product.tags && product.tags.length > 0 && (
