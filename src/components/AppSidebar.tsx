@@ -13,8 +13,12 @@ import {
   User,
   Tag,
   Leaf,
+  Store,
+  ShieldCheck,
   LogOut,
 } from "lucide-react";
+import { useHasRole } from "@/hooks/useUserRole";
+import { useMySeller } from "@/hooks/useSeller";
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +44,8 @@ export function AppSidebar() {
   const { signOut, user } = useAuth();
   const { plan } = usePlan();
   const { t } = useTranslation();
+  const { has: isAdmin } = useHasRole("admin");
+  const { data: mySeller } = useMySeller();
 
   const mainItems = [
     { title: t("nav.dashboard"), url: "/dashboard", icon: LayoutDashboard },
@@ -56,6 +62,10 @@ export function AppSidebar() {
   const accountItems = [
     { title: t("nav.profile"), url: "/profile", icon: User },
     { title: t("nav.pricing"), url: "/pricing", icon: Tag },
+    ...(mySeller
+      ? [{ title: "Seller Dashboard", url: "/seller/dashboard", icon: Store }]
+      : [{ title: "Diventa venditore", url: "/sell", icon: Store }]),
+    ...(isAdmin ? [{ title: "Admin Sellers", url: "/admin/sellers", icon: ShieldCheck }] : []),
   ];
 
   const isActive = (path: string) => location.pathname === path;

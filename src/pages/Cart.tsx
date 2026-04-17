@@ -14,7 +14,7 @@ import { Trash2, Minus, Plus, ShoppingBag, ArrowLeft } from "lucide-react";
 
 export default function Cart() {
   const { t } = useTranslation();
-  const { items, removeItem, setQuantity, totalCents, count } = useCart();
+  const { items, removeItem, setQuantity, totalCents, count, shippingCents } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [checkingOut, setCheckingOut] = useState(false);
@@ -89,6 +89,7 @@ export default function Cart() {
                     </div>
                     <div className="text-sm text-muted-foreground mt-0.5">
                       {formatEur(item.unitAmount)}
+                      {item.sellerName && <span className="ml-2">· {item.sellerName}</span>}
                     </div>
                     <div className="flex items-center justify-between mt-auto pt-2">
                       <div className="inline-flex items-center rounded-lg border border-border">
@@ -125,11 +126,11 @@ export default function Cart() {
                 </div>
                 <div className="flex items-center justify-between mb-4 text-sm text-muted-foreground">
                   <span>{t("cart.shipping", "Spedizione")}</span>
-                  <span>{t("cart.shipping_at_checkout", "Calcolata al checkout")}</span>
+                  <span>{shippingCents > 0 ? formatEur(shippingCents) : "Gratis"}</span>
                 </div>
                 <div className="flex items-center justify-between border-t border-border/60 pt-3 mb-5">
                   <span className="font-display text-lg font-bold">{t("cart.total", "Totale")}</span>
-                  <span className="font-display text-2xl font-bold">{formatEur(totalCents)}</span>
+                  <span className="font-display text-2xl font-bold">{formatEur(totalCents + shippingCents)}</span>
                 </div>
                 <Button size="lg" className="w-full" onClick={startCheckout}>
                   {t("cart.checkout_btn", "Procedi al checkout")}

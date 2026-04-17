@@ -26,6 +26,11 @@ import AIChat from "./pages/AIChat.tsx";
 import Surplus from "./pages/Surplus.tsx";
 import MealPlan from "./pages/MealPlan.tsx";
 import Community from "./pages/Community.tsx";
+import Sell from "./pages/Sell.tsx";
+import SellApply from "./pages/SellApply.tsx";
+import SellerDashboard from "./pages/SellerDashboard.tsx";
+import AdminSellers from "./pages/AdminSellers.tsx";
+import Store from "./pages/Store.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 
@@ -61,6 +66,11 @@ const App = () => (
               <Route path="/surplus" element={<Surplus />} />
               <Route path="/meal-plan" element={<MealPlan />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/sell" element={<Sell />} />
+              <Route path="/sell/apply" element={<SellApply />} />
+              <Route path="/seller/dashboard" element={<SellerDashboard />} />
+              <Route path="/admin/sellers" element={<AdminSellers />} />
+              <Route path="/store/:slug" element={<Store />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
