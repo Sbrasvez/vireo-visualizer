@@ -129,8 +129,11 @@ export default function ProductDetail() {
   const { data: reviews = [] } = useProductReviews(product?.id);
   const { data: myReview } = useMyProductReview(product?.id);
   const { data: related = [] } = useRelatedProducts(product?.seller_id, product?.id);
+  const { data: questions = [] } = useProductQuestions(product?.id);
   const upsertReview = useUpsertProductReview(product?.id);
   const deleteReview = useDeleteProductReview(product?.id);
+  const askQuestion = useAskProductQuestion(product?.id);
+  const deleteQuestion = useDeleteProductQuestion(product?.id);
 
   const [activeImage, setActiveImage] = useState(0);
   const [qty, setQty] = useState(1);
@@ -139,6 +142,7 @@ export default function ProductDetail() {
   const [rating, setRating] = useState(myReview?.rating ?? 5);
   const [title, setTitle] = useState(myReview?.title ?? "");
   const [body, setBody] = useState(myReview?.body ?? "");
+  const [questionText, setQuestionText] = useState("");
 
   if (isLoading) {
     return (
