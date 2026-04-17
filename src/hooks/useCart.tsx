@@ -1,12 +1,19 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 
 export interface CartItem {
+  // For seller products: productId is the seller_products UUID; priceId mirrors it.
+  // For Stripe-priced items (subscriptions): priceId is the Stripe lookup_key.
   priceId: string;
   productId: string;
   name: string;
   image: string;
   unitAmount: number; // cents
   quantity: number;
+  sellerId?: string;
+  sellerName?: string;
+  shippingCents?: number;
+  // Marks this line as a dynamic seller product so checkout uses price_data
+  kind?: "seller_product" | "stripe_price";
 }
 
 interface CartContextValue {
@@ -17,11 +24,12 @@ interface CartContextValue {
   clear: () => void;
   count: number;
   totalCents: number;
+  shippingCents: number;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "vireo:cart";
+const STORAGE_KEY = "vireo:cart:v2";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
@@ -65,7 +73,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const clear: CartContextValue["clear"] = () => setItems([]);
     const count = items.reduce((s, i) => s + i.quantity, 0);
     const totalCents = items.reduce((s, i) => s + i.unitAmount * i.quantity, 0);
-    return { items, addItem, removeItem, setQuantity, clear, count, totalCents };
+    // Shipping: max shipping_cents across distinct sellers in cart
+    const sellerShip = new Map<string, number>();
+    for (const i of items) {
+      if (i.sellerId && (i.shippingCents ?? 0) > 0) {
+        sellerShip.set(i.sellerId, Math.max(sellerShip.get(i.sellerId) ?? 0, i.shippingCents!));
+      }
+    }
+    const shippingCents = Array.from(sellerShip.values()).reduce((s, n) => s + n, 0);
+    return { items, addItem, removeItem, setQuantity, clear, count, totalCents, shippingCents };
   }, [items]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
