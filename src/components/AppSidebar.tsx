@@ -8,6 +8,8 @@ import {
   Sparkles,
   BookOpen,
   PackageOpen,
+  CalendarDays,
+  Users,
   User,
   Tag,
   Leaf,
@@ -45,6 +47,8 @@ export function AppSidebar() {
     { title: t("nav.restaurants"), url: "/restaurants", icon: Utensils },
     { title: "Anti-spreco", url: "/surplus", icon: PackageOpen },
     { title: t("nav.marketplace"), url: "/marketplace", icon: ShoppingBag },
+    { title: "Meal Plan AI", url: "/meal-plan", icon: CalendarDays },
+    { title: "Community", url: "/community", icon: Users },
     { title: t("nav.ai_chat"), url: "/ai", icon: Sparkles },
     { title: t("nav.blog"), url: "/blog", icon: BookOpen },
   ];

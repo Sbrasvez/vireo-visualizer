@@ -24,6 +24,8 @@ import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AIChat from "./pages/AIChat.tsx";
 import Surplus from "./pages/Surplus.tsx";
+import MealPlan from "./pages/MealPlan.tsx";
+import Community from "./pages/Community.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 
@@ -57,6 +59,8 @@ const App = () => (
               <Route path="/ai" element={<AIChat />} />
               <Route path="/shopping-list" element={<ShoppingList />} />
               <Route path="/surplus" element={<Surplus />} />
+              <Route path="/meal-plan" element={<MealPlan />} />
+              <Route path="/community" element={<Community />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
