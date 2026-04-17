@@ -122,16 +122,18 @@ export default function Store() {
                 const outOfStock = !p.unlimited_stock && p.stock <= 0;
                 return (
                   <article key={p.id} className="rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up" style={{ animationDelay: `${i * 0.04}s` }}>
-                    <div className="relative aspect-square overflow-hidden bg-muted">
-                      <img src={img} alt={p.name} loading="lazy" className="w-full h-full object-cover" />
+                    <Link to={`/product/${p.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
+                      <img src={img} alt={p.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                       <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                         {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
                         {p.is_reused && <Badge variant="secondary" className="gap-1"><Recycle className="size-3" />Riuso</Badge>}
                         {outOfStock && <Badge variant="destructive">Esaurito</Badge>}
                       </div>
-                    </div>
+                    </Link>
                     <div className="p-4">
-                      <h3 className="font-display font-semibold mb-2 line-clamp-2 min-h-[2.5em]">{p.name}</h3>
+                      <Link to={`/product/${p.slug}`} className="block hover:text-primary transition-colors">
+                        <h3 className="font-display font-semibold mb-2 line-clamp-2 min-h-[2.5em]">{p.name}</h3>
+                      </Link>
                       <div className="flex items-end justify-between">
                         <div>
                           <div className="font-display text-xl font-bold">{formatEur(p.price_cents)}</div>
