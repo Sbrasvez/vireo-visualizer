@@ -157,7 +157,7 @@ export default function Marketplace() {
                       className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up"
                       style={{ animationDelay: `${i * 0.04}s` }}
                     >
-                      <Link to={`/store/${p.seller?.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
+                      <Link to={`/product/${p.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
                         <img
                           src={img}
                           alt={p.name}
@@ -191,9 +191,11 @@ export default function Marketplace() {
                           <Leaf className="size-3 text-primary" />
                           {p.seller?.business_name ?? "Seller"}
                         </Link>
-                        <h3 className="font-display font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5em]">
-                          {p.name}
-                        </h3>
+                        <Link to={`/product/${p.slug}`} className="block">
+                          <h3 className="font-display font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5em]">
+                            {p.name}
+                          </h3>
+                        </Link>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
                           <Star className="size-3.5 fill-tertiary text-tertiary" />
                           <span className="font-medium text-foreground">{(p.rating ?? 0).toFixed(1)}</span>
