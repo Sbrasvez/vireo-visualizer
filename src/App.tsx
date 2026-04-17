@@ -18,6 +18,7 @@ import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AIChat from "./pages/AIChat.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AIAssistantFAB />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
