@@ -4,7 +4,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { useTranslation } from "react-i18next";
-import { ShoppingBag, Star, Heart, Recycle, Leaf, Check, Store, Plus } from "lucide-react";
+import { ShoppingBag, Star, Recycle, Leaf, Check, Store, Plus } from "lucide-react";
+import { WishlistButton } from "@/components/WishlistButton";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -166,13 +167,7 @@ export default function Marketplace() {
                           width={800}
                           height={800}
                         />
-                        <button
-                          className="absolute top-3 right-3 size-9 rounded-full bg-card/95 backdrop-blur flex items-center justify-center text-muted-foreground hover:text-secondary transition-colors shadow-soft"
-                          aria-label={t("marketplace.favorite")}
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <Heart className="size-4" />
-                        </button>
+                        <WishlistButton productId={p.id} className="absolute top-3 right-3" />
                         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                           {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
                           {p.is_reused && (
