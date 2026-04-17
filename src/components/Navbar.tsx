@@ -14,12 +14,14 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useCart } from "@/hooks/useCart";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { user, signOut } = useAuth();
+  const { count: cartCount } = useCart();
   const { t } = useTranslation();
 
   const navLinks = [
@@ -74,6 +76,16 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
+          <Button variant="ghost" size="sm" asChild className="relative">
+            <Link to="/cart" aria-label={t("nav.cart", "Carrello")}>
+              <ShoppingBag className="size-4" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </Button>
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">

@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Camera, Save, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ProfileSubscription } from "@/components/ProfileSubscription";
 
 export default function Profile() {
   const { t } = useTranslation();
@@ -126,7 +127,7 @@ export default function Profile() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-24 pb-16 px-4">
-        <div className="container max-w-lg">
+        <div className="container max-w-lg space-y-6">
           <Card className="border-border/50">
             <CardHeader className="text-center space-y-4">
               <div className="relative mx-auto group">
@@ -184,6 +185,8 @@ export default function Profile() {
               </Button>
             </CardContent>
           </Card>
+
+          <ProfileSubscription />
         </div>
       </main>
       <Footer />
