@@ -34,6 +34,9 @@ export default function SellerDashboard() {
   const deleteProduct = useDeleteProduct();
   const updateProduct = useUpdateProduct();
   const updateFulfillment = useUpdateFulfillment();
+  const { data: questions = [] } = useSellerQuestions(seller?.id);
+  const answerQuestion = useAnswerQuestion();
+  const unansweredCount = questions.filter((q) => !q.answer).length;
 
   const [openCreate, setOpenCreate] = useState(false);
   const [form, setForm] = useState({
