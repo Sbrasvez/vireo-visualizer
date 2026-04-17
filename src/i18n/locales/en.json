@@ -55,7 +55,7 @@
     "public_empty_desc": "This wishlist doesn't have any shared products yet."
   },
   "hero": {
-    "badge": "AI-Powered Sustainable Living",
+    "badge": "Real food, zero waste",
     "title_1": "Live",
     "title_smart": "smart",
     "title_2": "choose",
@@ -68,7 +68,42 @@
     "stat_restaurants": "Restaurants",
     "stat_users": "Green users",
     "badge_eco": "Eco-score",
-    "badge_co2": "CO₂ saved"
+    "badge_co2": "CO₂ saved",
+    "editorial_title_1": "Nature,",
+    "editorial_title_2": "on your table.",
+    "editorial_lead": "Join the sustainable market. Discover local growers, rescue surplus food, and cook with an AI assistant that thinks like you do.",
+    "image_alt": "Rustic table set with seasonal vegetables, herbs and handmade ceramics",
+    "harvest_badge": "Today's harvest",
+    "harvest_text": "Heirloom tomatoes and fresh basil, straight from our local growers."
+  },
+  "home": {
+    "sections_title": "Wander the stalls.",
+    "sections_subtitle": "Six places designed to transform the way you live and eat plant-based.",
+    "ai_prompt": "I have chickpeas and cauliflower — ideas?",
+    "ai_reply": "Rustic curry in 25 minutes. I'll walk you through it…",
+    "cta_open": "Open the assistant",
+    "cta_join": "Join",
+    "cta_discover": "Discover",
+    "section": {
+      "market_eyebrow": "The Market",
+      "market_title": "Direct from growers",
+      "market_body": "Buy roots, leaves and seeds straight from the people who farm the land. No middlemen.",
+      "surplus_eyebrow": "Magic Pantry",
+      "surplus_title": "Rescue the harvest",
+      "surplus_body": "Surprise bags from the best bakeries and growers at end of day. Fresh food, half price.",
+      "ai_eyebrow": "Botanical AI",
+      "ai_title": "Cook with what you have",
+      "ai_body": "No dinner idea? Ask our assistant. It suggests recipes from the ingredients you already own.",
+      "recipes_eyebrow": "The Cookbook",
+      "recipes_title": "Seasonal dishes",
+      "recipes_body": "Hundreds of plant-based recipes that follow the natural rhythm of the seasons.",
+      "restaurants_eyebrow": "Local Tables",
+      "restaurants_title": "Bistros and trattorias",
+      "restaurants_body": "Find places near you where plant-based cooking is treated with respect and creativity.",
+      "community_eyebrow": "The Roots",
+      "community_title": "Join the table",
+      "community_body": "Trade recipes, share kitchen wins and meet passionate people near you."
+    }
   },
   "features": {
     "kicker": "The Vireo ecosystem",
