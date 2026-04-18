@@ -159,7 +159,7 @@ export default function Restaurants() {
           <div className="relative container py-20 lg:py-28">
             <div className="max-w-2xl">
               <div className="flex items-center gap-3 mb-6 animate-fade-up">
-                <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°04</span>
+                <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°05</span>
                 <span className="h-px flex-1 max-w-[60px] bg-border" />
                 <div className="inline-flex items-center gap-2 text-xs font-medium text-primary uppercase tracking-wider">
                   <Sparkles className="size-3.5" />
