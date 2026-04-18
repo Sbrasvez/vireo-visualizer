@@ -6,6 +6,7 @@ import { lovable } from "@/integrations/lovable";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -106,9 +107,9 @@ export default function Signup() {
                   <Input id="password" type="password" placeholder={t("auth.password_min")} className="pl-10" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <CTAButton type="submit" size="md" className="w-full" disabled={loading}>
                 {loading ? t("auth.signing_up") : t("auth.signup_btn")}
-              </Button>
+              </CTAButton>
             </form>
 
             <p className="text-center text-sm text-muted-foreground">

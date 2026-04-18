@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Check, Loader2, Sparkles, Zap, Crown } from "lucide-react";
 import { PLANS, formatEur, type PlanTierId } from "@/lib/catalog";
@@ -155,15 +156,16 @@ export default function Pricing() {
                       {t("pricing.manage_subscription", "Gestisci abbonamento")}
                     </Button>
                   ) : (
-                    <Button
+                    <CTAButton
                       className="w-full"
-                      variant={isHighlight ? "default" : "secondary"}
+                      size="md"
+                      variant={isHighlight ? "primary" : "secondary"}
                       onClick={() => startCheckout(plan.priceId!)}
                     >
                       {subscription
                         ? t("pricing.switch_plan", "Cambia piano")
                         : t("pricing.subscribe", "Abbonati")}
-                    </Button>
+                    </CTAButton>
                   )}
                 </article>
               );
