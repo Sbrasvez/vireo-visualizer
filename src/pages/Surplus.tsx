@@ -39,8 +39,10 @@ function MagicBagCard({ bag, index }: { bag: MagicBag; index: number }) {
   );
 
   return (
-    <article
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all duration-500 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.25)]"
+    <MotionCard
+      delay={Math.min(index, 12) * 0.04}
+      lift="medium"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-muted">
         {bag.image_url || bag.restaurant?.cover_image ? (
@@ -119,7 +121,7 @@ function MagicBagCard({ bag, index }: { bag: MagicBag; index: number }) {
           )}
         </div>
       </div>
-    </article>
+    </MotionCard>
   );
 }
 
