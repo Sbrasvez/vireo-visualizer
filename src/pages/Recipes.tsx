@@ -145,10 +145,16 @@ export default function Recipes() {
               </div>
             </div>
 
-            <div className="flex items-end justify-between mb-6">
+            <div className="flex items-end justify-between gap-6 mb-10 pb-6 border-b border-border/60 flex-wrap">
               <div>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold">{t("recipes.featured")}</h2>
-                <p className="text-muted-foreground mt-1">
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                  — {t("recipes.section_eyebrow", "Selezione editoriale")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
+                  {t("recipes.featured")}{" "}
+                  <em className="italic text-primary">{t("recipes.section_em", "del giorno")}</em>
+                </h2>
+                <p className="text-muted-foreground mt-3 font-mono text-sm">
                   {isLoading ? t("recipes.loading") : t("recipes.results_count", { count: data?.total ?? 0 })}
                 </p>
               </div>
