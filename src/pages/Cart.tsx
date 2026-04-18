@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
@@ -169,9 +170,9 @@ export default function Cart() {
                     {formatEur(totalCents + shippingCents)}
                   </span>
                 </div>
-                <Button size="lg" className="w-full rounded-full" onClick={startCheckout}>
+                <CTAButton size="lg" className="w-full" onClick={startCheckout}>
                   {t("cart.checkout_btn", "Procedi al checkout")}
-                </Button>
+                </CTAButton>
               </div>
             </div>
           )}
