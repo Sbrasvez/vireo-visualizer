@@ -6,6 +6,7 @@ import { lovable } from "@/integrations/lovable";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -93,9 +94,9 @@ export default function Login() {
                   <Input id="password" type="password" placeholder={t("auth.password_placeholder")} className="pl-10" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <CTAButton type="submit" size="md" className="w-full" disabled={loading}>
                 {loading ? t("auth.logging_in") : t("auth.login_btn")}
-              </Button>
+              </CTAButton>
             </form>
 
             <p className="text-center text-sm text-muted-foreground">

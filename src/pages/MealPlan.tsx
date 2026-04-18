@@ -3,6 +3,7 @@ import { Sparkles, Calendar, Leaf, ShoppingBag, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -106,13 +107,13 @@ export default function MealPlan() {
               />
             </div>
             <div className="sm:col-span-3 flex justify-end">
-              <Button onClick={handleGenerate} disabled={generate.isPending}>
+              <CTAButton size="md" onClick={handleGenerate} disabled={generate.isPending}>
                 {generate.isPending ? (
                   <><Loader2 className="size-4 mr-2 animate-spin" /> Generazione…</>
                 ) : (
                   <><Sparkles className="size-4 mr-2" /> {plan ? "Rigenera" : "Genera piano"}</>
                 )}
-              </Button>
+              </CTAButton>
             </div>
           </CardContent>
         </Card>
