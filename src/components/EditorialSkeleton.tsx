@@ -201,6 +201,131 @@ export function SkeletonCommunityList({ count = 3 }: { count?: number }) {
     </div>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*                              Wishlist card                                 */
+/* -------------------------------------------------------------------------- */
+
+export function SkeletonWishlistCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border/60 bg-card overflow-hidden",
+        className,
+      )}
+    >
+      <div className="relative">
+        <SkeletonShimmer className="aspect-square w-full rounded-none" />
+        {/* Action chip placeholder (heart/trash) */}
+        <div className="absolute top-3 right-3">
+          <SkeletonShimmer className="size-9 rounded-full" />
+        </div>
+      </div>
+      <div className="p-4 space-y-3">
+        <SkeletonEyebrow />
+        <SkeletonShimmer className="h-5 w-4/5 rounded" />
+        <SkeletonShimmer className="h-6 w-1/3 rounded" />
+        <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/40">
+          <SkeletonShimmer className="h-5 w-12 rounded-full" />
+          <SkeletonShimmer className="h-9 w-9 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonWishlistGrid({ count = 8 }: { count?: number }) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonWishlistCard key={i} />
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                       Dashboard: recommended recipes                       */
+/* -------------------------------------------------------------------------- */
+
+export function SkeletonRecipeMiniCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "rounded-xl border border-border/60 bg-card overflow-hidden",
+        className,
+      )}
+    >
+      <SkeletonShimmer className="aspect-[4/3] w-full rounded-none" />
+      <div className="p-4 space-y-2">
+        <div className="flex items-center gap-1.5">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <SkeletonShimmer key={i} className="size-3 rounded-full" />
+          ))}
+        </div>
+        <SkeletonShimmer className="h-4 w-11/12 rounded" />
+        <SkeletonShimmer className="h-4 w-7/12 rounded" />
+        <div className="flex items-center justify-between pt-1">
+          <SkeletonShimmer className="h-3 w-12 rounded-full" />
+          <SkeletonShimmer className="h-4 w-16 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonRecipeMiniGrid({ count = 4 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonRecipeMiniCard key={i} />
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                       Dashboard: nearby restaurants                        */
+/* -------------------------------------------------------------------------- */
+
+export function SkeletonNearbyRestaurantCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "rounded-xl border border-border/60 bg-card overflow-hidden",
+        className,
+      )}
+    >
+      <SkeletonShimmer className="aspect-[16/10] w-full rounded-none" />
+      <div className="p-4 space-y-2">
+        <div className="flex items-start justify-between gap-2">
+          <SkeletonShimmer className="h-4 w-2/3 rounded" />
+          <SkeletonShimmer className="h-3 w-8 rounded-full" />
+        </div>
+        <div className="flex items-center gap-3">
+          <SkeletonShimmer className="h-3 w-10 rounded-full" />
+          <SkeletonShimmer className="h-3 w-16 rounded-full" />
+        </div>
+        <div className="space-y-1.5 pt-1">
+          <SkeletonShimmer className="h-3 w-full rounded" />
+          <SkeletonShimmer className="h-3 w-9/12 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonNearbyRestaurantGrid({ count = 3 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonNearbyRestaurantCard key={i} />
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*                              Product Detail                                */
 /* -------------------------------------------------------------------------- */
 

@@ -13,7 +13,10 @@ import {
 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { StatCard } from "@/components/StatCard";
-import { SkeletonCard } from "@/components/SkeletonCard";
+import {
+  SkeletonRecipeMiniGrid,
+  SkeletonNearbyRestaurantGrid,
+} from "@/components/EditorialSkeleton";
 import { CO2Tracker } from "@/components/CO2Tracker";
 import { GreenScore } from "@/components/GreenScore";
 import { Card, CardContent } from "@/components/ui/card";
@@ -71,7 +74,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { plan, isPro } = usePlan();
   const { stats, loading: statsLoading } = useDashboardStats();
-  const { restaurants } = useRestaurants();
+  const { restaurants, loading: restaurantsLoading } = useRestaurants();
   const [displayName, setDisplayName] = useState<string | undefined>();
 
   const getGreeting = (name?: string) => {
