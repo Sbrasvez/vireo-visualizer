@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import MotionCard from "@/components/MotionCard";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { SkeletonWishlistGrid } from "@/components/EditorialSkeleton";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -98,68 +99,53 @@ export default function Wishlist() {
       <Navbar />
       <main className="flex-1 pt-24 pb-20">
         {/* Editorial hero */}
-        <section className="gradient-soft py-14 border-b border-border/40">
-          <div className="container max-w-6xl">
-            <div className="flex items-center justify-between mb-6">
-              <span className="font-mono text-xs tracking-[0.25em] text-muted-foreground uppercase">
-                — {t("wishlist.eyebrow", "I tuoi preferiti")}
-              </span>
-              <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°03</span>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-              <div className="max-w-2xl">
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] mb-4">
-                  {t("wishlist.editorial_title_1", "Oggetti che")}{" "}
-                  <em className="italic text-primary">
-                    {t("wishlist.editorial_title_2", "amerai a lungo")}
-                  </em>
-                </h1>
-                <p className="text-muted-foreground text-base sm:text-lg max-w-xl">
-                  {t(
-                    "wishlist.editorial_lead",
-                    "Una collezione personale di pezzi sostenibili: salvali ora, condividili quando vuoi, portali a casa al momento giusto.",
-                  )}
+        <EditorialPageHeader
+          eyebrow={t("wishlist.eyebrow", "I tuoi preferiti")}
+          number="03"
+          title={t("wishlist.editorial_title_1", "Oggetti che")}
+          italic={t("wishlist.editorial_title_2", "amerai a lungo")}
+          lead={t(
+            "wishlist.editorial_lead",
+            "Una collezione personale di pezzi sostenibili: salvali ora, condividili quando vuoi, portali a casa al momento giusto.",
+          )}
+          aside={
+            items.length > 0 ? (
+              <Card className="p-5 space-y-3 border-border/60 bg-card/80 backdrop-blur">
+                <div className="font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
+                  — {t("wishlist.share_eyebrow", "Condivisione")}
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <Label htmlFor="bulk-public" className="text-sm font-medium flex items-center gap-2">
+                    {allPublic ? <Globe className="size-4 text-primary" /> : <Lock className="size-4" />}
+                    {t("wishlist.make_public", "Wishlist pubblica")}
+                  </Label>
+                  <Switch
+                    id="bulk-public"
+                    checked={allPublic}
+                    onCheckedChange={(v) => bulkSet.mutate(v)}
+                  />
+                </div>
+                {anyPublic && (
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={handleCopy} className="flex-1 gap-2">
+                      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+                      {t("wishlist.copy_link", "Copia link")}
+                    </Button>
+                    <Button size="sm" onClick={handleShare} className="flex-1 gap-2">
+                      <Share2 className="size-4" />
+                      {t("wishlist.share", "Condividi")}
+                    </Button>
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  {anyPublic
+                    ? t("wishlist.public_hint", "Chi ha il link può vedere i prodotti contrassegnati come pubblici.")
+                    : t("wishlist.private_hint", "Attiva per condividere la tua wishlist con un link.")}
                 </p>
-              </div>
-
-              {items.length > 0 && (
-                <Card className="p-5 space-y-3 w-full md:w-auto md:min-w-[320px] border-border/60 bg-card/80 backdrop-blur">
-                  <div className="font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
-                    — {t("wishlist.share_eyebrow", "Condivisione")}
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <Label htmlFor="bulk-public" className="text-sm font-medium flex items-center gap-2">
-                      {allPublic ? <Globe className="size-4 text-primary" /> : <Lock className="size-4" />}
-                      {t("wishlist.make_public", "Wishlist pubblica")}
-                    </Label>
-                    <Switch
-                      id="bulk-public"
-                      checked={allPublic}
-                      onCheckedChange={(v) => bulkSet.mutate(v)}
-                    />
-                  </div>
-                  {anyPublic && (
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={handleCopy} className="flex-1 gap-2">
-                        {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-                        {t("wishlist.copy_link", "Copia link")}
-                      </Button>
-                      <Button size="sm" onClick={handleShare} className="flex-1 gap-2">
-                        <Share2 className="size-4" />
-                        {t("wishlist.share", "Condividi")}
-                      </Button>
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground">
-                    {anyPublic
-                      ? t("wishlist.public_hint", "Chi ha il link può vedere i prodotti contrassegnati come pubblici.")
-                      : t("wishlist.private_hint", "Attiva per condividere la tua wishlist con un link.")}
-                  </p>
-                </Card>
-              )}
-            </div>
-          </div>
-        </section>
+              </Card>
+            ) : undefined
+          }
+        />
 
         {/* Grid */}
         <section className="py-14">

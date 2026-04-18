@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTAButton from "@/components/CTAButton";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -128,26 +129,17 @@ export default function Profile() {
       <Navbar />
       <main className="flex-1 pt-24 pb-20">
         {/* Editorial header */}
-        <section className="gradient-soft py-14 border-b border-border/40">
-          <div className="container max-w-3xl">
-            <div className="flex items-center justify-between mb-6">
-              <span className="font-mono text-xs tracking-[0.25em] text-muted-foreground uppercase">
-                — {t("profile.eyebrow", "Il tuo spazio")}
-              </span>
-              <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°01</span>
-            </div>
-            <h1 className="font-display text-4xl sm:text-5xl font-bold leading-[1.05] mb-3">
-              {t("profile.editorial_title_1", "La tua")}{" "}
-              <em className="italic text-primary">{t("profile.editorial_title_2", "identità")}</em>
-            </h1>
-            <p className="text-muted-foreground max-w-xl text-base">
-              {t(
-                "profile.editorial_lead",
-                "Cura il tuo profilo: il nome che ti rappresenta, una storia da condividere, un volto da riconoscere.",
-              )}
-            </p>
-          </div>
-        </section>
+        <EditorialPageHeader
+          eyebrow={t("profile.eyebrow", "Il tuo spazio")}
+          number="01"
+          title={t("profile.editorial_title_1", "La tua")}
+          italic={t("profile.editorial_title_2", "identità")}
+          lead={t(
+            "profile.editorial_lead",
+            "Cura il tuo profilo: il nome che ti rappresenta, una storia da condividere, un volto da riconoscere.",
+          )}
+          containerClassName="max-w-3xl"
+        />
 
         {/* Identity card */}
         <section className="py-14">
