@@ -634,5 +634,31 @@
     "awaiting_answer": "En attente de la réponse du vendeur",
     "login_required": "Connexion requise",
     "login_required_desc": "Connectez-vous pour poser une question"
+  },
+  "shopping_list": {
+    "title": "Liste de courses",
+    "subtitle": "{{count}} produits à récupérer",
+    "eyebrow": "Courses en conscience",
+    "title_1": "Votre liste",
+    "title_em": "essentielle",
+    "title_2": "du jour.",
+    "share": "Partager",
+    "copied": "Liste copiée dans le presse-papiers",
+    "clear_checked": "Retirer les cochés",
+    "clear_all": "Tout vider",
+    "empty_title": "Votre liste est vide",
+    "empty_desc": "Ajoutez des ingrédients directement depuis les recettes pour préparer vos courses.",
+    "browse_recipes": "Explorer les recettes",
+    "from": "de",
+    "categories.vegetables": "Légumes",
+    "categories.fruits": "Fruits",
+    "categories.grains": "Céréales et pain",
+    "categories.legumes": "Légumineuses et protéines vég.",
+    "categories.dairy": "Produits laitiers et alternatives",
+    "categories.nuts_seeds": "Fruits secs et graines",
+    "categories.condiments": "Condiments et épices",
+    "categories.sweeteners": "Édulcorants",
+    "categories.drinks": "Boissons",
+    "categories.other": "Autres"
   }
 }
