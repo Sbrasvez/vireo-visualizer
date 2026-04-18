@@ -5,11 +5,13 @@ import { Heart, Share2, Trash2, ShoppingBag, Globe, Lock, Copy, Check } from "lu
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
+import MotionCard from "@/components/MotionCard";
 import { useAuth } from "@/hooks/useAuth";
 import {
   useMyWishlist,
@@ -81,9 +83,9 @@ export default function Wishlist() {
             <p className="text-muted-foreground">
               {t("wishlist.login_desc", "Salva i prodotti che ami e ritrovali ovunque, su ogni dispositivo.")}
             </p>
-            <Button asChild size="lg">
+            <CTAButton size="md" asChild>
               <Link to="/login">{t("nav.login", "Accedi")}</Link>
-            </Button>
+            </CTAButton>
           </div>
         </main>
         <Footer />
@@ -94,25 +96,37 @@ export default function Wishlist() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      <main className="flex-1 pt-24 pb-16">
-        <section className="gradient-soft py-14">
+      <main className="flex-1 pt-24 pb-20">
+        {/* Editorial hero */}
+        <section className="gradient-soft py-14 border-b border-border/40">
           <div className="container max-w-6xl">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-              <div>
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/15 text-secondary text-sm font-medium mb-4">
-                  <Heart className="size-4" />
-                  <span>{t("wishlist.badge", "I tuoi preferiti")}</span>
-                </div>
-                <h1 className="font-display text-4xl sm:text-5xl font-bold mb-3">
-                  {t("wishlist.title", "Wishlist")}
+            <div className="flex items-center justify-between mb-6">
+              <span className="font-mono text-xs tracking-[0.25em] text-muted-foreground uppercase">
+                — {t("wishlist.eyebrow", "I tuoi preferiti")}
+              </span>
+              <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°03</span>
+            </div>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+              <div className="max-w-2xl">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] mb-4">
+                  {t("wishlist.editorial_title_1", "Oggetti che")}{" "}
+                  <em className="italic text-primary">
+                    {t("wishlist.editorial_title_2", "amerai a lungo")}
+                  </em>
                 </h1>
-                <p className="text-muted-foreground max-w-xl">
-                  {t("wishlist.subtitle", "Tutti i prodotti che hai messo nel cuore, in un unico posto.")}
+                <p className="text-muted-foreground text-base sm:text-lg max-w-xl">
+                  {t(
+                    "wishlist.editorial_lead",
+                    "Una collezione personale di pezzi sostenibili: salvali ora, condividili quando vuoi, portali a casa al momento giusto.",
+                  )}
                 </p>
               </div>
 
               {items.length > 0 && (
-                <Card className="p-4 space-y-3 w-full md:w-auto md:min-w-[320px]">
+                <Card className="p-5 space-y-3 w-full md:w-auto md:min-w-[320px] border-border/60 bg-card/80 backdrop-blur">
+                  <div className="font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
+                    — {t("wishlist.share_eyebrow", "Condivisione")}
+                  </div>
                   <div className="flex items-center justify-between gap-3">
                     <Label htmlFor="bulk-public" className="text-sm font-medium flex items-center gap-2">
                       {allPublic ? <Globe className="size-4 text-primary" /> : <Lock className="size-4" />}
@@ -147,8 +161,24 @@ export default function Wishlist() {
           </div>
         </section>
 
+        {/* Grid */}
         <section className="py-14">
           <div className="container max-w-6xl">
+            {!isLoading && items.length > 0 && (
+              <div className="flex items-end justify-between mb-8">
+                <div>
+                  <div className="font-mono text-xs tracking-[0.25em] text-muted-foreground uppercase mb-2">
+                    — {t("wishlist.collection_eyebrow", "La tua collezione")}
+                  </div>
+                  <h2 className="font-display text-2xl sm:text-3xl font-semibold">
+                    {items.length} {items.length === 1
+                      ? t("wishlist.item_singular", "pezzo")
+                      : t("wishlist.item_plural", "pezzi")}
+                  </h2>
+                </div>
+              </div>
+            )}
+
             {isLoading ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -162,32 +192,37 @@ export default function Wishlist() {
                 ))}
               </div>
             ) : items.length === 0 ? (
-              <div className="text-center py-20 rounded-2xl border border-border/60 bg-card">
+              <div className="text-center py-20 rounded-2xl border border-border/60 bg-card max-w-2xl mx-auto">
                 <Heart className="size-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="font-display text-xl font-semibold mb-2">
+                <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                  — {t("wishlist.empty_eyebrow", "Capitolo vuoto")}
+                </div>
+                <h3 className="font-display text-2xl font-semibold mb-3">
                   {t("wishlist.empty_title", "Nessun preferito ancora")}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-6">
+                <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
                   {t("wishlist.empty_desc", "Esplora il marketplace e tocca il cuore sui prodotti che ti piacciono.")}
                 </p>
-                <Button asChild>
+                <CTAButton size="md" asChild>
                   <Link to="/marketplace">
                     <ShoppingBag className="size-4 mr-2" />
                     {t("wishlist.browse_marketplace", "Esplora il marketplace")}
                   </Link>
-                </Button>
+                </CTAButton>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {items.map((it) => {
+                {items.map((it, i) => {
                   const p = it.product;
                   if (!p) return null;
                   const img = p.primary_image ?? p.images?.[0] ?? "/placeholder.svg";
                   const outOfStock = !p.unlimited_stock && p.stock <= 0;
                   return (
-                    <article
+                    <MotionCard
                       key={it.id}
-                      className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift"
+                      delay={Math.min(i, 12) * 0.05}
+                      lift="medium"
+                      className="group rounded-2xl bg-card border border-border/60 overflow-hidden"
                     >
                       <Link to={`/product/${p.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
                         <img
@@ -208,7 +243,7 @@ export default function Wishlist() {
                           <Trash2 className="size-4" />
                         </button>
                         {it.is_public && (
-                          <Badge className="absolute top-3 left-3 bg-primary/90 text-primary-foreground gap-1">
+                          <Badge className="absolute top-3 left-3 bg-primary/90 text-primary-foreground gap-1 font-mono text-[9px] tracking-[0.18em] uppercase">
                             <Globe className="size-3" />
                             {t("wishlist.public", "Pubblico")}
                           </Badge>
@@ -216,8 +251,13 @@ export default function Wishlist() {
                       </Link>
                       <div className="p-4 space-y-3">
                         <div>
+                          {p.seller?.business_name && (
+                            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1.5 truncate">
+                              {p.seller.business_name}
+                            </div>
+                          )}
                           <Link to={`/product/${p.slug}`}>
-                            <h3 className="font-display font-semibold line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5em]">
+                            <h3 className="font-display font-semibold line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5em] leading-snug">
                               {p.name}
                             </h3>
                           </Link>
@@ -226,8 +266,8 @@ export default function Wishlist() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between gap-2 pt-1">
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-border/40">
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2">
                             {it.is_public ? <Globe className="size-3.5" /> : <Lock className="size-3.5" />}
                             <Switch
                               checked={it.is_public}
@@ -240,6 +280,7 @@ export default function Wishlist() {
                           <Button
                             size="sm"
                             disabled={outOfStock}
+                            className="mt-2"
                             onClick={() => {
                               addItem({
                                 priceId: p.id,
@@ -262,7 +303,7 @@ export default function Wishlist() {
                           </Button>
                         </div>
                       </div>
-                    </article>
+                    </MotionCard>
                   );
                 })}
               </div>
