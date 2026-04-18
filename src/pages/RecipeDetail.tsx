@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonRecipeDetail } from "@/components/EditorialSkeleton";
 import { useRecipeBySlug } from "@/hooks/useRecipes";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -79,15 +80,8 @@ export default function RecipeDetail() {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
-        <main className="flex-1 pt-24 container">
-          <Skeleton className="h-10 w-32 mb-6" />
-          <Skeleton className="aspect-[16/7] w-full rounded-2xl mb-8" />
-          <Skeleton className="h-12 w-2/3 mb-4" />
-          <Skeleton className="h-6 w-1/2 mb-8" />
-          <div className="grid lg:grid-cols-3 gap-8">
-            <Skeleton className="h-96 lg:col-span-1" />
-            <Skeleton className="h-96 lg:col-span-2" />
-          </div>
+        <main className="flex-1 pt-24">
+          <SkeletonRecipeDetail />
         </main>
         <Footer />
       </div>

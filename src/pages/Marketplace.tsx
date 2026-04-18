@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatEur } from "@/lib/catalog";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonProductGrid } from "@/components/EditorialSkeleton";
 
 const CATEGORIES = [
   { key: "all", label: "Tutti" },
@@ -161,16 +162,7 @@ export default function Marketplace() {
             </div>
 
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="space-y-3">
-                    <Skeleton className="aspect-[4/5] w-full rounded-xl" />
-                    <Skeleton className="h-3 w-1/3" />
-                    <Skeleton className="h-5 w-3/4" />
-                    <Skeleton className="h-8 w-1/2" />
-                  </div>
-                ))}
-              </div>
+              <SkeletonProductGrid count={8} />
             ) : visible.length === 0 ? (
               <div className="text-center py-20 rounded-2xl border border-dashed border-border bg-card/50">
                 <ShoppingBag className="size-12 mx-auto text-muted-foreground mb-4" />
