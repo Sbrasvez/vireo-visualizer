@@ -42,22 +42,20 @@ export default function Cart() {
           </Button>
 
           {/* Editorial header */}
-          <div className="space-y-4 mb-10 animate-fade-in">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-primary/40" />
-              <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary">
-                Checkout · {count} {count === 1 ? "articolo" : "articoli"}
-              </span>
-            </div>
-            <h1 className="font-display text-4xl sm:text-5xl font-light leading-[1.05] text-foreground">
-              {t("cart.title", "Il tuo")}{" "}
-              <em className="italic font-normal text-primary">carrello</em>.
-            </h1>
-            <p className="text-muted-foreground max-w-xl">
-              {count === 0
-                ? t("cart.empty", "Il carrello è vuoto.")
-                : "Rivedi la tua selezione prima di completare l'ordine."}
-            </p>
+          <div className="mb-10 animate-fade-in">
+            <EditorialPageHeader
+              surface="plain"
+              containerClassName="max-w-3xl px-0"
+              eyebrow={`Checkout · ${count} ${count === 1 ? "articolo" : "articoli"}`}
+              title={t("cart.title", "Il tuo")}
+              italic="carrello"
+              trailing="."
+              lead={
+                count === 0
+                  ? t("cart.empty", "Il carrello è vuoto.")
+                  : "Rivedi la tua selezione prima di completare l'ordine."
+              }
+            />
           </div>
 
           {items.length === 0 ? (

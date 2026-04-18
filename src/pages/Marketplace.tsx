@@ -145,15 +145,14 @@ export default function Marketplace() {
         <section className="py-16 lg:py-20">
           <div className="container">
             <div className="flex items-end justify-between gap-6 mb-10 pb-6 border-b border-border/60 flex-wrap">
-              <div>
-                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
-                  — {t("marketplace.section_eyebrow", "Curated selection")}
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
-                  {t("marketplace.section_title", "Oggetti che")}{" "}
-                  <em className="italic text-primary">{t("marketplace.section_title_em", "raccontano una storia")}</em>
-                </h2>
-              </div>
+              <EditorialPageHeader
+                surface="plain"
+                containerClassName="max-w-none px-0"
+                size="section"
+                eyebrow={t("marketplace.section_eyebrow", "Curated selection")}
+                title={t("marketplace.section_title", "Oggetti che")}
+                italic={t("marketplace.section_title_em", "raccontano una storia")}
+              />
               {!isLoading && visible.length > 0 && (
                 <p className="text-sm text-muted-foreground font-mono">
                   {visible.length} {t("marketplace.items_count", "pezzi disponibili")}

@@ -149,26 +149,17 @@ export default function Surplus() {
     <DashboardLayout>
       <div className="space-y-10">
         {/* Editorial header */}
-        <header className="space-y-5 animate-fade-in">
-          <div className="flex items-center gap-3">
-            <span className="h-px w-10 bg-primary/40" />
-            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary">
-              Anti-spreco · Magic Bags
-            </span>
-          </div>
-          <div className="space-y-3">
-            <h1 className="font-display text-4xl sm:text-5xl font-light leading-[1.05] text-foreground">
-              Salva il <em className="italic font-normal text-primary">cibo buono</em>,
-              <br className="hidden sm:block" />
-              riduci lo spreco.
-            </h1>
-            <p className="text-muted-foreground max-w-xl leading-relaxed">
-              Pasti e prodotti dai ristoranti vicini fino al{" "}
-              <span className="text-foreground font-medium">-70%</span>. Ogni Magic
-              Bag evita circa 2,5 kg di CO₂.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2 pt-2">
+        <header className="animate-fade-in space-y-5">
+          <EditorialPageHeader
+            surface="plain"
+            containerClassName="max-w-none px-0"
+            eyebrow="Anti-spreco · Magic Bags"
+            title="Salva il"
+            italic="cibo buono"
+            trailing=", riduci lo spreco."
+            lead="Pasti e prodotti dai ristoranti vicini fino al -70%. Ogni Magic Bag evita circa 2,5 kg di CO₂."
+          />
+          <div className="flex flex-wrap gap-2 pt-1">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
               <Package className="size-3.5 text-primary" />
               <span className="font-mono tabular-nums">{bags?.length ?? 0}</span>
