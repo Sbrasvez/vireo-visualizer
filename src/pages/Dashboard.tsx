@@ -13,7 +13,10 @@ import {
 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { StatCard } from "@/components/StatCard";
-import { SkeletonCard } from "@/components/SkeletonCard";
+import {
+  SkeletonRecipeMiniGrid,
+  SkeletonNearbyRestaurantGrid,
+} from "@/components/EditorialSkeleton";
 import { CO2Tracker } from "@/components/CO2Tracker";
 import { GreenScore } from "@/components/GreenScore";
 import { Card, CardContent } from "@/components/ui/card";
@@ -71,7 +74,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { plan, isPro } = usePlan();
   const { stats, loading: statsLoading } = useDashboardStats();
-  const { restaurants } = useRestaurants();
+  const { restaurants, loading: restaurantsLoading } = useRestaurants();
   const [displayName, setDisplayName] = useState<string | undefined>();
 
   const getGreeting = (name?: string) => {
@@ -184,35 +187,39 @@ export default function Dashboard() {
               </Link>
             </Button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {RECOMMENDED_RECIPES.map((r, i) => (
-              <MotionCard
-                key={r.id}
-                delay={i * 0.05}
-                lift="medium"
-                className="overflow-hidden border border-border/60 bg-card cursor-pointer group rounded-xl"
-              >
-                <div
-                  className="aspect-[4/3] bg-muted bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                  style={{ backgroundImage: `url(${r.image})` }}
-                />
-                <div className="p-4 space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    {Array.from({ length: r.leaves }).map((_, idx) => (
-                      <Leaf key={idx} className="size-3 text-primary fill-primary/30" />
-                    ))}
+          {statsLoading ? (
+            <SkeletonRecipeMiniGrid count={4} />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {RECOMMENDED_RECIPES.map((r, i) => (
+                <MotionCard
+                  key={r.id}
+                  delay={i * 0.05}
+                  lift="medium"
+                  className="overflow-hidden border border-border/60 bg-card cursor-pointer group rounded-xl"
+                >
+                  <div
+                    className="aspect-[4/3] bg-muted bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                    style={{ backgroundImage: `url(${r.image})` }}
+                  />
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center gap-1.5">
+                      {Array.from({ length: r.leaves }).map((_, idx) => (
+                        <Leaf key={idx} className="size-3 text-primary fill-primary/30" />
+                      ))}
+                    </div>
+                    <h3 className="font-display font-medium text-sm leading-snug line-clamp-2">{r.title}</h3>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="font-mono tracking-wide">{r.time} min</span>
+                      <Badge variant="secondary" className="text-[10px] font-mono uppercase tracking-wider">
+                        {r.diet}
+                      </Badge>
+                    </div>
                   </div>
-                  <h3 className="font-display font-medium text-sm leading-snug line-clamp-2">{r.title}</h3>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="font-mono tracking-wide">{r.time} min</span>
-                    <Badge variant="secondary" className="text-[10px] font-mono uppercase tracking-wider">
-                      {r.diet}
-                    </Badge>
-                  </div>
-                </div>
-              </MotionCard>
-            ))}
-          </div>
+                </MotionCard>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Nearby restaurants */}
@@ -233,12 +240,8 @@ export default function Dashboard() {
               </Link>
             </Button>
           </div>
-          {nearbyRestaurants.length === 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <SkeletonCard key={i} />
-              ))}
-            </div>
+          {restaurantsLoading || nearbyRestaurants.length === 0 ? (
+            <SkeletonNearbyRestaurantGrid count={3} />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {nearbyRestaurants.map((r, i) => (

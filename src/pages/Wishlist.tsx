@@ -9,9 +9,9 @@ import CTAButton from "@/components/CTAButton";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import MotionCard from "@/components/MotionCard";
+import { SkeletonWishlistGrid } from "@/components/EditorialSkeleton";
 import { useAuth } from "@/hooks/useAuth";
 import {
   useMyWishlist,
@@ -180,17 +180,7 @@ export default function Wishlist() {
             )}
 
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="rounded-2xl bg-card border border-border/60 overflow-hidden">
-                    <Skeleton className="aspect-square w-full" />
-                    <div className="p-4 space-y-2">
-                      <Skeleton className="h-4 w-2/3" />
-                      <Skeleton className="h-6 w-1/3" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SkeletonWishlistGrid count={8} />
             ) : items.length === 0 ? (
               <div className="text-center py-20 rounded-2xl border border-border/60 bg-card max-w-2xl mx-auto">
                 <Heart className="size-12 mx-auto text-muted-foreground mb-4" />

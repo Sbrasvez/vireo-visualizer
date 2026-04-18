@@ -4,8 +4,8 @@ import { Heart, ShoppingBag, ArrowLeft, Leaf } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SkeletonWishlistGrid } from "@/components/EditorialSkeleton";
 import { usePublicWishlist } from "@/hooks/useWishlist";
 import { formatEur } from "@/lib/catalog";
 
@@ -59,17 +59,7 @@ export default function PublicWishlist() {
         <section className="py-14">
           <div className="container max-w-5xl">
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="rounded-2xl bg-card border border-border/60 overflow-hidden">
-                    <Skeleton className="aspect-square w-full" />
-                    <div className="p-4 space-y-2">
-                      <Skeleton className="h-4 w-2/3" />
-                      <Skeleton className="h-6 w-1/3" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SkeletonWishlistGrid count={6} />
             ) : items.length === 0 ? (
               <div className="text-center py-20 rounded-2xl border border-border/60 bg-card">
                 <Heart className="size-12 mx-auto text-muted-foreground mb-4" />
