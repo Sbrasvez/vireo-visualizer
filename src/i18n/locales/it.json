@@ -767,5 +767,22 @@
     "awaiting_answer": "In attesa di risposta dal venditore",
     "login_required": "Login richiesto",
     "login_required_desc": "Accedi per fare una domanda"
+  },
+  "cart": {
+    "eyebrow_one": "Checkout · {{count}} articolo",
+    "eyebrow_other": "Checkout · {{count}} articoli",
+    "title_1": "Il tuo",
+    "title_em": "carrello",
+    "title_2": ".",
+    "lead_filled": "Rivedi la tua selezione prima di completare l'ordine."
+  },
+  "surplus": {
+    "eyebrow": "Anti-spreco · Magic Bags",
+    "title_1": "Salva il",
+    "title_em": "cibo buono",
+    "title_2": ", riduci lo spreco.",
+    "lead": "Pasti e prodotti dai ristoranti vicini fino al -70%. Ogni Magic Bag evita circa 2,5 kg di CO₂.",
+    "available_today": "disponibili oggi",
+    "kg_co2_saved": "kg CO₂ salvabili"
   }
 }

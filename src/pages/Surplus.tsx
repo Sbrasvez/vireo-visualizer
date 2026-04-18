@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Clock, MapPin, Leaf, Package, Ticket, Sparkles } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import MotionCard from "@/components/MotionCard";

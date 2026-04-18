@@ -47,14 +47,14 @@ export default function Cart() {
             <EditorialPageHeader
               surface="plain"
               containerClassName="max-w-3xl px-0"
-              eyebrow={`Checkout · ${count} ${count === 1 ? "articolo" : "articoli"}`}
-              title={t("cart.title", "Il tuo")}
-              italic="carrello"
-              trailing="."
+              eyebrow={t("cart.eyebrow", { count })}
+              title={t("cart.title_1", "Il tuo")}
+              italic={t("cart.title_em", "carrello")}
+              trailing={t("cart.title_2", ".")}
               lead={
                 count === 0
                   ? t("cart.empty", "Il carrello è vuoto.")
-                  : "Rivedi la tua selezione prima di completare l'ordine."
+                  : t("cart.lead_filled", "Rivedi la tua selezione prima di completare l'ordine.")
               }
             />
           </div>
