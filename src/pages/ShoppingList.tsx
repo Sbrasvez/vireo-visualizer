@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { ShoppingCart, Trash2, Share2, ChefHat, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,30 +38,36 @@ export default function ShoppingList() {
   return (
     <DashboardLayout>
       <div className="container max-w-3xl py-8 space-y-6">
-        <header className="flex items-end justify-between gap-4 flex-wrap">
-          <div>
-            <h1 className="font-display text-3xl md:text-4xl font-bold flex items-center gap-3">
-              <ShoppingCart className="size-7 text-primary" />
-              {t("shopping_list.title")}
-            </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              {t("shopping_list.subtitle", { count: uncheckedCount })}
-            </p>
-          </div>
-          {items.length > 0 && (
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={handleShare}>
-                <Share2 className="size-4 mr-1.5" /> {t("shopping_list.share")}
-              </Button>
-              <Button variant="outline" size="sm" onClick={clearChecked} disabled={items.every((i) => !i.checked)}>
-                {t("shopping_list.clear_checked")}
-              </Button>
-              <Button variant="ghost" size="sm" onClick={clearAll}>
-                <Trash2 className="size-4 mr-1.5" /> {t("shopping_list.clear_all")}
-              </Button>
-            </div>
-          )}
-        </header>
+        <EditorialPageHeader
+          surface="plain"
+          containerClassName="max-w-none px-0"
+          eyebrow={t("shopping_list.eyebrow", "Spesa consapevole")}
+          number="08"
+          title={t("shopping_list.title_1", "La tua")}
+          italic={t("shopping_list.title_em", "lista")}
+          trailing={t("shopping_list.title_2", "essenziale.")}
+          lead={t("shopping_list.subtitle", { count: uncheckedCount })}
+          aside={
+            items.length > 0 ? (
+              <div className="flex flex-wrap gap-2 md:justify-end">
+                <Button variant="outline" size="sm" onClick={handleShare}>
+                  <Share2 className="size-4 mr-1.5" /> {t("shopping_list.share")}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearChecked}
+                  disabled={items.every((i) => !i.checked)}
+                >
+                  {t("shopping_list.clear_checked")}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={clearAll}>
+                  <Trash2 className="size-4 mr-1.5" /> {t("shopping_list.clear_all")}
+                </Button>
+              </div>
+            ) : undefined
+          }
+        />
 
         {items.length === 0 ? (
           <Card>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Heart, MessageCircle, ImagePlus, Send, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import MotionCard from "@/components/MotionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -256,28 +257,29 @@ export default function Community() {
       <div className="space-y-10 max-w-2xl mx-auto">
         {/* Editorial header */}
         <header className="space-y-5 animate-fade-in">
-          <div className="flex items-center gap-3">
-            <span className="h-px w-10 bg-primary/40" />
-            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary">
-              Community · Voci e piatti
-            </span>
-          </div>
-          <div className="flex items-end justify-between gap-4 flex-wrap">
-            <h1 className="font-display text-4xl sm:text-5xl font-light leading-[1.05] text-foreground">
-              Racconti dalla <em className="italic font-normal text-primary">cucina viva</em>.
-            </h1>
-            {user ? (
-              <CreatePostDialog />
-            ) : (
-              <Button asChild className="rounded-full">
-                <Link to="/login">Accedi per pubblicare</Link>
-              </Button>
-            )}
-          </div>
-          <p className="text-muted-foreground max-w-xl leading-relaxed">
-            Condividi i tuoi piatti, ispira chi cucina con te. Una community che cresce
-            piatto dopo piatto.
-          </p>
+          <EditorialPageHeader
+            surface="plain"
+            containerClassName="max-w-none px-0"
+            eyebrow="Community · Voci e piatti"
+            number="06"
+            title="Racconti dalla"
+            italic="cucina viva"
+            trailing="."
+            lead="Condividi i tuoi piatti, ispira chi cucina con te. Una community che cresce piatto dopo piatto."
+            aside={
+              user ? (
+                <div className="flex md:justify-end">
+                  <CreatePostDialog />
+                </div>
+              ) : (
+                <div className="flex md:justify-end">
+                  <Button asChild className="rounded-full">
+                    <Link to="/login">Accedi per pubblicare</Link>
+                  </Button>
+                </div>
+              )
+            }
+          />
         </header>
 
         {/* Section divider */}

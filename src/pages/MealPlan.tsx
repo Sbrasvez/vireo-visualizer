@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sparkles, Calendar, Leaf, ShoppingBag, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CTAButton from "@/components/CTAButton";
@@ -60,15 +61,16 @@ export default function MealPlan() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <header className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Sparkles className="size-6 text-primary" />
-            <h1 className="text-3xl font-display font-bold">Meal Plan AI</h1>
-          </div>
-          <p className="text-muted-foreground">
-            7 giorni di pasti plant-based personalizzati, generati da AI in pochi secondi.
-          </p>
-        </header>
+        <EditorialPageHeader
+          surface="plain"
+          containerClassName="max-w-none px-0"
+          eyebrow="Meal Plan AI · 7 giorni"
+          number="07"
+          title="Una settimana"
+          italic="su misura"
+          trailing="."
+          lead="7 giorni di pasti plant-based personalizzati, generati da AI in pochi secondi."
+        />
 
         <Card>
           <CardHeader>
