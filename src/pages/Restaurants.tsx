@@ -29,6 +29,7 @@ import {
 import { useGeocoding } from "@/hooks/useGeocoding";
 import { useToast } from "@/hooks/use-toast";
 import heroImg from "@/assets/restaurants-hero.jpg";
+import { SkeletonRestaurantGrid } from "@/components/EditorialSkeleton";
 
 export default function Restaurants() {
   const { t } = useTranslation();
