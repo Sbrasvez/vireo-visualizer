@@ -63,6 +63,144 @@ export function SkeletonProductGrid({ count = 8 }: { count?: number }) {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                            Restaurant card                                 */
+/* -------------------------------------------------------------------------- */
+
+export function SkeletonRestaurantCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border/60 bg-card overflow-hidden",
+        className,
+      )}
+    >
+      <SkeletonShimmer className="aspect-[16/10] w-full rounded-none" />
+      <div className="p-4 space-y-3">
+        <div className="flex items-start justify-between gap-3">
+          <SkeletonShimmer className="h-5 w-2/3 rounded" />
+          <SkeletonShimmer className="h-4 w-10 rounded-full" />
+        </div>
+        <div className="flex items-center gap-3">
+          <SkeletonShimmer className="h-3 w-12 rounded-full" />
+          <SkeletonShimmer className="h-3 w-20 rounded-full" />
+        </div>
+        <div className="space-y-1.5 pt-1">
+          <SkeletonShimmer className="h-3 w-full rounded" />
+          <SkeletonShimmer className="h-3 w-9/12 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonRestaurantGrid({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonRestaurantCard key={i} />
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Magic Bag card                                */
+/* -------------------------------------------------------------------------- */
+
+export function SkeletonMagicBagCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border/60 bg-card overflow-hidden flex flex-col",
+        className,
+      )}
+    >
+      <div className="relative">
+        <SkeletonShimmer className="aspect-[4/3] w-full rounded-none" />
+        {/* Discount chip placeholder */}
+        <div className="absolute top-3 left-3">
+          <SkeletonShimmer className="h-6 w-14 rounded-full" />
+        </div>
+      </div>
+      <div className="p-5 space-y-3 flex-1 flex flex-col">
+        <SkeletonEyebrow />
+        <SkeletonShimmer className="h-5 w-4/5 rounded" />
+        <SkeletonShimmer className="h-3 w-3/5 rounded" />
+        <div className="flex items-center justify-between pt-3 mt-auto border-t border-border/40">
+          <div className="space-y-1.5">
+            <SkeletonShimmer className="h-3 w-16 rounded-full" />
+            <SkeletonShimmer className="h-6 w-20 rounded" />
+          </div>
+          <SkeletonShimmer className="h-10 w-24 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonMagicBagGrid({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonMagicBagCard key={i} />
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Community post                                */
+/* -------------------------------------------------------------------------- */
+
+export function SkeletonCommunityPost({ className }: { className?: string }) {
+  return (
+    <article
+      className={cn(
+        "rounded-2xl border border-border/60 bg-card p-5 sm:p-6 space-y-4",
+        className,
+      )}
+    >
+      {/* Author row */}
+      <div className="flex items-center gap-3">
+        <SkeletonShimmer className="size-10 rounded-full" />
+        <div className="space-y-1.5 flex-1">
+          <SkeletonShimmer className="h-3 w-32 rounded" />
+          <SkeletonShimmer className="h-2.5 w-20 rounded-full" />
+        </div>
+      </div>
+
+      {/* Title + body */}
+      <div className="space-y-2.5">
+        <SkeletonShimmer className="h-6 w-4/5 rounded" />
+        <div className="space-y-1.5">
+          <SkeletonShimmer className="h-3 w-full rounded" />
+          <SkeletonShimmer className="h-3 w-11/12 rounded" />
+          <SkeletonShimmer className="h-3 w-9/12 rounded" />
+        </div>
+      </div>
+
+      {/* Optional image */}
+      <SkeletonShimmer className="aspect-[16/9] w-full rounded-xl" />
+
+      {/* Footer actions */}
+      <div className="flex items-center gap-4 pt-2 border-t border-border/40">
+        <SkeletonShimmer className="h-7 w-16 rounded-full" />
+        <SkeletonShimmer className="h-7 w-16 rounded-full" />
+        <SkeletonShimmer className="h-7 w-20 rounded-full ml-auto" />
+      </div>
+    </article>
+  );
+}
+
+export function SkeletonCommunityList({ count = 3 }: { count?: number }) {
+  return (
+    <div className="space-y-6">
+      {Array.from({ length: count }).map((_, i) => (
+        <SkeletonCommunityPost key={i} />
+      ))}
+    </div>
+  );
+}
 /*                              Product Detail                                */
 /* -------------------------------------------------------------------------- */
 

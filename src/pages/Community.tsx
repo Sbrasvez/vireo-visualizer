@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCommunityList } from "@/components/EditorialSkeleton";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -289,9 +290,7 @@ export default function Community() {
         </div>
 
         {isLoading ? (
-          <div className="space-y-6">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-72 rounded-2xl" />)}
-          </div>
+          <SkeletonCommunityList count={3} />
         ) : posts && posts.length > 0 ? (
           <div className="space-y-6">
             {posts.map((p, i) => <PostCard key={p.id} post={p} index={i} />)}
