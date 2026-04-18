@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import RestaurantMap, { type RestaurantMarker } from "@/components/RestaurantMap";
 import RestaurantDetailDialog from "@/components/RestaurantDetailDialog";
 import { MapPin, Star, Clock, Leaf, Search, Map as MapIcon, Loader2, X, Sparkles } from "lucide-react";
+import MotionCard from "@/components/MotionCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -353,17 +354,18 @@ export default function Restaurants() {
                 {filtered.map((r, i) => {
                   const isActive = activeId === r.id;
                   return (
-                    <article
+                    <MotionCard
                       key={r.id}
+                      delay={Math.min(i, 12) * 0.04}
+                      lift="medium"
                       onClick={() => {
                         setActiveId(r.id);
                         openDetail(r);
                       }}
                       onMouseEnter={() => setActiveId(r.id)}
-                      className={`group rounded-2xl bg-card border overflow-hidden hover-lift animate-fade-up cursor-pointer transition-all ${
+                      className={`group rounded-2xl bg-card border overflow-hidden cursor-pointer ${
                         isActive ? "border-primary ring-2 ring-primary/30" : "border-border/60"
                       }`}
-                      style={{ animationDelay: `${Math.min(i, 12) * 0.04}s` }}
                     >
                       <div className="relative aspect-[4/3] overflow-hidden">
                         {r.cover_image && (
@@ -432,7 +434,7 @@ export default function Restaurants() {
                           {r.available_now ? t("restaurants.book_live") : t("restaurants.waitlist")}
                         </Button>
                       </div>
-                    </article>
+                    </MotionCard>
                   );
                 })}
               </div>
