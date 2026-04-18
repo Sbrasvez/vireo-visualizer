@@ -667,7 +667,12 @@
     "title_1": "Tu",
     "title_em": "carrito",
     "title_2": ".",
-    "lead_filled": "Revisa tu selección antes de completar el pedido."
+    "lead_filled": "Revisa tu selección antes de completar el pedido.",
+    "continue_shopping": "Seguir comprando",
+    "empty": "El carrito está vacío.",
+    "empty_title": "Nada en el carrito",
+    "empty_desc": "Explora el marketplace eco de Vireo.",
+    "browse_btn": "Ir al marketplace"
   },
   "surplus": {
     "eyebrow": "Antidesperdicio · Magic Bags",

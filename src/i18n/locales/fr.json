@@ -667,7 +667,12 @@
     "title_1": "Votre",
     "title_em": "panier",
     "title_2": ".",
-    "lead_filled": "Vérifiez votre sélection avant de finaliser la commande."
+    "lead_filled": "Vérifiez votre sélection avant de finaliser la commande.",
+    "continue_shopping": "Continuer mes achats",
+    "empty": "Le panier est vide.",
+    "empty_title": "Rien dans le panier",
+    "empty_desc": "Explorez le marketplace éco de Vireo.",
+    "browse_btn": "Aller au marketplace"
   },
   "surplus": {
     "eyebrow": "Anti-gaspi · Magic Bags",
