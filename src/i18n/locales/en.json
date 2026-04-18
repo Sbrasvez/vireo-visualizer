@@ -718,7 +718,12 @@
     "title_1": "Your",
     "title_em": "cart",
     "title_2": ".",
-    "lead_filled": "Review your selection before completing the order."
+    "lead_filled": "Review your selection before completing the order.",
+    "continue_shopping": "Continue shopping",
+    "empty": "Your cart is empty.",
+    "empty_title": "Nothing in the cart",
+    "empty_desc": "Explore Vireo's eco marketplace.",
+    "browse_btn": "Go to marketplace"
   },
   "surplus": {
     "eyebrow": "Anti-waste · Magic Bags",
