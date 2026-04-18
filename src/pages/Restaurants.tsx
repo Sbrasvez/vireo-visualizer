@@ -142,28 +142,34 @@ export default function Restaurants() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-24">
-        {/* HERO */}
-        <section className="relative overflow-hidden">
+        {/* HERO — editorial Tactile Market */}
+        <section className="relative overflow-hidden border-b border-border/50">
           <div className="absolute inset-0">
             <img
               src={heroImg}
-              alt="Piatti vegetali colorati su tavolo rustico"
+              alt=""
               className="w-full h-full object-cover"
               width={1920}
               height={1080}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/92 to-background/40" />
           </div>
           <div className="relative container py-20 lg:py-28">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border text-sm font-medium mb-6 animate-fade-up">
-                <Sparkles className="size-4 text-primary" />
-                <span>{t("restaurants.badge_count", { count: restaurants.length })}</span>
+              <div className="flex items-center gap-3 mb-6 animate-fade-up">
+                <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°04</span>
+                <span className="h-px flex-1 max-w-[60px] bg-border" />
+                <div className="inline-flex items-center gap-2 text-xs font-medium text-primary uppercase tracking-wider">
+                  <Sparkles className="size-3.5" />
+                  <span>{t("restaurants.badge_count", { count: restaurants.length })}</span>
+                </div>
               </div>
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                {t("restaurants.title_1")} <span className="italic text-gradient-warm">{t("restaurants.title_aware")}</span>{t("restaurants.title_2")}
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-light leading-[0.95] mb-6 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                {t("restaurants.title_1")}{" "}
+                <em className="italic font-normal text-secondary">{t("restaurants.title_aware")}</em>
+                {t("restaurants.title_2")}
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+              <p className="text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
                 {t("restaurants.subtitle")}
               </p>
 
@@ -172,7 +178,7 @@ export default function Restaurants() {
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
                   <Input
                     placeholder={t("restaurants.search_placeholder")}
-                    className="pl-12 h-14 rounded-xl text-base bg-card shadow-soft"
+                    className="pl-12 h-14 rounded-xl text-base bg-card/95 backdrop-blur-sm shadow-soft"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -322,12 +328,15 @@ export default function Restaurants() {
         {/* LIST */}
         <section className="pb-24">
           <div className="container">
-            <div className="flex items-end justify-between mb-8">
+            <div className="flex items-end justify-between gap-6 mb-10 pb-6 border-b border-border/60 flex-wrap">
               <div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold">
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                  — {t("restaurants.list_eyebrow", "Indirizzi consigliati")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
                   {originLabel ? t("restaurants.sorted_by_distance") : t("restaurants.all_restaurants")}
                 </h2>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-muted-foreground mt-3 font-mono text-sm">
                   {t("restaurants.click_card_hint")}
                 </p>
               </div>

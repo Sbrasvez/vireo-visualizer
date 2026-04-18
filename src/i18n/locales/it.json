@@ -255,6 +255,8 @@
   },
   "recipes": {
     "badge": "Database Spoonacular + AI Vireo",
+    "section_eyebrow": "Selezione editoriale",
+    "section_em": "del giorno",
     "title_1": "Ricette",
     "title_vegan": "vegane",
     "title_2": "e bio",
@@ -308,6 +310,7 @@
   },
   "restaurants": {
     "badge_count": "{{count}} ristoranti eco-friendly in Italia",
+    "list_eyebrow": "Indirizzi consigliati",
     "title_1": "Mangia",
     "title_aware": "consapevole",
     "title_2": ", ovunque tu sia",
@@ -400,6 +403,11 @@
   },
   "marketplace": {
     "badge": "Compravendita & riuso certificato",
+    "section_eyebrow": "Selezione curata",
+    "section_title": "Oggetti che",
+    "section_title_em": "raccontano una storia",
+    "items_count": "pezzi disponibili",
+    "in_cart": "nel carrello",
     "title_1": "Marketplace",
     "title_2": "sostenibile",
     "subtitle": "Una vetrina dedicata alla compravendita di prodotti eco-friendly e al riuso, con linee guida rigorose per garantire la sostenibilità.",
