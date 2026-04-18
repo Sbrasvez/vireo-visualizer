@@ -660,5 +660,22 @@
     "categories.sweeteners": "Endulzantes",
     "categories.drinks": "Bebidas",
     "categories.other": "Otros"
+  },
+  "cart": {
+    "eyebrow_one": "Checkout · {{count}} artículo",
+    "eyebrow_other": "Checkout · {{count}} artículos",
+    "title_1": "Tu",
+    "title_em": "carrito",
+    "title_2": ".",
+    "lead_filled": "Revisa tu selección antes de completar el pedido."
+  },
+  "surplus": {
+    "eyebrow": "Antidesperdicio · Magic Bags",
+    "title_1": "Salva la",
+    "title_em": "buena comida",
+    "title_2": ", reduce el desperdicio.",
+    "lead": "Comidas y productos de restaurantes cercanos hasta -70%. Cada Magic Bag evita unos 2,5 kg de CO₂.",
+    "available_today": "disponibles hoy",
+    "kg_co2_saved": "kg CO₂ a salvar"
   }
 }

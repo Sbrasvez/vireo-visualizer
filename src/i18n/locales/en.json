@@ -711,5 +711,22 @@
     "categories.sweeteners": "Sweeteners",
     "categories.drinks": "Drinks",
     "categories.other": "Other"
+  },
+  "cart": {
+    "eyebrow_one": "Checkout · {{count}} item",
+    "eyebrow_other": "Checkout · {{count}} items",
+    "title_1": "Your",
+    "title_em": "cart",
+    "title_2": ".",
+    "lead_filled": "Review your selection before completing the order."
+  },
+  "surplus": {
+    "eyebrow": "Anti-waste · Magic Bags",
+    "title_1": "Save the",
+    "title_em": "good food",
+    "title_2": ", reduce waste.",
+    "lead": "Meals and goods from nearby restaurants up to -70%. Each Magic Bag prevents around 2.5 kg of CO₂.",
+    "available_today": "available today",
+    "kg_co2_saved": "kg CO₂ to save"
   }
 }
