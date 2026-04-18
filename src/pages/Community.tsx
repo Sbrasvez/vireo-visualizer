@@ -289,9 +289,7 @@ export default function Community() {
         </div>
 
         {isLoading ? (
-          <div className="space-y-6">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-72 rounded-2xl" />)}
-          </div>
+          <SkeletonCommunityList count={3} />
         ) : posts && posts.length > 0 ? (
           <div className="space-y-6">
             {posts.map((p, i) => <PostCard key={p.id} post={p} index={i} />)}

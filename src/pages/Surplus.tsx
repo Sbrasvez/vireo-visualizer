@@ -251,11 +251,7 @@ export default function Surplus() {
 
           <TabsContent value={category} className="mt-8">
             {isLoading ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className="aspect-[4/5] rounded-2xl" />
-                ))}
-              </div>
+              <SkeletonMagicBagGrid count={6} />
             ) : filtered.length === 0 ? (
               <div className="text-center py-16 text-muted-foreground border border-dashed border-border/60 rounded-2xl">
                 <Sparkles className="size-10 mx-auto mb-3 opacity-30" />

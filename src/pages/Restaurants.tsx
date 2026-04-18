@@ -343,7 +343,9 @@ export default function Restaurants() {
               </div>
             </div>
 
-            {filtered.length === 0 ? (
+            {loading ? (
+              <SkeletonRestaurantGrid count={6} />
+            ) : filtered.length === 0 ? (
               <div className="text-center py-20 bg-card rounded-2xl border border-border/60">
                 <Leaf className="size-10 mx-auto text-muted-foreground mb-3" />
                 <h3 className="font-display text-xl font-semibold mb-2">{t("restaurants.no_results_title")}</h3>
