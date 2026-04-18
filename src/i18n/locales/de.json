@@ -634,5 +634,31 @@
     "awaiting_answer": "Warten auf Antwort des Verkäufers",
     "login_required": "Anmeldung erforderlich",
     "login_required_desc": "Anmelden, um eine Frage zu stellen"
+  },
+  "shopping_list": {
+    "title": "Einkaufsliste",
+    "subtitle": "{{count}} Produkte zum Mitnehmen",
+    "eyebrow": "Bewusst einkaufen",
+    "title_1": "Deine",
+    "title_em": "essenzielle",
+    "title_2": "Liste.",
+    "share": "Teilen",
+    "copied": "Liste in die Zwischenablage kopiert",
+    "clear_checked": "Markierte entfernen",
+    "clear_all": "Alles leeren",
+    "empty_title": "Deine Liste ist leer",
+    "empty_desc": "Füge Zutaten direkt aus den Rezepten hinzu, um deinen Einkauf zu planen.",
+    "browse_recipes": "Rezepte entdecken",
+    "from": "aus",
+    "categories.vegetables": "Gemüse",
+    "categories.fruits": "Obst",
+    "categories.grains": "Getreide & Brot",
+    "categories.legumes": "Hülsenfrüchte & pflanzl. Eiweiß",
+    "categories.dairy": "Milchprodukte & Alternativen",
+    "categories.nuts_seeds": "Nüsse & Samen",
+    "categories.condiments": "Gewürze & Würzmittel",
+    "categories.sweeteners": "Süßungsmittel",
+    "categories.drinks": "Getränke",
+    "categories.other": "Sonstiges"
   }
 }

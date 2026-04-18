@@ -685,5 +685,31 @@
     "awaiting_answer": "Awaiting seller response",
     "login_required": "Login required",
     "login_required_desc": "Sign in to ask a question"
+  },
+  "shopping_list": {
+    "title": "Shopping list",
+    "subtitle": "{{count}} items to pick up",
+    "eyebrow": "Mindful shopping",
+    "title_1": "Your",
+    "title_em": "essential",
+    "title_2": "list.",
+    "share": "Share",
+    "copied": "List copied to clipboard",
+    "clear_checked": "Remove checked",
+    "clear_all": "Clear all",
+    "empty_title": "Your list is empty",
+    "empty_desc": "Add ingredients straight from your recipes to plan the perfect shop.",
+    "browse_recipes": "Browse recipes",
+    "from": "from",
+    "categories.vegetables": "Vegetables",
+    "categories.fruits": "Fruit",
+    "categories.grains": "Grains & bread",
+    "categories.legumes": "Legumes & plant protein",
+    "categories.dairy": "Dairy & alternatives",
+    "categories.nuts_seeds": "Nuts & seeds",
+    "categories.condiments": "Condiments & spices",
+    "categories.sweeteners": "Sweeteners",
+    "categories.drinks": "Drinks",
+    "categories.other": "Other"
   }
 }
