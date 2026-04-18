@@ -69,18 +69,33 @@ export default function Marketplace() {
       <PaymentTestModeBanner />
       <Navbar />
       <main className="flex-1 pt-24">
-        <section className="relative py-16 gradient-soft overflow-hidden">
-          <div className="absolute top-10 right-10 size-80 rounded-full bg-tertiary/15 blur-3xl animate-float" />
-          <div className="container relative">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
-                <Recycle className="size-4" />
-                <span>{t("marketplace.badge")}</span>
+        {/* HERO — editorial Tactile Market */}
+        <section className="relative overflow-hidden border-b border-border/50">
+          <div className="absolute inset-0">
+            <img
+              src={marketplaceHero}
+              alt=""
+              className="w-full h-full object-cover"
+              width={1920}
+              height={1080}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/92 to-background/40" />
+          </div>
+          <div className="relative container py-20 lg:py-28">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-6 animate-fade-up">
+                <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°02</span>
+                <span className="h-px flex-1 max-w-[60px] bg-border" />
+                <div className="inline-flex items-center gap-2 text-xs font-medium text-secondary uppercase tracking-wider">
+                  <Recycle className="size-3.5" />
+                  {t("marketplace.badge")}
+                </div>
               </div>
-              <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                {t("marketplace.title_1")} <span className="italic text-gradient-leaf">{t("marketplace.title_2")}</span>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-light leading-[0.95] mb-6 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                {t("marketplace.title_1")}{" "}
+                <em className="italic font-normal text-secondary">{t("marketplace.title_2")}</em>
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+              <p className="text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
                 {t("marketplace.subtitle")}
               </p>
 
@@ -89,12 +104,12 @@ export default function Marketplace() {
                   <ShoppingBag className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
                   <Input
                     placeholder={t("marketplace.search_placeholder")}
-                    className="pl-12 h-14 rounded-xl text-base border-border bg-card"
+                    className="pl-12 h-14 rounded-xl text-base border-border bg-card/95 backdrop-blur-sm shadow-soft"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                <Button asChild size="lg" variant="outline" className="h-14 px-6 rounded-xl">
+                <Button asChild size="lg" variant="outline" className="h-14 px-6 rounded-xl bg-card/95 backdrop-blur-sm">
                   <Link to="/sell">
                     <Store className="size-4 mr-2" />
                     {t("marketplace.become_seller")}
@@ -107,7 +122,7 @@ export default function Marketplace() {
                   <Badge
                     key={c.key}
                     variant={category === c.key ? "default" : "outline"}
-                    className="px-4 py-1.5 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
+                    className="px-4 py-1.5 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-sm bg-card/80 backdrop-blur-sm"
                     onClick={() => setCategory(c.key)}
                   >
                     {t(`marketplace.categories.${c.key}`, c.label)}
@@ -115,7 +130,7 @@ export default function Marketplace() {
                 ))}
                 <Badge
                   variant={reusedOnly ? "default" : "outline"}
-                  className="px-4 py-1.5 cursor-pointer hover:bg-secondary hover:text-secondary-foreground transition-colors text-sm gap-1"
+                  className="px-4 py-1.5 cursor-pointer hover:bg-secondary hover:text-secondary-foreground transition-colors text-sm gap-1 bg-card/80 backdrop-blur-sm"
                   onClick={() => setReusedOnly((v) => !v)}
                 >
                   <Recycle className="size-3" /> {t("marketplace.reused_only")}
