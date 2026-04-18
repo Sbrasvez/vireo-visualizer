@@ -257,6 +257,7 @@
     "badge": "Database Spoonacular + AI Vireo",
     "section_eyebrow": "Selezione editoriale",
     "section_em": "del giorno",
+    "recipe_label": "Ricetta",
     "title_1": "Ricette",
     "title_vegan": "vegane",
     "title_2": "e bio",
@@ -685,6 +686,7 @@
     "access_denied_desc": "Solo gli amministratori possono accedere a questa pagina."
   },
   "store": {
+    "collection_eyebrow": "La collezione",
     "not_found": "Store non trovato",
     "back_to_marketplace": "Torna al marketplace",
     "verified": "Verificato",
@@ -696,6 +698,10 @@
     "added_title": "Aggiunto al carrello"
   },
   "product_detail": {
+    "description_eyebrow": "Dettagli",
+    "reviews_eyebrow": "Voci dei clienti",
+    "qa_eyebrow": "Domande",
+    "related_eyebrow": "Dallo stesso atelier",
     "back": "Marketplace",
     "not_found": "Prodotto non trovato",
     "not_found_desc": "Il prodotto che cerchi non esiste o non è più disponibile.",

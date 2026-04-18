@@ -119,58 +119,67 @@ export default function RecipeDetail() {
       <Navbar />
       <main className="flex-1 pt-24">
         <div className="container">
-          <Button asChild variant="ghost" size="sm" className="mb-6">
+          <Button asChild variant="ghost" size="sm" className="mb-6 -ml-3">
             <Link to="/recipes"><ArrowLeft className="size-4 mr-2" />{t("recipes.back")}</Link>
           </Button>
 
-          <div className="relative aspect-[16/7] sm:aspect-[16/6] rounded-2xl overflow-hidden mb-8 shadow-elegant">
-            {recipe.image ? (
-              <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-muted flex items-center justify-center">
-                <ChefHat className="size-20 text-muted-foreground" />
+          {/* Editorial header */}
+          <header className="grid lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-12 mb-12 items-center">
+            <div className="order-2 lg:order-1">
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°{(recipe.id?.slice(0, 3) ?? "001").toUpperCase()}</span>
+                <span className="h-px flex-1 max-w-[60px] bg-border" />
+                <span className="font-mono text-xs tracking-[0.2em] text-primary uppercase">{t("recipes.recipe_label", "Ricetta")}</span>
               </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 text-background">
-              <div className="flex flex-wrap gap-2 mb-3">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6 text-balance">
+                {recipe.title}
+              </h1>
+              <div className="flex flex-wrap gap-2 mb-6">
                 {recipe.eco_score != null && (
-                  <Badge className="bg-card/95 text-primary border-0 backdrop-blur">
-                    <Leaf className="size-3.5 mr-1" />
+                  <Badge className="bg-primary/10 text-primary border-0 font-mono text-[10px] tracking-wider uppercase">
+                    <Leaf className="size-3 mr-1" />
                     Eco {Number(recipe.eco_score).toFixed(1)}
                   </Badge>
                 )}
-                <Badge variant="secondary" className="capitalize backdrop-blur">{recipe.difficulty}</Badge>
+                <Badge variant="outline" className="capitalize font-mono text-[10px] tracking-wider">{recipe.difficulty}</Badge>
                 {recipe.diets.slice(0, 3).map((d) => (
-                  <Badge key={d} variant="secondary" className="capitalize backdrop-blur">{d}</Badge>
+                  <Badge key={d} variant="outline" className="capitalize font-mono text-[10px] tracking-wider">{d}</Badge>
                 ))}
               </div>
-              <h1 className="font-display text-3xl sm:text-5xl font-bold text-balance max-w-3xl">{recipe.title}</h1>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-6 mb-10 text-muted-foreground">
-            {recipe.ready_in_minutes && (
-              <span className="flex items-center gap-2"><Clock className="size-5 text-primary" /><strong className="text-foreground">{recipe.ready_in_minutes}</strong> {t("recipes.min")}</span>
-            )}
-            <span className="flex items-center gap-2"><Users className="size-5 text-primary" /><strong className="text-foreground">{currentServings}</strong> {t("recipes.servings")}</span>
-            {cal && <span className="flex items-center gap-2"><Flame className="size-5 text-primary" /><strong className="text-foreground">{cal}</strong> kcal</span>}
-            <div className="ml-auto flex gap-2 flex-wrap">
-              <Button variant="default" size="sm" onClick={handleAddToShoppingList}>
-                <ShoppingCart className="size-4 mr-2" />{t("recipes.add_to_shopping_list")}
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleSave}>
-                <Bookmark className="size-4 mr-2" />{t("recipes.save")}
-              </Button>
-              {recipe.source_url && (
-                <Button asChild variant="ghost" size="sm">
-                  <a href={recipe.source_url} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="size-4 mr-2" />{t("recipes.source")}
-                  </a>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground border-y border-border/50 py-4">
+                {recipe.ready_in_minutes && (
+                  <span className="flex items-center gap-2"><Clock className="size-4 text-primary" /><strong className="text-foreground font-display text-lg font-normal">{recipe.ready_in_minutes}</strong> {t("recipes.min")}</span>
+                )}
+                <span className="flex items-center gap-2"><Users className="size-4 text-primary" /><strong className="text-foreground font-display text-lg font-normal">{currentServings}</strong> {t("recipes.servings")}</span>
+                {cal && <span className="flex items-center gap-2"><Flame className="size-4 text-primary" /><strong className="text-foreground font-display text-lg font-normal">{cal}</strong> kcal</span>}
+              </div>
+              <div className="flex gap-2 flex-wrap mt-6">
+                <Button variant="default" size="sm" onClick={handleAddToShoppingList} className="rounded-full">
+                  <ShoppingCart className="size-4 mr-2" />{t("recipes.add_to_shopping_list")}
                 </Button>
+                <Button variant="outline" size="sm" onClick={handleSave} className="rounded-full">
+                  <Bookmark className="size-4 mr-2" />{t("recipes.save")}
+                </Button>
+                {recipe.source_url && (
+                  <Button asChild variant="ghost" size="sm" className="rounded-full">
+                    <a href={recipe.source_url} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="size-4 mr-2" />{t("recipes.source")}
+                    </a>
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div className="order-1 lg:order-2 relative aspect-[4/5] lg:aspect-[5/6] rounded-2xl overflow-hidden bg-muted border border-border/40 shadow-soft">
+              {recipe.image ? (
+                <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <ChefHat className="size-20 text-muted-foreground" />
+                </div>
               )}
             </div>
-          </div>
+          </header>
 
           <div className="grid lg:grid-cols-3 gap-8 pb-16">
             <aside className="lg:col-span-1 space-y-6">

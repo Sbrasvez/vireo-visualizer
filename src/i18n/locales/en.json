@@ -181,6 +181,7 @@
     "badge": "Spoonacular database + Vireo AI",
     "section_eyebrow": "Editorial selection",
     "section_em": "of the day",
+    "recipe_label": "Recipe",
     "title_1": "Vegan",
     "title_vegan": "& organic",
     "title_2": "recipes",
@@ -607,6 +608,7 @@
     "access_denied_desc": "Only administrators can access this page."
   },
   "store": {
+    "collection_eyebrow": "The collection",
     "not_found": "Store not found",
     "back_to_marketplace": "Back to marketplace",
     "verified": "Verified",
@@ -618,6 +620,10 @@
     "added_title": "Added to cart"
   },
   "product_detail": {
+    "description_eyebrow": "Details",
+    "reviews_eyebrow": "Customer voices",
+    "qa_eyebrow": "Questions",
+    "related_eyebrow": "From the same atelier",
     "back": "Marketplace",
     "not_found": "Product not found",
     "not_found_desc": "The product you're looking for doesn't exist or is no longer available.",

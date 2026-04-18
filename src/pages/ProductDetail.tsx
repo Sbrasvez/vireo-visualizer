@@ -279,21 +279,21 @@ export default function ProductDetail() {
       <Navbar />
       <main className="flex-1 pt-24 pb-16">
         <div className="container max-w-6xl">
-          <Button asChild variant="ghost" size="sm" className="mb-6 gap-2">
+          <Button asChild variant="ghost" size="sm" className="mb-6 gap-2 -ml-3">
             <Link to="/marketplace">
               <ArrowLeft className="size-4" /> {t("product_detail.back")}
             </Link>
           </Button>
 
-          <div className="grid lg:grid-cols-2 gap-10">
-            {/* Gallery */}
+          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-14">
+            {/* Gallery — editorial */}
             <div className="space-y-4">
-              <div className="relative aspect-square rounded-3xl overflow-hidden bg-muted border border-border/60">
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-muted border border-border/40 shadow-soft">
                 {current ? (
                   <img
                     src={current}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-700"
                   />
                 ) : (
                   <div className="w-full h-full grid place-items-center text-muted-foreground">
@@ -301,18 +301,18 @@ export default function ProductDetail() {
                   </div>
                 )}
                 {discount > 0 && (
-                  <Badge className="absolute top-4 left-4 bg-destructive text-destructive-foreground">
+                  <Badge className="absolute top-4 left-4 bg-destructive text-destructive-foreground font-mono text-[10px] tracking-wider uppercase">
                     -{discount}%
                   </Badge>
                 )}
                 <div className="absolute top-4 right-4 flex flex-col gap-2">
                   {product.is_reused && (
-                    <Badge className="bg-tertiary text-tertiary-foreground gap-1">
+                    <Badge className="bg-tertiary text-tertiary-foreground gap-1 font-mono text-[10px] tracking-wider uppercase">
                       <Recycle className="size-3" /> {t("marketplace.reuse_badge")}
                     </Badge>
                   )}
                   {product.is_bio && (
-                    <Badge className="bg-primary text-primary-foreground gap-1">
+                    <Badge className="bg-primary text-primary-foreground gap-1 font-mono text-[10px] tracking-wider uppercase">
                       <Leaf className="size-3" /> {t("seller_dashboard.bio")}
                     </Badge>
                   )}
@@ -326,10 +326,10 @@ export default function ProductDetail() {
                       key={img + i}
                       onClick={() => setActiveImage(i)}
                       className={cn(
-                        "aspect-square rounded-xl overflow-hidden border-2 transition-all",
+                        "aspect-square rounded-lg overflow-hidden transition-all",
                         activeImage === i
-                          ? "border-primary shadow-md"
-                          : "border-transparent opacity-70 hover:opacity-100",
+                          ? "ring-2 ring-primary ring-offset-2 ring-offset-background"
+                          : "opacity-60 hover:opacity-100",
                       )}
                     >
                       <img src={img} alt="" className="w-full h-full object-cover" />
@@ -339,57 +339,57 @@ export default function ProductDetail() {
               )}
             </div>
 
-            {/* Info */}
-            <div className="space-y-6">
+            {/* Info — editorial */}
+            <div className="space-y-6 lg:pt-2">
               {product.seller && (
                 <Link
                   to={`/store/${product.seller.slug}`}
-                  className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
+                  className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors"
                 >
-                  <Avatar className="size-6">
+                  <Avatar className="size-5">
                     <AvatarImage src={product.seller.logo_url ?? undefined} />
-                    <AvatarFallback className="text-xs">
+                    <AvatarFallback className="text-[10px]">
                       {product.seller.business_name[0]}
                     </AvatarFallback>
                   </Avatar>
                   <span>
-                    {t("product_detail.sold_by")}{" "}
-                    <span className="font-medium text-foreground">{product.seller.business_name}</span>
+                    {t("product_detail.sold_by")} —{" "}
+                    <span className="font-semibold text-foreground tracking-normal normal-case">{product.seller.business_name}</span>
                   </span>
                 </Link>
               )}
 
               <div>
-                <h1 className="font-display text-3xl sm:text-4xl font-bold leading-tight mb-3">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-4 text-balance">
                   {product.name}
                 </h1>
                 <div className="flex items-center gap-3 text-sm">
                   <Stars value={Number(product.rating ?? 0)} />
-                  <span className="text-muted-foreground">
+                  <span className="text-muted-foreground font-mono text-xs">
                     {Number(product.rating ?? 0).toFixed(1)} ·{" "}
                     {t("product_detail.reviews_count", { count: product.reviews_count })}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-end gap-3">
-                <span className="font-display text-4xl font-bold">{formatEur(product.price_cents)}</span>
+              <div className="flex items-end gap-3 pt-2 pb-2 border-y border-border/50 py-5">
+                <span className="font-display text-5xl font-light tracking-tight">{formatEur(product.price_cents)}</span>
                 {product.compare_at_price_cents && product.compare_at_price_cents > product.price_cents && (
-                  <span className="text-lg text-muted-foreground line-through mb-1">
+                  <span className="text-lg text-muted-foreground line-through mb-1.5">
                     {formatEur(product.compare_at_price_cents)}
                   </span>
                 )}
               </div>
 
               {product.short_description && (
-                <p className="text-lg text-muted-foreground leading-relaxed">
+                <p className="text-base text-muted-foreground leading-relaxed font-display italic">
                   {product.short_description}
                 </p>
               )}
 
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-4 text-xs font-mono uppercase tracking-wider text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <Truck className="size-4" />
+                  <Truck className="size-3.5" />
                   {product.shipping_cents === 0
                     ? t("product_detail.free_shipping")
                     : t("product_detail.shipping", { price: formatEur(product.shipping_cents) })}
@@ -410,16 +410,16 @@ export default function ProductDetail() {
                   <button
                     type="button"
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="size-10 grid place-items-center text-muted-foreground hover:text-foreground transition"
+                    className="size-11 grid place-items-center text-muted-foreground hover:text-foreground transition"
                     aria-label={t("product_detail.decrease")}
                   >
                     <Minus className="size-4" />
                   </button>
-                  <span className="w-10 text-center font-medium">{qty}</span>
+                  <span className="w-10 text-center font-medium font-display">{qty}</span>
                   <button
                     type="button"
                     onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
-                    className="size-10 grid place-items-center text-muted-foreground hover:text-foreground transition"
+                    className="size-11 grid place-items-center text-muted-foreground hover:text-foreground transition"
                     aria-label={t("product_detail.increase")}
                   >
                     <Plus className="size-4" />
@@ -429,7 +429,7 @@ export default function ProductDetail() {
                   size="lg"
                   onClick={() => handleAdd()}
                   disabled={!inStock}
-                  className="flex-1 sm:flex-none gap-2 min-w-48"
+                  className="flex-1 sm:flex-none gap-2 min-w-48 rounded-full h-11"
                 >
                   {justAdded ? (
                     <>
@@ -447,7 +447,7 @@ export default function ProductDetail() {
               {product.tags && product.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
                   {product.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="font-normal">
+                    <Badge key={tag} variant="secondary" className="font-normal font-mono text-[10px] uppercase tracking-wider">
                       {tag}
                     </Badge>
                   ))}
@@ -458,24 +458,30 @@ export default function ProductDetail() {
 
           {/* Description */}
           {product.description && (
-            <section className="mt-16 max-w-3xl">
-              <h2 className="font-display text-2xl font-semibold mb-4">
+            <section className="mt-20 max-w-3xl">
+              <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                — {t("product_detail.description_eyebrow", "Dettagli")}
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight mb-6">
                 {t("product_detail.description")}
               </h2>
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-base">
                 {product.description}
               </p>
             </section>
           )}
 
           {/* Reviews */}
-          <section className="mt-16">
-            <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+          <section className="mt-20">
+            <div className="flex items-end justify-between mb-8 pb-6 border-b border-border/60 flex-wrap gap-3">
               <div>
-                <h2 className="font-display text-2xl font-semibold">{t("reviews.title")}</h2>
-                <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                  — {t("product_detail.reviews_eyebrow", "Voci dei clienti")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight">{t("reviews.title")}</h2>
+                <div className="flex items-center gap-2 mt-3 text-sm text-muted-foreground">
                   <Stars value={Number(product.rating ?? 0)} />
-                  <span>
+                  <span className="font-mono text-xs">
                     {t("product_detail.rating_summary", {
                       rating: Number(product.rating ?? 0).toFixed(1),
                       count: product.reviews_count,
@@ -580,14 +586,17 @@ export default function ProductDetail() {
           </section>
 
           {/* Q&A */}
-          <section className="mt-16">
-            <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+          <section className="mt-20">
+            <div className="flex items-end justify-between mb-8 pb-6 border-b border-border/60 flex-wrap gap-3">
               <div>
-                <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
-                  <MessageCircleQuestion className="size-6 text-primary" />
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3 inline-flex items-center gap-2">
+                  <MessageCircleQuestion className="size-3.5" />
+                  — {t("product_detail.qa_eyebrow", "Domande")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight">
                   {t("qa.title")}
                 </h2>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-3 font-mono">
                   {t("qa.subtitle_other", {
                     count: questions.length,
                     brand: sellerName,
@@ -693,13 +702,18 @@ export default function ProductDetail() {
 
           {/* Related */}
           {related.length > 0 && (
-            <section className="mt-16">
-              <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
-                <h2 className="font-display text-2xl font-semibold">
-                  {t("product_detail.related", { brand: product.seller?.business_name ?? "" })}
-                </h2>
+            <section className="mt-20">
+              <div className="flex items-end justify-between mb-8 pb-6 border-b border-border/60 flex-wrap gap-3">
+                <div>
+                  <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                    — {t("product_detail.related_eyebrow", "Dallo stesso atelier")}
+                  </div>
+                  <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight">
+                    {t("product_detail.related", { brand: product.seller?.business_name ?? "" })}
+                  </h2>
+                </div>
                 {product.seller && (
-                  <Button asChild variant="ghost" size="sm">
+                  <Button asChild variant="ghost" size="sm" className="font-mono text-xs uppercase tracking-wider">
                     <Link to={`/store/${product.seller.slug}`}>{t("product_detail.see_all")}</Link>
                   </Button>
                 )}
