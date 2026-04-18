@@ -8,6 +8,7 @@ import { ShoppingBag, Star, Recycle, Leaf, Check, Store, Plus, ArrowRight } from
 import marketplaceHero from "@/assets/home-marketplace.jpg";
 import { WishlistButton } from "@/components/WishlistButton";
 import MotionCard from "@/components/MotionCard";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import MotionCard from "@/components/MotionCard";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { SkeletonWishlistGrid } from "@/components/EditorialSkeleton";
 import { useAuth } from "@/hooks/useAuth";
 import {

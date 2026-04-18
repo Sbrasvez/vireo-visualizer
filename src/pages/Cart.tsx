@@ -7,6 +7,7 @@ import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { Button } from "@/components/ui/button";
 import CTAButton from "@/components/CTAButton";
+import EditorialPageHeader from "@/components/EditorialPageHeader";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
