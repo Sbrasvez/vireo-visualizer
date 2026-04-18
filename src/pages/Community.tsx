@@ -242,7 +242,7 @@ function PostCard({ post, index }: { post: CommunityPost; index: number }) {
 
         {showComments && <CommentsSection postId={post.id} />}
       </div>
-    </article>
+    </MotionCard>
   );
 }
 
