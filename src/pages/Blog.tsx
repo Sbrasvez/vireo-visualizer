@@ -85,7 +85,12 @@ export default function Blog() {
             <h2 className="font-display text-3xl font-bold mb-10">{t("blog.all_articles")}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((a, i) => (
-                <article key={a.id} className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up cursor-pointer" style={{ animationDelay: `${i * 0.06}s` }}>
+                <MotionCard
+                  key={a.id}
+                  delay={i * 0.06}
+                  lift="medium"
+                  className="group rounded-2xl bg-card border border-border/60 overflow-hidden cursor-pointer"
+                >
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img src={a.img} alt={a.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width={1024} height={640} />
                     <Badge className="absolute top-3 left-3 bg-card/95 backdrop-blur text-foreground">{a.category}</Badge>
@@ -98,7 +103,7 @@ export default function Blog() {
                       <span className="flex items-center gap-1"><Clock className="size-3.5" /> {a.read}</span>
                     </div>
                   </div>
-                </article>
+                </MotionCard>
               ))}
             </div>
           </div>
