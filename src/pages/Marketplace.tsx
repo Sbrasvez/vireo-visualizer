@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { ShoppingBag, Star, Recycle, Leaf, Check, Store, Plus, ArrowRight } from "lucide-react";
 import marketplaceHero from "@/assets/home-marketplace.jpg";
 import { WishlistButton } from "@/components/WishlistButton";
+import MotionCard from "@/components/MotionCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
