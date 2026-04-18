@@ -458,24 +458,30 @@ export default function ProductDetail() {
 
           {/* Description */}
           {product.description && (
-            <section className="mt-16 max-w-3xl">
-              <h2 className="font-display text-2xl font-semibold mb-4">
+            <section className="mt-20 max-w-3xl">
+              <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                — {t("product_detail.description_eyebrow", "Dettagli")}
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight mb-6">
                 {t("product_detail.description")}
               </h2>
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-base">
                 {product.description}
               </p>
             </section>
           )}
 
           {/* Reviews */}
-          <section className="mt-16">
-            <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+          <section className="mt-20">
+            <div className="flex items-end justify-between mb-8 pb-6 border-b border-border/60 flex-wrap gap-3">
               <div>
-                <h2 className="font-display text-2xl font-semibold">{t("reviews.title")}</h2>
-                <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                  — {t("product_detail.reviews_eyebrow", "Voci dei clienti")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight">{t("reviews.title")}</h2>
+                <div className="flex items-center gap-2 mt-3 text-sm text-muted-foreground">
                   <Stars value={Number(product.rating ?? 0)} />
-                  <span>
+                  <span className="font-mono text-xs">
                     {t("product_detail.rating_summary", {
                       rating: Number(product.rating ?? 0).toFixed(1),
                       count: product.reviews_count,
@@ -580,14 +586,17 @@ export default function ProductDetail() {
           </section>
 
           {/* Q&A */}
-          <section className="mt-16">
-            <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+          <section className="mt-20">
+            <div className="flex items-end justify-between mb-8 pb-6 border-b border-border/60 flex-wrap gap-3">
               <div>
-                <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
-                  <MessageCircleQuestion className="size-6 text-primary" />
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3 inline-flex items-center gap-2">
+                  <MessageCircleQuestion className="size-3.5" />
+                  — {t("product_detail.qa_eyebrow", "Domande")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight">
                   {t("qa.title")}
                 </h2>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-3 font-mono">
                   {t("qa.subtitle_other", {
                     count: questions.length,
                     brand: sellerName,
@@ -693,13 +702,18 @@ export default function ProductDetail() {
 
           {/* Related */}
           {related.length > 0 && (
-            <section className="mt-16">
-              <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
-                <h2 className="font-display text-2xl font-semibold">
-                  {t("product_detail.related", { brand: product.seller?.business_name ?? "" })}
-                </h2>
+            <section className="mt-20">
+              <div className="flex items-end justify-between mb-8 pb-6 border-b border-border/60 flex-wrap gap-3">
+                <div>
+                  <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                    — {t("product_detail.related_eyebrow", "Dallo stesso atelier")}
+                  </div>
+                  <h2 className="font-display text-3xl sm:text-4xl font-light leading-tight">
+                    {t("product_detail.related", { brand: product.seller?.business_name ?? "" })}
+                  </h2>
+                </div>
                 {product.seller && (
-                  <Button asChild variant="ghost" size="sm">
+                  <Button asChild variant="ghost" size="sm" className="font-mono text-xs uppercase tracking-wider">
                     <Link to={`/store/${product.seller.slug}`}>{t("product_detail.see_all")}</Link>
                   </Button>
                 )}
