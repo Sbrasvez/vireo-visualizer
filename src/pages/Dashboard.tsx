@@ -236,12 +236,8 @@ export default function Dashboard() {
               </Link>
             </Button>
           </div>
-          {nearbyRestaurants.length === 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <SkeletonCard key={i} />
-              ))}
-            </div>
+          {restaurantsLoading || nearbyRestaurants.length === 0 ? (
+            <SkeletonNearbyRestaurantGrid count={3} />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {nearbyRestaurants.map((r, i) => (
