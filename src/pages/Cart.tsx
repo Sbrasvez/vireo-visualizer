@@ -170,9 +170,9 @@ export default function Cart() {
                     {formatEur(totalCents + shippingCents)}
                   </span>
                 </div>
-                <Button size="lg" className="w-full rounded-full" onClick={startCheckout}>
+                <CTAButton size="lg" className="w-full" onClick={startCheckout}>
                   {t("cart.checkout_btn", "Procedi al checkout")}
-                </Button>
+                </CTAButton>
               </div>
             </div>
           )}
