@@ -69,18 +69,28 @@ export default function Recipes() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-24">
-        <section className="relative py-16 gradient-soft overflow-hidden">
-          <div className="absolute top-10 right-10 size-72 rounded-full bg-primary/10 blur-3xl animate-float" />
-          <div className="container relative">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6 animate-fade-up">
-                <ChefHat className="size-4" />
-                <span>{t("recipes.badge")}</span>
+        {/* HERO — editorial Tactile Market */}
+        <section className="relative overflow-hidden border-b border-border/50">
+          <div className="absolute inset-0">
+            <img src={recipesHero} alt="" className="w-full h-full object-cover" width={1920} height={1080} />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/92 to-background/40" />
+          </div>
+          <div className="container relative py-20 lg:py-28">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-6 animate-fade-up">
+                <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">N°03</span>
+                <span className="h-px flex-1 max-w-[60px] bg-border" />
+                <div className="inline-flex items-center gap-2 text-xs font-medium text-primary uppercase tracking-wider">
+                  <ChefHat className="size-3.5" />
+                  <span>{t("recipes.badge")}</span>
+                </div>
               </div>
-              <h1 className="font-display text-5xl sm:text-6xl font-bold mb-5 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
-                {t("recipes.title_1")} <span className="italic text-gradient-leaf">{t("recipes.title_vegan")}</span> {t("recipes.title_2")}
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-light leading-[0.95] mb-6 text-balance animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                {t("recipes.title_1")}{" "}
+                <em className="italic font-normal text-primary">{t("recipes.title_vegan")}</em>{" "}
+                {t("recipes.title_2")}
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+              <p className="text-lg text-muted-foreground mb-8 max-w-xl leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
                 {t("recipes.subtitle")}
               </p>
 
@@ -91,7 +101,7 @@ export default function Recipes() {
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                     placeholder={t("recipes.search_placeholder")}
-                    className="pl-12 h-14 rounded-xl text-base border-border bg-card"
+                    className="pl-12 h-14 rounded-xl text-base border-border bg-card/95 backdrop-blur-sm shadow-soft"
                   />
                 </div>
               </div>
