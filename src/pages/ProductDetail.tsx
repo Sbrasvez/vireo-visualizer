@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import CTAButton from "@/components/CTAButton";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonProductDetail } from "@/components/EditorialSkeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

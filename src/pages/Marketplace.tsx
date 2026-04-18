@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatEur } from "@/lib/catalog";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonProductGrid } from "@/components/EditorialSkeleton";
 
 const CATEGORIES = [
   { key: "all", label: "Tutti" },
