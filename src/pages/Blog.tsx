@@ -5,6 +5,7 @@ import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import MotionCard from "@/components/MotionCard";
 import b1 from "@/assets/blog-1.jpg";
 import b2 from "@/assets/blog-2.jpg";
 import b3 from "@/assets/blog-3.jpg";
