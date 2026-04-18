@@ -69,17 +69,29 @@ export default function Store() {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 pt-24 pb-20">
-        <section className="relative h-64 md:h-80 bg-gradient-to-br from-primary/20 via-tertiary/15 to-secondary/20 overflow-hidden">
-          {seller.cover_url && (
+        {/* Cover — editorial */}
+        <section className="relative h-72 md:h-96 overflow-hidden border-b border-border/50">
+          {seller.cover_url ? (
             <img src={seller.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          ) : (
+            <div className="absolute inset-0 gradient-soft" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         </section>
 
-        <div className="container max-w-5xl -mt-20 relative">
-          <div className="bg-card rounded-2xl border border-border/60 p-6 md:p-8 shadow-elegant">
-            <div className="flex items-start gap-5 flex-wrap">
-              <div className="size-24 rounded-2xl bg-primary/10 grid place-items-center overflow-hidden shrink-0">
+        <div className="container max-w-6xl -mt-28 md:-mt-32 relative">
+          {/* Atelier identity card */}
+          <div className="bg-card rounded-2xl border border-border/40 p-6 md:p-10 shadow-elegant">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase">— Atelier</span>
+              <span className="h-px flex-1 max-w-[60px] bg-border" />
+              {seller.is_demo && <Badge variant="secondary" className="font-mono text-[10px] tracking-wider uppercase">{t("store.demo")}</Badge>}
+              <Badge className="bg-primary/10 text-primary border-0 font-mono text-[10px] tracking-wider uppercase gap-1">
+                <Leaf className="size-3" /> {t("store.verified")}
+              </Badge>
+            </div>
+            <div className="flex items-start gap-6 flex-wrap">
+              <div className="size-20 md:size-24 rounded-2xl bg-primary/10 grid place-items-center overflow-hidden shrink-0 border border-border/40">
                 {seller.logo_url ? (
                   <img src={seller.logo_url} alt={seller.business_name} className="w-full h-full object-cover" />
                 ) : (
@@ -87,64 +99,100 @@ export default function Store() {
                 )}
               </div>
               <div className="flex-1 min-w-[200px]">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <h1 className="font-display text-3xl md:text-4xl font-bold">{seller.business_name}</h1>
-                  {seller.is_demo && <Badge variant="secondary">{t("store.demo")}</Badge>}
-                  <Badge className="bg-primary/10 text-primary">{t("store.verified")}</Badge>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                  <span className="flex items-center gap-1">
-                    <Star className="size-4 fill-tertiary text-tertiary" />
-                    <strong className="text-foreground">{(seller.rating ?? 0).toFixed(1)}</strong>
+                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-4 text-balance">
+                  {seller.business_name}
+                </h1>
+                <div className="flex items-center gap-4 text-xs font-mono uppercase tracking-wider text-muted-foreground mb-4">
+                  <span className="flex items-center gap-1.5">
+                    <Star className="size-3.5 fill-tertiary text-tertiary" />
+                    <strong className="text-foreground font-display text-base font-normal">{(seller.rating ?? 0).toFixed(1)}</strong>
                   </span>
+                  <span>·</span>
                   <span>{t("store.orders", { count: seller.total_orders })}</span>
-                  {seller.category && <Badge variant="outline">{seller.category}</Badge>}
+                  {seller.category && (
+                    <>
+                      <span>·</span>
+                      <span>{seller.category}</span>
+                    </>
+                  )}
                 </div>
-                {seller.description && <p className="text-muted-foreground">{seller.description}</p>}
+                {seller.description && (
+                  <p className="text-muted-foreground leading-relaxed font-display italic max-w-2xl">{seller.description}</p>
+                )}
               </div>
             </div>
           </div>
 
-          <h2 className="font-display text-2xl font-bold mt-12 mb-6">{t("store.products_count", { count: products.length })}</h2>
+          {/* Editorial section header */}
+          <div className="flex items-end justify-between gap-6 mt-16 mb-10 pb-6 border-b border-border/60 flex-wrap">
+            <div>
+              <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                — {t("store.collection_eyebrow", "La collezione")}
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
+                {t("store.products_count", { count: products.length })}
+              </h2>
+            </div>
+          </div>
 
           {loadingProducts ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="aspect-[3/4] rounded-2xl" />)}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="space-y-3">
+                  <Skeleton className="aspect-[4/5] rounded-xl" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-6 w-1/2" />
+                </div>
+              ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-16 rounded-2xl border border-border/60 bg-card">
+            <div className="text-center py-20 rounded-2xl border border-dashed border-border bg-card/50">
               <ShoppingBag className="size-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground">{t("store.no_products")}</p>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
               {products.map((p, i) => {
                 const recentlyAdded = justAdded === p.id;
                 const img = p.primary_image ?? p.images[0] ?? "/placeholder.svg";
                 const outOfStock = !p.unlimited_stock && p.stock <= 0;
                 return (
-                  <article key={p.id} className="rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up" style={{ animationDelay: `${i * 0.04}s` }}>
-                    <Link to={`/product/${p.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
-                      <img src={img} alt={p.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                  <article
+                    key={p.id}
+                    className="group animate-fade-up"
+                    style={{ animationDelay: `${Math.min(i, 12) * 0.04}s` }}
+                  >
+                    <Link to={`/product/${p.slug}`} className="relative aspect-[4/5] overflow-hidden bg-muted block rounded-xl mb-4">
+                      <img
+                        src={img}
+                        alt={p.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-                        {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
-                        {p.is_reused && <Badge variant="secondary" className="gap-1"><Recycle className="size-3" />{t("seller_dashboard.reused")}</Badge>}
-                        {outOfStock && <Badge variant="destructive">{t("store.out_of_stock")}</Badge>}
+                        {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground font-mono text-[10px] tracking-wider uppercase">Bio</Badge>}
+                        {p.is_reused && <Badge variant="secondary" className="gap-1 font-mono text-[10px] tracking-wider uppercase"><Recycle className="size-3" />{t("seller_dashboard.reused")}</Badge>}
+                        {outOfStock && <Badge variant="destructive" className="font-mono text-[10px] tracking-wider uppercase">{t("store.out_of_stock")}</Badge>}
                       </div>
                     </Link>
-                    <div className="p-4">
-                      <Link to={`/product/${p.slug}`} className="block hover:text-primary transition-colors">
-                        <h3 className="font-display font-semibold mb-2 line-clamp-2 min-h-[2.5em]">{p.name}</h3>
-                      </Link>
-                      <div className="flex items-end justify-between">
-                        <div>
-                          <div className="font-display text-xl font-bold">{formatEur(p.price_cents)}</div>
-                          {p.compare_at_price_cents && <div className="text-xs text-muted-foreground line-through">{formatEur(p.compare_at_price_cents)}</div>}
-                        </div>
-                        <Button size="sm" variant={recentlyAdded ? "default" : "outline"} onClick={() => handleAdd(p)} disabled={outOfStock}>
-                          {recentlyAdded ? <Check className="size-4" /> : <Plus className="size-4" />}
-                        </Button>
+                    <Link to={`/product/${p.slug}`} className="block">
+                      <h3 className="font-display text-lg font-normal leading-snug mb-3 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.6em]">{p.name}</h3>
+                    </Link>
+                    <div className="flex items-end justify-between pt-3 border-t border-border/50">
+                      <div>
+                        <div className="font-display text-2xl font-light">{formatEur(p.price_cents)}</div>
+                        {p.compare_at_price_cents && <div className="text-xs text-muted-foreground line-through">{formatEur(p.compare_at_price_cents)}</div>}
                       </div>
+                      <Button
+                        size="sm"
+                        variant={recentlyAdded ? "default" : "outline"}
+                        onClick={() => handleAdd(p)}
+                        disabled={outOfStock}
+                        className="rounded-full h-9 w-9 p-0 transition-transform hover:scale-110"
+                      >
+                        {recentlyAdded ? <Check className="size-4" /> : <Plus className="size-4" />}
+                      </Button>
                     </div>
                   </article>
                 );
