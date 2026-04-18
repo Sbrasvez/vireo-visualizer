@@ -140,18 +140,33 @@ export default function Marketplace() {
           </div>
         </section>
 
-        <section className="py-20">
+        <section className="py-16 lg:py-20">
           <div className="container">
+            <div className="flex items-end justify-between gap-6 mb-10 pb-6 border-b border-border/60 flex-wrap">
+              <div>
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                  — {t("marketplace.section_eyebrow", "Curated selection")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
+                  {t("marketplace.section_title", "Oggetti che")}{" "}
+                  <em className="italic text-primary">{t("marketplace.section_title_em", "raccontano una storia")}</em>
+                </h2>
+              </div>
+              {!isLoading && visible.length > 0 && (
+                <p className="text-sm text-muted-foreground font-mono">
+                  {visible.length} {t("marketplace.items_count", "pezzi disponibili")}
+                </p>
+              )}
+            </div>
+
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="rounded-2xl bg-card border border-border/60 overflow-hidden">
-                    <Skeleton className="aspect-square w-full" />
-                    <div className="p-4 space-y-2">
-                      <Skeleton className="h-3 w-1/3" />
-                      <Skeleton className="h-5 w-3/4" />
-                      <Skeleton className="h-8 w-1/2" />
-                    </div>
+                  <div key={i} className="space-y-3">
+                    <Skeleton className="aspect-[4/5] w-full rounded-xl" />
+                    <Skeleton className="h-3 w-1/3" />
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-8 w-1/2" />
                   </div>
                 ))}
               </div>
