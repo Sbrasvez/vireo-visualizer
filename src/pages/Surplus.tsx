@@ -30,7 +30,7 @@ function formatTimeWindow(start: string, end: string) {
   return `${fmt(s)}–${fmt(e)}`;
 }
 
-function MagicBagCard({ bag }: { bag: MagicBag }) {
+function MagicBagCard({ bag, index }: { bag: MagicBag; index: number }) {
   const { user } = useAuth();
   const { mutate, isPending } = useReserveMagicBag();
   const discount = Math.round(
@@ -38,13 +38,15 @@ function MagicBagCard({ bag }: { bag: MagicBag }) {
   );
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-40 bg-muted">
+    <article
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all duration-500 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.25)]"
+    >
+      <div className="relative aspect-[4/5] overflow-hidden bg-muted">
         {bag.image_url || bag.restaurant?.cover_image ? (
           <img
             src={bag.image_url ?? bag.restaurant?.cover_image ?? ""}
             alt={bag.title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
             loading="lazy"
           />
         ) : (
@@ -52,41 +54,51 @@ function MagicBagCard({ bag }: { bag: MagicBag }) {
             <Package className="size-12 text-primary/60" />
           </div>
         )}
-        <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground">
-          -{discount}%
-        </Badge>
-        <Badge variant="secondary" className="absolute top-2 right-2 gap-1">
-          <Leaf className="size-3" /> {bag.co2_saved_kg}kg CO₂
-        </Badge>
-      </div>
-      <CardContent className="p-4 space-y-3">
-        <div>
-          <Badge variant="outline" className="mb-1.5 text-xs">
-            {categoryLabels[bag.category] ?? bag.category}
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
+        <div className="absolute top-3 left-3 flex items-center gap-1.5">
+          <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-white/90 bg-black/30 backdrop-blur px-2 py-1 rounded-full">
+            N°{String(index + 1).padStart(2, "0")}
+          </span>
+          <Badge className="bg-destructive/90 text-destructive-foreground border-0 backdrop-blur">
+            -{discount}%
           </Badge>
-          <h3 className="font-semibold leading-tight">{bag.title}</h3>
+        </div>
+        <div className="absolute top-3 right-3">
+          <Badge variant="secondary" className="gap-1 backdrop-blur bg-background/80">
+            <Leaf className="size-3" /> {bag.co2_saved_kg}kg
+          </Badge>
+        </div>
+      </div>
+      <div className="flex flex-col flex-1 p-5 space-y-3">
+        <div>
+          <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1.5">
+            {categoryLabels[bag.category] ?? bag.category}
+          </p>
+          <h3 className="font-display text-lg leading-tight text-foreground">
+            {bag.title}
+          </h3>
           {bag.restaurant && (
-            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1.5">
               <MapPin className="size-3" />
               {bag.restaurant.name} · {bag.restaurant.city}
             </p>
           )}
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span className="flex items-center gap-1 text-muted-foreground">
+          <span className="flex items-center gap-1.5 text-muted-foreground">
             <Clock className="size-3.5" />
             {formatTimeWindow(bag.pickup_start, bag.pickup_end)}
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="font-mono text-[10px] tracking-wider uppercase text-muted-foreground">
             {bag.quantity_available} disp.
           </span>
         </div>
-        <div className="flex items-end justify-between pt-2 border-t">
+        <div className="flex items-end justify-between pt-3 mt-auto border-t border-border/60">
           <div>
-            <span className="text-xs text-muted-foreground line-through">
+            <span className="font-mono text-[10px] text-muted-foreground line-through">
               €{bag.original_price.toFixed(2)}
             </span>
-            <p className="text-xl font-bold text-primary">
+            <p className="font-display text-2xl font-light text-primary leading-none mt-0.5">
               €{bag.discounted_price.toFixed(2)}
             </p>
           </div>
@@ -95,17 +107,18 @@ function MagicBagCard({ bag }: { bag: MagicBag }) {
               size="sm"
               onClick={() => mutate({ bagId: bag.id })}
               disabled={isPending}
+              className="rounded-full"
             >
               {isPending ? "..." : "Riserva"}
             </Button>
           ) : (
-            <Button size="sm" asChild>
+            <Button size="sm" asChild className="rounded-full">
               <Link to="/login">Accedi</Link>
             </Button>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </article>
   );
 }
 
@@ -130,32 +143,50 @@ export default function Surplus() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <header className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Sparkles className="size-6 text-primary" />
-            <h1 className="text-3xl font-display font-bold">Anti-spreco</h1>
+      <div className="space-y-10">
+        {/* Editorial header */}
+        <header className="space-y-5 animate-fade-in">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-primary/40" />
+            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary">
+              Anti-spreco · Magic Bags
+            </span>
           </div>
-          <p className="text-muted-foreground">
-            Salva pasti e cibo buono dai ristoranti vicini, fino al -70%. Ogni
-            Magic Bag evita ~2.5 kg di CO₂.
-          </p>
-          <div className="flex flex-wrap gap-3 text-sm pt-2">
-            <Badge variant="secondary" className="gap-1">
-              <Package className="size-3" /> {bags?.length ?? 0} disponibili oggi
-            </Badge>
-            <Badge variant="secondary" className="gap-1">
-              <Leaf className="size-3" /> {totalCo2Saved.toFixed(1)} kg CO₂ salvabili
-            </Badge>
+          <div className="space-y-3">
+            <h1 className="font-display text-4xl sm:text-5xl font-light leading-[1.05] text-foreground">
+              Salva il <em className="italic font-normal text-primary">cibo buono</em>,
+              <br className="hidden sm:block" />
+              riduci lo spreco.
+            </h1>
+            <p className="text-muted-foreground max-w-xl leading-relaxed">
+              Pasti e prodotti dai ristoranti vicini fino al{" "}
+              <span className="text-foreground font-medium">-70%</span>. Ogni Magic
+              Bag evita circa 2,5 kg di CO₂.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 pt-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
+              <Package className="size-3.5 text-primary" />
+              <span className="font-mono tabular-nums">{bags?.length ?? 0}</span>
+              <span className="text-muted-foreground">disponibili oggi</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
+              <Leaf className="size-3.5 text-primary" />
+              <span className="font-mono tabular-nums">{totalCo2Saved.toFixed(1)}</span>
+              <span className="text-muted-foreground">kg CO₂ salvabili</span>
+            </span>
           </div>
         </header>
 
         {user && myReservations && myReservations.length > 0 && (
-          <Card className="bg-primary/5 border-primary/30">
-            <CardContent className="p-4 space-y-3">
-              <h2 className="font-semibold flex items-center gap-2">
-                <Ticket className="size-4" /> Le tue prenotazioni attive
-              </h2>
+          <Card className="border-primary/20 bg-primary/5">
+            <CardContent className="p-5 space-y-3">
+              <div className="flex items-center gap-2">
+                <Ticket className="size-4 text-primary" />
+                <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-primary">
+                  Prenotazioni attive
+                </p>
+              </div>
               <div className="space-y-2">
                 {myReservations
                   .filter((r: any) => r.status === "reserved")
@@ -163,11 +194,13 @@ export default function Surplus() {
                   .map((r: any) => (
                     <div
                       key={r.id}
-                      className="flex items-center justify-between text-sm bg-background rounded-md p-2"
+                      className="flex items-center justify-between gap-3 text-sm bg-background rounded-xl p-3 border border-border/40"
                     >
-                      <div>
-                        <p className="font-medium">{r.magic_bag?.title}</p>
-                        <p className="text-xs text-muted-foreground">
+                      <div className="min-w-0">
+                        <p className="font-display font-medium truncate">
+                          {r.magic_bag?.title}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
                           {r.magic_bag?.restaurant?.name} ·{" "}
                           {r.magic_bag &&
                             formatTimeWindow(
@@ -176,7 +209,7 @@ export default function Surplus() {
                             )}
                         </p>
                       </div>
-                      <Badge className="font-mono tracking-wider">
+                      <Badge className="font-mono tracking-[0.15em] text-xs shrink-0">
                         {r.pickup_code}
                       </Badge>
                     </div>
@@ -186,30 +219,52 @@ export default function Surplus() {
           </Card>
         )}
 
+        {/* Section divider */}
+        <div className="flex items-center gap-3 pt-2">
+          <span className="h-px flex-1 bg-border" />
+          <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">
+            Selezione di oggi
+          </span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
         <Tabs value={category} onValueChange={setCategory}>
-          <TabsList>
-            <TabsTrigger value="all">Tutto</TabsTrigger>
-            <TabsTrigger value="meal">Pasti</TabsTrigger>
-            <TabsTrigger value="bakery">Panetteria</TabsTrigger>
-            <TabsTrigger value="mixed">Sorprese</TabsTrigger>
+          <TabsList className="bg-transparent gap-1 h-auto p-0 flex-wrap justify-start">
+            {[
+              { v: "all", l: "Tutto" },
+              { v: "meal", l: "Pasti" },
+              { v: "bakery", l: "Panetteria" },
+              { v: "mixed", l: "Sorprese" },
+            ].map((t) => (
+              <TabsTrigger
+                key={t.v}
+                value={t.v}
+                className="rounded-full border border-border/60 bg-card px-4 py-1.5 text-xs font-mono tracking-wider uppercase data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary"
+              >
+                {t.l}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
-          <TabsContent value={category} className="mt-6">
+          <TabsContent value={category} className="mt-8">
             {isLoading ? (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className="h-72 rounded-xl" />
+                  <Skeleton key={i} className="aspect-[4/5] rounded-2xl" />
                 ))}
               </div>
             ) : filtered.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
-                <Package className="size-12 mx-auto mb-3 opacity-30" />
-                <p>Nessuna Magic Bag disponibile in questa categoria.</p>
+              <div className="text-center py-16 text-muted-foreground border border-dashed border-border/60 rounded-2xl">
+                <Sparkles className="size-10 mx-auto mb-3 opacity-30" />
+                <p className="font-display text-lg">
+                  Nessuna Magic Bag in questa categoria
+                </p>
+                <p className="text-sm mt-1">Torna più tardi o esplora altre categorie.</p>
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {filtered.map((b) => (
-                  <MagicBagCard key={b.id} bag={b} />
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filtered.map((b, i) => (
+                  <MagicBagCard key={b.id} bag={b} index={i} />
                 ))}
               </div>
             )}

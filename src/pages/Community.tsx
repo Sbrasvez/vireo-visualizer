@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, MessageCircle, ImagePlus, Send, Users, Loader2 } from "lucide-react";
+import { Heart, MessageCircle, ImagePlus, Send, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -59,16 +59,22 @@ function CreatePostDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button><ImagePlus className="size-4 mr-2" /> Pubblica</Button>
+        <Button className="rounded-full">
+          <ImagePlus className="size-4 mr-2" /> Pubblica
+        </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader><DialogTitle>Condividi un piatto</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle className="font-display text-2xl font-light">
+            Condividi un piatto
+          </DialogTitle>
+        </DialogHeader>
         <div className="space-y-3">
           <Input placeholder="Titolo (es. Pasta zucchine e menta)" value={title} onChange={(e) => setTitle(e.target.value)} />
           <Textarea placeholder="Racconta la ricetta o l'ispirazione…" value={body} onChange={(e) => setBody(e.target.value)} rows={4} />
           <Input type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] ?? null)} />
           <Input placeholder="Tag (separati da virgola): vegano, estate" value={tags} onChange={(e) => setTags(e.target.value)} />
-          <Button onClick={submit} disabled={create.isPending || !title.trim()} className="w-full">
+          <Button onClick={submit} disabled={create.isPending || !title.trim()} className="w-full rounded-full">
             {create.isPending ? <Loader2 className="size-4 animate-spin" /> : "Pubblica"}
           </Button>
         </div>
@@ -84,23 +90,23 @@ function CommentsSection({ postId }: { postId: string }) {
   const { user } = useAuth();
 
   return (
-    <div className="border-t pt-3 mt-3 space-y-3">
+    <div className="border-t border-border/60 pt-4 mt-4 space-y-3">
       {isLoading ? (
         <Skeleton className="h-4 w-32" />
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {comments.length === 0 && (
-            <p className="text-xs text-muted-foreground">Nessun commento ancora.</p>
+            <p className="text-xs text-muted-foreground italic">Nessun commento ancora.</p>
           )}
           {comments.map((c: any) => (
             <div key={c.id} className="flex gap-2 text-sm">
               <Avatar className="size-7">
                 <AvatarImage src={c.author?.avatar_url ?? undefined} />
-                <AvatarFallback>{c.author?.display_name?.[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+                <AvatarFallback className="text-xs">{c.author?.display_name?.[0]?.toUpperCase() ?? "?"}</AvatarFallback>
               </Avatar>
-              <div className="flex-1 bg-muted rounded-lg px-3 py-1.5">
+              <div className="flex-1 bg-muted/60 rounded-2xl px-3 py-2">
                 <p className="text-xs font-semibold">{c.author?.display_name ?? "Utente"}</p>
-                <p>{c.body}</p>
+                <p className="text-sm">{c.body}</p>
               </div>
             </div>
           ))}
@@ -108,69 +114,131 @@ function CommentsSection({ postId }: { postId: string }) {
       )}
       {user && (
         <div className="flex gap-2">
-          <Input value={body} onChange={(e) => setBody(e.target.value)} placeholder="Scrivi un commento…" onKeyDown={(e) => {
-            if (e.key === "Enter" && body.trim()) {
+          <Input
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="Scrivi un commento…"
+            className="rounded-full"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && body.trim()) {
+                addComment.mutate({ postId, body });
+                setBody("");
+              }
+            }}
+          />
+          <Button
+            size="icon"
+            disabled={!body.trim() || addComment.isPending}
+            className="rounded-full shrink-0"
+            onClick={() => {
               addComment.mutate({ postId, body });
               setBody("");
-            }
-          }} />
-          <Button size="icon" disabled={!body.trim() || addComment.isPending} onClick={() => {
-            addComment.mutate({ postId, body });
-            setBody("");
-          }}><Send className="size-4" /></Button>
+            }}
+          >
+            <Send className="size-4" />
+          </Button>
         </div>
       )}
     </div>
   );
 }
 
-function PostCard({ post }: { post: CommunityPost }) {
+function PostCard({ post, index }: { post: CommunityPost; index: number }) {
   const toggleLike = useToggleLike();
   const [showComments, setShowComments] = useState(false);
   const { user } = useAuth();
 
   return (
-    <Card>
-      <CardContent className="p-4 space-y-3">
-        <div className="flex items-center gap-2">
-          <Avatar className="size-9">
-            <AvatarImage src={post.author?.avatar_url ?? undefined} />
-            <AvatarFallback>{post.author?.display_name?.[0]?.toUpperCase() ?? "?"}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <p className="font-semibold text-sm">{post.author?.display_name ?? "Utente Vireo"}</p>
-            <p className="text-xs text-muted-foreground">{timeAgo(post.created_at)}</p>
+    <article className="group rounded-2xl border border-border/60 bg-card overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.2)]">
+      <div className="p-5 space-y-4">
+        {/* Author + index */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-3">
+            <Avatar className="size-10 ring-2 ring-background">
+              <AvatarImage src={post.author?.avatar_url ?? undefined} />
+              <AvatarFallback>{post.author?.display_name?.[0]?.toUpperCase() ?? "?"}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-display text-sm font-medium leading-tight">
+                {post.author?.display_name ?? "Utente Vireo"}
+              </p>
+              <p className="text-xs text-muted-foreground font-mono tracking-wider">
+                {timeAgo(post.created_at)}
+              </p>
+            </div>
           </div>
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+            N°{String(index + 1).padStart(2, "0")}
+          </span>
         </div>
+
+        {/* Title + body */}
         <div>
-          <h3 className="font-display text-lg">{post.title}</h3>
-          {post.body && <p className="text-sm text-muted-foreground mt-1">{post.body}</p>}
+          <h3 className="font-display text-2xl font-light leading-snug text-foreground">
+            {post.title}
+          </h3>
+          {post.body && (
+            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+              {post.body}
+            </p>
+          )}
         </div>
-        {post.image_url && (
-          <img src={post.image_url} alt={post.title} loading="lazy" className="w-full rounded-lg object-cover max-h-96" />
-        )}
+      </div>
+
+      {/* Image */}
+      {post.image_url && (
+        <div className="relative overflow-hidden bg-muted">
+          <img
+            src={post.image_url}
+            alt={post.title}
+            loading="lazy"
+            className="w-full object-cover max-h-[500px] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+          />
+        </div>
+      )}
+
+      <div className="p-5 pt-4 space-y-3">
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {post.tags.map((t) => <Badge key={t} variant="outline" className="text-xs">#{t}</Badge>)}
+            {post.tags.map((t) => (
+              <Badge
+                key={t}
+                variant="outline"
+                className="text-[10px] font-mono tracking-wider uppercase border-border/60"
+              >
+                #{t}
+              </Badge>
+            ))}
           </div>
         )}
-        <div className="flex items-center gap-4 pt-1 border-t">
+
+        <div className="flex items-center gap-1 pt-3 border-t border-border/60">
           <Button
             variant="ghost"
             size="sm"
             disabled={!user}
             onClick={() => toggleLike.mutate({ postId: post.id, liked: !!post.liked_by_me })}
-            className={post.liked_by_me ? "text-destructive" : ""}
+            className={`rounded-full transition-all ${post.liked_by_me ? "text-destructive" : ""}`}
           >
-            <Heart className={`size-4 mr-1.5 ${post.liked_by_me ? "fill-current" : ""}`} /> {post.likes_count}
+            <Heart
+              className={`size-4 mr-1.5 transition-transform ${post.liked_by_me ? "fill-current scale-110" : ""}`}
+            />
+            <span className="font-mono tabular-nums text-xs">{post.likes_count}</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setShowComments((v) => !v)}>
-            <MessageCircle className="size-4 mr-1.5" /> {post.comments_count}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowComments((v) => !v)}
+            className="rounded-full"
+          >
+            <MessageCircle className="size-4 mr-1.5" />
+            <span className="font-mono tabular-nums text-xs">{post.comments_count}</span>
           </Button>
         </div>
+
         {showComments && <CommentsSection postId={post.id} />}
-      </CardContent>
-    </Card>
+      </div>
+    </article>
   );
 }
 
@@ -180,33 +248,55 @@ export default function Community() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-2xl mx-auto">
-        <header className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <Users className="size-6 text-primary" />
-              <h1 className="text-3xl font-display font-bold">Community</h1>
-            </div>
-            <p className="text-muted-foreground mt-1">Condividi i tuoi piatti, ispira la community Vireo.</p>
+      <div className="space-y-10 max-w-2xl mx-auto">
+        {/* Editorial header */}
+        <header className="space-y-5 animate-fade-in">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-primary/40" />
+            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary">
+              Community · Voci e piatti
+            </span>
           </div>
-          {user ? <CreatePostDialog /> : <Button asChild><Link to="/login">Accedi per pubblicare</Link></Button>}
+          <div className="flex items-end justify-between gap-4 flex-wrap">
+            <h1 className="font-display text-4xl sm:text-5xl font-light leading-[1.05] text-foreground">
+              Racconti dalla <em className="italic font-normal text-primary">cucina viva</em>.
+            </h1>
+            {user ? (
+              <CreatePostDialog />
+            ) : (
+              <Button asChild className="rounded-full">
+                <Link to="/login">Accedi per pubblicare</Link>
+              </Button>
+            )}
+          </div>
+          <p className="text-muted-foreground max-w-xl leading-relaxed">
+            Condividi i tuoi piatti, ispira chi cucina con te. Una community che cresce
+            piatto dopo piatto.
+          </p>
         </header>
 
+        {/* Section divider */}
+        <div className="flex items-center gap-3">
+          <span className="h-px flex-1 bg-border" />
+          <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">
+            {posts?.length ?? 0} pubblicazioni
+          </span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
         {isLoading ? (
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-64 rounded-xl" />)}
+          <div className="space-y-6">
+            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-72 rounded-2xl" />)}
           </div>
         ) : posts && posts.length > 0 ? (
-          <div className="space-y-4">
-            {posts.map((p) => <PostCard key={p.id} post={p} />)}
+          <div className="space-y-6">
+            {posts.map((p, i) => <PostCard key={p.id} post={p} index={i} />)}
           </div>
         ) : (
-          <Card>
-            <CardContent className="py-12 text-center text-muted-foreground">
-              <Users className="size-12 mx-auto mb-3 opacity-30" />
-              <p>Nessun post ancora. Sii il primo a condividere un piatto!</p>
-            </CardContent>
-          </Card>
+          <div className="border border-dashed border-border/60 rounded-2xl py-16 text-center text-muted-foreground">
+            <p className="font-display text-xl mb-2">Nessun racconto ancora</p>
+            <p className="text-sm">Sii il primo a condividere un piatto con la community.</p>
+          </div>
         )}
       </div>
     </DashboardLayout>
