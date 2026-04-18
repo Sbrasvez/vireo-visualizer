@@ -171,13 +171,13 @@ export default function Marketplace() {
                 ))}
               </div>
             ) : visible.length === 0 ? (
-              <div className="text-center py-20 rounded-2xl border border-border/60 bg-card">
+              <div className="text-center py-20 rounded-2xl border border-dashed border-border bg-card/50">
                 <ShoppingBag className="size-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="font-display text-xl font-semibold mb-2">{t("marketplace.no_results")}</h3>
+                <h3 className="font-display text-2xl font-light mb-2">{t("marketplace.no_results")}</h3>
                 <p className="text-sm text-muted-foreground">{t("marketplace.no_results_desc")}</p>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
                 {visible.map((p, i) => {
                   const inCart = items.find((it) => it.priceId === p.id);
                   const recentlyAdded = justAdded === p.id;
@@ -186,50 +186,51 @@ export default function Marketplace() {
                   return (
                     <article
                       key={p.id}
-                      className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover-lift animate-fade-up"
-                      style={{ animationDelay: `${i * 0.04}s` }}
+                      className="group animate-fade-up"
+                      style={{ animationDelay: `${Math.min(i, 12) * 0.04}s` }}
                     >
-                      <Link to={`/product/${p.slug}`} className="relative aspect-square overflow-hidden bg-muted block">
+                      <Link to={`/product/${p.slug}`} className="relative aspect-[4/5] overflow-hidden bg-muted block rounded-xl mb-4">
                         <img
                           src={img}
                           alt={p.name}
                           loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
                           width={800}
-                          height={800}
+                          height={1000}
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <WishlistButton productId={p.id} className="absolute top-3 right-3" />
                         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-                          {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground">Bio</Badge>}
+                          {p.is_bio && <Badge className="bg-tertiary text-tertiary-foreground font-mono text-[10px] tracking-wider uppercase">Bio</Badge>}
                           {p.is_reused && (
-                            <Badge variant="secondary" className="bg-secondary/90 text-secondary-foreground gap-1">
+                            <Badge variant="secondary" className="bg-secondary/95 text-secondary-foreground gap-1 font-mono text-[10px] tracking-wider uppercase">
                               <Recycle className="size-3" /> {t("marketplace.reuse_badge")}
                             </Badge>
                           )}
-                          {outOfStock && <Badge variant="destructive">{t("marketplace.out_of_stock")}</Badge>}
+                          {outOfStock && <Badge variant="destructive" className="font-mono text-[10px] tracking-wider uppercase">{t("marketplace.out_of_stock")}</Badge>}
                         </div>
                       </Link>
-                      <div className="p-4">
+                      <div>
                         <Link
                           to={`/store/${p.seller?.slug}`}
-                          className="text-xs text-muted-foreground mb-1 flex items-center gap-1 hover:text-primary transition-colors"
+                          className="text-[11px] font-mono uppercase tracking-[0.15em] text-muted-foreground mb-2 inline-flex items-center gap-1.5 hover:text-primary transition-colors"
                         >
                           <Leaf className="size-3 text-primary" />
                           {p.seller?.business_name ?? "Seller"}
                         </Link>
                         <Link to={`/product/${p.slug}`} className="block">
-                          <h3 className="font-display font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5em]">
+                          <h3 className="font-display text-lg font-normal leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.6em]">
                             {p.name}
                           </h3>
                         </Link>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
                           <Star className="size-3.5 fill-tertiary text-tertiary" />
                           <span className="font-medium text-foreground">{(p.rating ?? 0).toFixed(1)}</span>
                           <span>({p.reviews_count})</span>
                         </div>
-                        <div className="flex items-end justify-between">
+                        <div className="flex items-end justify-between pt-3 border-t border-border/50">
                           <div>
-                            <div className="font-display text-xl font-bold text-foreground">
+                            <div className="font-display text-2xl font-light text-foreground">
                               {formatEur(p.price_cents)}
                             </div>
                             {p.compare_at_price_cents && (
@@ -241,15 +242,19 @@ export default function Marketplace() {
                           <Button
                             size="sm"
                             variant={recentlyAdded ? "default" : "outline"}
-                            className="rounded-lg"
+                            className="rounded-full h-9 w-9 p-0 transition-transform hover:scale-110"
                             onClick={() => handleAdd(p)}
                             disabled={outOfStock}
                             aria-label={t("marketplace.add_to_cart", "Aggiungi al carrello")}
                           >
                             {recentlyAdded ? <Check className="size-4" /> : <Plus className="size-4" />}
-                            {inCart && !recentlyAdded ? <span className="ml-1 text-xs">×{inCart.quantity}</span> : null}
                           </Button>
                         </div>
+                        {inCart && !recentlyAdded && (
+                          <div className="text-[11px] font-mono text-primary mt-2 uppercase tracking-wider">
+                            ×{inCart.quantity} {t("marketplace.in_cart", "nel carrello")}
+                          </div>
+                        )}
                       </div>
                     </article>
                   );
@@ -257,11 +262,12 @@ export default function Marketplace() {
               </div>
             )}
 
-            <div className="text-center mt-10">
-              <Button asChild variant="outline" size="lg" className="rounded-xl">
+            <div className="text-center mt-16">
+              <Button asChild variant="outline" size="lg" className="rounded-full px-8 group">
                 <Link to="/cart">
                   <ShoppingBag className="size-4 mr-2" />
                   {t("cart.view_cart", "Vai al carrello")}
+                  <ArrowRight className="size-4 ml-2 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
             </div>

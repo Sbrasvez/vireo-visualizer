@@ -20,6 +20,7 @@ import RecipeCard from "@/components/RecipeCard";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRecipes } from "@/hooks/useRecipes";
+import recipesHero from "@/assets/home-recipes.jpg";
 
 export default function Recipes() {
   const { t } = useTranslation();
