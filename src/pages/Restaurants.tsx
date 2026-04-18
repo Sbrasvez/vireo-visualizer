@@ -328,12 +328,15 @@ export default function Restaurants() {
         {/* LIST */}
         <section className="pb-24">
           <div className="container">
-            <div className="flex items-end justify-between mb-8">
+            <div className="flex items-end justify-between gap-6 mb-10 pb-6 border-b border-border/60 flex-wrap">
               <div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold">
+                <div className="font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase mb-3">
+                  — {t("restaurants.list_eyebrow", "Indirizzi consigliati")}
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
                   {originLabel ? t("restaurants.sorted_by_distance") : t("restaurants.all_restaurants")}
                 </h2>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-muted-foreground mt-3 font-mono text-sm">
                   {t("restaurants.click_card_hint")}
                 </p>
               </div>
