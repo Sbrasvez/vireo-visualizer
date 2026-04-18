@@ -179,6 +179,8 @@
   },
   "recipes": {
     "badge": "Spoonacular database + Vireo AI",
+    "section_eyebrow": "Editorial selection",
+    "section_em": "of the day",
     "title_1": "Vegan",
     "title_vegan": "& organic",
     "title_2": "recipes",
@@ -230,6 +232,7 @@
   },
   "restaurants": {
     "badge_count": "{{count}} eco-friendly restaurants in Italy",
+    "list_eyebrow": "Recommended addresses",
     "title_1": "Eat",
     "title_aware": "mindfully",
     "title_2": ", wherever you are",
@@ -322,6 +325,11 @@
   },
   "marketplace": {
     "badge": "Buy, sell & certified reuse",
+    "section_eyebrow": "Curated selection",
+    "section_title": "Objects that",
+    "section_title_em": "tell a story",
+    "items_count": "items available",
+    "in_cart": "in cart",
     "title_1": "Sustainable",
     "title_2": "marketplace",
     "subtitle": "A showcase for buying and selling eco-friendly and reused products, with strict guidelines to ensure sustainability.",
