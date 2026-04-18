@@ -129,6 +129,7 @@ function MagicBagCard({ bag, index }: { bag: MagicBag; index: number }) {
 }
 
 export default function Surplus() {
+  const { t } = useTranslation();
   const { data: bags, isLoading } = useMagicBags();
   const { data: myReservations } = useMyBagReservations();
   const { user } = useAuth();
@@ -155,22 +156,25 @@ export default function Surplus() {
           <EditorialPageHeader
             surface="plain"
             containerClassName="max-w-none px-0"
-            eyebrow="Anti-spreco · Magic Bags"
-            title="Salva il"
-            italic="cibo buono"
-            trailing=", riduci lo spreco."
-            lead="Pasti e prodotti dai ristoranti vicini fino al -70%. Ogni Magic Bag evita circa 2,5 kg di CO₂."
+            eyebrow={t("surplus.eyebrow", "Anti-spreco · Magic Bags")}
+            title={t("surplus.title_1", "Salva il")}
+            italic={t("surplus.title_em", "cibo buono")}
+            trailing={t("surplus.title_2", ", riduci lo spreco.")}
+            lead={t(
+              "surplus.lead",
+              "Pasti e prodotti dai ristoranti vicini fino al -70%. Ogni Magic Bag evita circa 2,5 kg di CO₂.",
+            )}
           />
           <div className="flex flex-wrap gap-2 pt-1">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
               <Package className="size-3.5 text-primary" />
               <span className="font-mono tabular-nums">{bags?.length ?? 0}</span>
-              <span className="text-muted-foreground">disponibili oggi</span>
+              <span className="text-muted-foreground">{t("surplus.available_today", "disponibili oggi")}</span>
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
               <Leaf className="size-3.5 text-primary" />
               <span className="font-mono tabular-nums">{totalCo2Saved.toFixed(1)}</span>
-              <span className="text-muted-foreground">kg CO₂ salvabili</span>
+              <span className="text-muted-foreground">{t("surplus.kg_co2_saved", "kg CO₂ salvabili")}</span>
             </span>
           </div>
         </header>
