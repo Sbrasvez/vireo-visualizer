@@ -425,11 +425,11 @@ export default function ProductDetail() {
                     <Plus className="size-4" />
                   </button>
                 </div>
-                <Button
+                <CTAButton
                   size="lg"
                   onClick={() => handleAdd()}
                   disabled={!inStock}
-                  className="flex-1 sm:flex-none gap-2 min-w-48 rounded-full h-11"
+                  className="flex-1 sm:flex-none min-w-48"
                 >
                   {justAdded ? (
                     <>
@@ -440,7 +440,7 @@ export default function ProductDetail() {
                       <ShoppingBag className="size-5" /> {t("product_detail.add_to_cart")}
                     </>
                   )}
-                </Button>
+                </CTAButton>
                 <WishlistButton productId={product.id} variant="full" />
               </div>
 

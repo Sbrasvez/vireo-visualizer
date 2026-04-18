@@ -2,6 +2,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/CTAButton";
 import heroImage from "@/assets/home-hero.jpg";
 
 /**
@@ -55,16 +56,12 @@ export default function HeroSection() {
               className="flex flex-wrap items-center gap-4 animate-fade-up"
               style={{ animationDelay: "0.3s" }}
             >
-              <Button
-                size="lg"
-                className="gap-2 text-base px-8 rounded-full shadow-elegant group"
-                asChild
-              >
+              <CTAButton size="lg" asChild>
                 <Link to="/signup">
                   {t("hero.cta_start", "Inizia gratis")}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-1" />
                 </Link>
-              </Button>
+              </CTAButton>
               <Button
                 variant="outline"
                 size="lg"
