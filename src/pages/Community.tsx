@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heart, MessageCircle, ImagePlus, Send, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent } from "@/components/ui/card";
+import MotionCard from "@/components/MotionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -149,7 +149,11 @@ function PostCard({ post, index }: { post: CommunityPost; index: number }) {
   const { user } = useAuth();
 
   return (
-    <article className="group rounded-2xl border border-border/60 bg-card overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.2)]">
+    <MotionCard
+      delay={Math.min(index, 8) * 0.05}
+      lift="subtle"
+      className="group rounded-2xl border border-border/60 bg-card overflow-hidden"
+    >
       <div className="p-5 space-y-4">
         {/* Author + index */}
         <div className="flex items-center justify-between gap-2">
@@ -238,7 +242,7 @@ function PostCard({ post, index }: { post: CommunityPost; index: number }) {
 
         {showComments && <CommentsSection postId={post.id} />}
       </div>
-    </article>
+    </MotionCard>
   );
 }
 
