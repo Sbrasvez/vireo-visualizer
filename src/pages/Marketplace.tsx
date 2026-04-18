@@ -184,10 +184,11 @@ export default function Marketplace() {
                   const img = p.primary_image ?? p.images[0] ?? "/placeholder.svg";
                   const outOfStock = !p.unlimited_stock && p.stock <= 0;
                   return (
-                    <article
+                    <MotionCard
                       key={p.id}
-                      className="group animate-fade-up"
-                      style={{ animationDelay: `${Math.min(i, 12) * 0.04}s` }}
+                      delay={Math.min(i, 12) * 0.04}
+                      lift="medium"
+                      className="group rounded-xl"
                     >
                       <Link to={`/product/${p.slug}`} className="relative aspect-[4/5] overflow-hidden bg-muted block rounded-xl mb-4">
                         <img
@@ -256,7 +257,7 @@ export default function Marketplace() {
                           </div>
                         )}
                       </div>
-                    </article>
+                    </MotionCard>
                   );
                 })}
               </div>

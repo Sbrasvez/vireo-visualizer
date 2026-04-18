@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Heart, MessageCircle, ImagePlus, Send, Loader2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent } from "@/components/ui/card";
+import MotionCard from "@/components/MotionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

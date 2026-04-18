@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Clock, MapPin, Leaf, Package, Ticket, Sparkles } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
+import MotionCard from "@/components/MotionCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
