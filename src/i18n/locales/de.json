@@ -68,7 +68,13 @@
     "stat_restaurants": "Restaurants",
     "stat_users": "Green Nutzer",
     "badge_eco": "Eco-Score",
-    "badge_co2": "CO₂ gespart"
+    "badge_co2": "CO₂ gespart",
+    "editorial_title_1": "Die Natur,",
+    "editorial_title_2": "auf deinem Tisch.",
+    "editorial_lead": "Werde Teil des nachhaltigen Marktes. Entdecke lokale Erzeuger, rette überschüssige Lebensmittel und koche mit einem KI-Assistenten, der mitdenkt.",
+    "image_alt": "Rustikaler Tisch mit saisonalem Gemüse, Kräutern und handgefertigter Keramik",
+    "harvest_badge": "Heutige Ernte",
+    "harvest_text": "Ochsenherz-Tomaten und frisches Basilikum, direkt von unseren lokalen Erzeugern."
   },
   "features": {
     "kicker": "Das Vireo-Ökosystem",
@@ -309,7 +315,12 @@
     "out_of_stock": "Ausverkauft",
     "added_title": "Zum Warenkorb hinzugefügt",
     "add_to_cart": "In den Warenkorb",
-    "view_cart": "Zum Warenkorb"
+    "view_cart": "Zum Warenkorb",
+    "section_eyebrow": "Kuratierte Auswahl",
+    "section_title": "Dinge, die",
+    "section_title_em": "eine Geschichte erzählen",
+    "items_count": "Stücke verfügbar",
+    "in_cart": "im Warenkorb"
   },
   "blog": {
     "badge": "Artikel, Anleitungen und Best Practices",
@@ -383,7 +394,14 @@
     "nearby_desc": "Die beliebtesten umweltfreundlichen Locations auf Vireo",
     "explore_map": "Karte entdecken",
     "active_plan": "Aktiver Plan",
-    "free_plan_hint": "10 KI-Nachrichten pro Tag · 5 Kartensuchen"
+    "free_plan_hint": "10 KI-Nachrichten pro Tag · 5 Kartensuchen",
+    "eyebrow": "Dein nachhaltiges Tagebuch",
+    "greeting_em": "willkommen zurück.",
+    "stats_eyebrow": "Deine Wirkung",
+    "tracker_eyebrow": "Miss, was zählt",
+    "pro_eyebrow": "Auf Pro upgraden",
+    "recipes_eyebrow": "Auswahl des Tages",
+    "places_eyebrow": "Orte in der Nähe"
   },
   "common": {
     "loading": "Lädt...",
@@ -716,5 +734,51 @@
     "how_calculated": "So berechnen wir es",
     "rule_recipe": "+2,5 kg für jedes gespeicherte Veggie-Rezept",
     "rule_reservation": "+1,8 kg für jede Eco-Reservierung"
+  },
+  "home": {
+    "sections_title": "Schlendere durch die Stände.",
+    "sections_subtitle": "Sechs Räume, die deinen Umgang mit pflanzlichem Essen verändern.",
+    "ai_prompt": "Ich habe Kichererbsen und Blumenkohl — Ideen?",
+    "ai_reply": "Rustikales Curry in 25 Minuten. Ich erkläre dir die Schritte…",
+    "cta_open": "Assistenten öffnen",
+    "cta_join": "Mitmachen",
+    "cta_discover": "Entdecken",
+    "section": {
+      "market_eyebrow": "Der Markt",
+      "market_title": "Direkt vom Erzeuger",
+      "market_body": "Wurzeln, Blätter und Samen direkt von denen, die das Land bestellen. Ohne Zwischenhändler.",
+      "surplus_eyebrow": "Magische Speisekammer",
+      "surplus_title": "Rette die Ernte",
+      "surplus_body": "Überraschungstüten von den besten Bäckereien und Bauern am Tagesende. Frisch, zum halben Preis.",
+      "ai_eyebrow": "Botanische KI",
+      "ai_title": "Koche mit dem, was du hast",
+      "ai_body": "Keine Idee fürs Abendessen? Frag unseren Assistenten. Er schlägt Rezepte aus deinen Zutaten vor.",
+      "recipes_eyebrow": "Das Kochbuch",
+      "recipes_title": "Saisonale Gerichte",
+      "recipes_body": "Hunderte pflanzliche Rezepte, die dem natürlichen Rhythmus der Jahreszeiten folgen.",
+      "restaurants_eyebrow": "Lokale Tische",
+      "restaurants_title": "Bistros und Trattorien",
+      "restaurants_body": "Finde Orte in deiner Nähe, an denen pflanzliche Küche mit Respekt und Kreativität behandelt wird.",
+      "community_eyebrow": "Die Wurzel",
+      "community_title": "Setz dich an den Tisch",
+      "community_body": "Tausche Rezepte, teile Küchenerfolge und triff Gleichgesinnte in deiner Nähe."
+    }
+  },
+  "pricing": {
+    "eyebrow": "Wähle deinen Plan",
+    "title": "Wachse mit",
+    "title_em": "Vireo",
+    "subtitle": "Starte kostenlos, wechsle zu Pro, wenn du es brauchst. Jederzeit ändern oder kündigen.",
+    "most_popular": "Am beliebtesten",
+    "free": "Kostenlos",
+    "month": "Monat",
+    "current_plan": "Aktueller Plan",
+    "always_free": "Immer kostenlos",
+    "manage_subscription": "Abo verwalten",
+    "switch_plan": "Plan wechseln",
+    "subscribe": "Abonnieren",
+    "disclaimer": "Sichere Zahlung mit Stripe. Jederzeit kündbar.",
+    "checkout_title": "Abo abschließen",
+    "portal_error": "Portal konnte nicht geöffnet werden"
   }
 }
