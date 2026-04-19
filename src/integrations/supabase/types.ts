@@ -1004,6 +1004,63 @@ export type Database = {
         }
         Relationships: []
       }
+      seller_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          replied_at: string | null
+          seller_id: string
+          sender_email: string
+          sender_name: string
+          sender_phone: string | null
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          replied_at?: string | null
+          seller_id: string
+          sender_email: string
+          sender_name: string
+          sender_phone?: string | null
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          replied_at?: string | null
+          seller_id?: string
+          sender_email?: string
+          sender_name?: string
+          sender_phone?: string | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seller_messages_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "seller_messages_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seller_products: {
         Row: {
           category: string
