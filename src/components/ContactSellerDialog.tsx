@@ -48,6 +48,7 @@ export function ContactSellerDialog({ sellerId, sellerName, trigger }: ContactSe
     sender_phone: "",
     subject: "",
     message: "",
+    website: "", // honeypot — must stay empty
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
