@@ -34,8 +34,12 @@ const ROOT = process.cwd();
 const args = process.argv.slice(2);
 const FLAGS = new Set(args.filter((a) => a.startsWith("--")));
 const TARGET = args.find((a) => !a.startsWith("--")) || "src";
-const CHECK_MISSING = !FLAGS.has("--orphans-only");
-const CHECK_ORPHANS = !FLAGS.has("--no-orphans");
+const ONLY_ORPHANS = FLAGS.has("--orphans-only");
+const ONLY_PARITY = FLAGS.has("--parity-only");
+const ONLY_MISSING = FLAGS.has("--missing-only");
+const CHECK_MISSING = !ONLY_ORPHANS && !ONLY_PARITY;
+const CHECK_ORPHANS = !FLAGS.has("--no-orphans") && !ONLY_PARITY && !ONLY_MISSING;
+const CHECK_PARITY = !FLAGS.has("--no-parity") && !ONLY_ORPHANS && !ONLY_MISSING;
 const STRICT = FLAGS.has("--strict");
 
 const LOCALES_DIR = join(ROOT, "src/i18n/locales");
