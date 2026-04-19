@@ -34,8 +34,12 @@ const ROOT = process.cwd();
 const args = process.argv.slice(2);
 const FLAGS = new Set(args.filter((a) => a.startsWith("--")));
 const TARGET = args.find((a) => !a.startsWith("--")) || "src";
-const CHECK_MISSING = !FLAGS.has("--orphans-only");
-const CHECK_ORPHANS = !FLAGS.has("--no-orphans");
+const ONLY_ORPHANS = FLAGS.has("--orphans-only");
+const ONLY_PARITY = FLAGS.has("--parity-only");
+const ONLY_MISSING = FLAGS.has("--missing-only");
+const CHECK_MISSING = !ONLY_ORPHANS && !ONLY_PARITY;
+const CHECK_ORPHANS = !FLAGS.has("--no-orphans") && !ONLY_PARITY && !ONLY_MISSING;
+const CHECK_PARITY = !FLAGS.has("--no-parity") && !ONLY_ORPHANS && !ONLY_MISSING;
 const STRICT = FLAGS.has("--strict");
 
 const LOCALES_DIR = join(ROOT, "src/i18n/locales");
@@ -217,6 +221,38 @@ if (CHECK_ORPHANS) {
   }
 }
 
+// === CHECK 3: parity =============================================================
+// Per ogni locale, calcoliamo l'insieme delle chiavi foglia (path dotted, comprese
+// le varianti plurali). Poi confrontiamo a coppie ogni locale contro l'unione di
+// tutti, segnalando le chiavi mancanti per locale.
+//
+// NOTE: due chiavi sono considerate "equivalenti" se hanno la stessa path
+// completa (incluso eventuale suffisso plurale). Questo è voluto: se it.json ha
+// `cart.item_one`/`cart.item_other` e en.json ha solo `cart.item`, è una
+// desincronizzazione che vogliamo vedere — i18next risolverà comunque grazie ai
+// fallback ma il traduttore deve esserne consapevole.
+const parityIssues = []; // [{ key, missingIn: ["en", "fr"], presentIn: ["it", "es", "de"] }]
+if (CHECK_PARITY) {
+  const keysByLocale = Object.fromEntries(
+    LOCALES.map((l) => [l, new Set(flattenKeys(dictionaries[l]))])
+  );
+  const allKeysUnion = new Set();
+  for (const set of Object.values(keysByLocale)) {
+    for (const k of set) allKeysUnion.add(k);
+  }
+  for (const key of allKeysUnion) {
+    const missingIn = [];
+    const presentIn = [];
+    for (const loc of LOCALES) {
+      if (keysByLocale[loc].has(key)) presentIn.push(loc);
+      else missingIn.push(loc);
+    }
+    if (missingIn.length > 0) {
+      parityIssues.push({ key, missingIn, presentIn });
+    }
+  }
+}
+
 // === REPORT ======================================================================
 let exitCode = 0;
 
@@ -277,6 +313,43 @@ if (CHECK_ORPHANS) {
       `Suggerimento: rimuovi queste chiavi dai 5 file di locale, oppure aggiungile alla ORPHAN_WHITELIST se sono consumate dinamicamente.\n`
     );
     if (STRICT) exitCode = 1;
+  }
+}
+
+if (CHECK_PARITY) {
+  if (parityIssues.length === 0) {
+    console.log(
+      `✓ i18n parity: tutte le chiavi foglia sono allineate in ${LOCALES.join("/")}`
+    );
+  } else {
+    // Parità rotta = sempre errore: significa che un locale ha chiavi che gli
+    // altri non hanno (o viceversa). Diverso dagli orphans, qui è un bug di
+    // sync tra file di traduzione e va sempre risolto.
+    console.error(
+      `✗ i18n parity: trovate ${parityIssues.length} chiavi non allineate tra i locale\n`
+    );
+    // Raggruppa per "set di locale mancanti" per leggibilità (es. tutte le
+    // chiavi che mancano in en+fr+de finiscono nello stesso gruppo)
+    const byMissingSet = new Map();
+    for (const p of parityIssues.sort((a, b) => a.key.localeCompare(b.key))) {
+      const sig = p.missingIn.join(",");
+      if (!byMissingSet.has(sig)) byMissingSet.set(sig, []);
+      byMissingSet.get(sig).push(p);
+    }
+    for (const [sig, items] of [...byMissingSet.entries()].sort()) {
+      console.error(`  mancanti in [${sig}] (presenti in [${items[0].presentIn.join(",")}]) — ${items.length} chiavi`);
+      for (const p of items.slice(0, 50)) {
+        console.error(`    ${p.key}`);
+      }
+      if (items.length > 50) {
+        console.error(`    ...e altre ${items.length - 50} chiavi`);
+      }
+      console.error("");
+    }
+    console.error(
+      `Suggerimento: copia le chiavi mancanti dai locale di origine, oppure rimuovile da quelli che le contengono se sono morte.\n`
+    );
+    exitCode = 1;
   }
 }
 
