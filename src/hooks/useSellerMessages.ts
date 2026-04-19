@@ -23,6 +23,8 @@ export interface SendSellerMessageInput {
   sender_phone?: string;
   subject: string;
   message: string;
+  /** Honeypot — must remain empty. */
+  website?: string;
 }
 
 /** Public: anyone (anon or authenticated) can send a message to an approved seller. */
@@ -36,9 +38,15 @@ export function useSendSellerMessage() {
         sender_phone: input.sender_phone?.trim() || null,
         subject: input.subject.trim(),
         message: input.message.trim(),
+        website: input.website ?? "",
       };
-      const { error } = await supabase.from("seller_messages" as any).insert(payload);
+      const { data, error } = await supabase.functions.invoke("send-seller-message", {
+        body: payload,
+      });
       if (error) throw error;
+      if (data && typeof data === "object" && "error" in data && data.error) {
+        throw new Error(typeof data.error === "string" ? data.error : "Errore invio");
+      }
     },
   });
 }
