@@ -18,10 +18,16 @@ import { useMySeller } from "@/hooks/useSeller";
 import { useMyProducts, useCreateProduct, useDeleteProduct, useUpdateProduct } from "@/hooks/useSellerProducts";
 import { useSellerOrders, useUpdateFulfillment } from "@/hooks/useSellerOrders";
 import { formatEur } from "@/lib/catalog";
-import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, MessageCircleQuestion } from "lucide-react";
+import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, MessageCircleQuestion, Mail, MailOpen, CheckCircle2, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useSellerQuestions, useAnswerQuestion } from "@/hooks/useProductQuestions";
+import {
+  useSellerMessages,
+  useMarkSellerMessageRead,
+  useMarkSellerMessageReplied,
+  type SellerMessage,
+} from "@/hooks/useSellerMessages";
 
 const CATEGORIES = ["kitchen", "home", "personal", "reuse", "bio", "fashion", "beauty", "garden"];
 
