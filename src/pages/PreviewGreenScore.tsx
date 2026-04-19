@@ -17,7 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge as UIBadge } from "@/components/ui/badge";
 import { GREEN_LEVELS, type GreenLevel } from "@/hooks/useGreenScore";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 // Sample scores chosen to land in different levels:
 //  - 15  → seedling (0–100), with progress towards sprout
