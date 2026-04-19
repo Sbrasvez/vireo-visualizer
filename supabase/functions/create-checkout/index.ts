@@ -252,7 +252,7 @@ serve(async (req) => {
     // Encode marketplace metadata so the webhook can build marketplace_orders rows.
     const isMarketplace = sellerLineMeta.length > 0;
     const metadata: Record<string, string> = {
-      ...(userId && { userId }),
+      userId,
       env,
       ...(isMarketplace && {
         marketplace: "1",
