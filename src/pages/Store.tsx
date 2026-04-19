@@ -120,6 +120,18 @@ export default function Store() {
                 {seller.description && (
                   <p className="text-muted-foreground leading-relaxed font-display italic max-w-2xl">{seller.description}</p>
                 )}
+                <div className="mt-5">
+                  <ContactSellerDialog
+                    sellerId={seller.id}
+                    sellerName={seller.business_name}
+                    trigger={
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Mail className="size-4" />
+                        {t("contact_seller.cta", "Contatta venditore")}
+                      </Button>
+                    }
+                  />
+                </div>
               </div>
             </div>
           </div>
