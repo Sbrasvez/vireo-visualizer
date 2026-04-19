@@ -68,6 +68,7 @@ const AnimatedRoutes = () => {
         <Route path="/product/:slug" element={wrap(<ProductDetail />)} />
         <Route path="/wishlist" element={wrap(<Wishlist />)} />
         <Route path="/wishlist/:userId" element={wrap(<PublicWishlist />)} />
+        <Route path="/preview/green-score" element={wrap(<PreviewGreenScore />)} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={wrap(<NotFound />)} />
       </Routes>
