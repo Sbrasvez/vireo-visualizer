@@ -614,7 +614,12 @@
     "publish_answer": "Pubblica risposta",
     "update_answer": "Aggiorna",
     "edit": "Modifica",
-    "sending": "Invio..."
+    "sending": "Invio...",
+    "tab_messages": "Messaggi",
+    "no_messages": "Nessun messaggio ancora.",
+    "new": "Nuovo",
+    "replied": "Risposto",
+    "reply_via_email": "Rispondi via email"
   },
   "admin_sellers": {
     "title": "Gestione venditori",

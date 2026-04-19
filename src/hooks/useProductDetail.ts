@@ -10,7 +10,7 @@ export function useProductDetail(slug: string | undefined) {
     queryFn: async (): Promise<SellerProduct | null> => {
       const { data, error } = await supabase
         .from("seller_products")
-        .select("*, seller:sellers!inner(id, business_name, slug, logo_url, rating, status, description)")
+        .select("*, seller:sellers_public!inner(id, business_name, slug, logo_url, rating, status, description)")
         .eq("slug", slug!)
         .maybeSingle();
       if (error) throw error;
@@ -35,7 +35,7 @@ export function useRelatedProducts(sellerId: string | undefined, excludeId: stri
     queryFn: async (): Promise<SellerProduct[]> => {
       let q = supabase
         .from("seller_products")
-        .select("*, seller:sellers!inner(id, business_name, slug, logo_url, rating, status)")
+        .select("*, seller:sellers_public!inner(id, business_name, slug, logo_url, rating, status)")
         .eq("seller_id", sellerId!)
         .eq("is_published", true)
         .eq("seller.status", "approved")
