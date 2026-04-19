@@ -353,7 +353,7 @@ if (CHECK_PARITY) {
   }
 }
 
-
+if (dynamicPrefixSet.size > 0) {
   console.log(
     `ℹ prefix dinamici registrati (orphans ignorate sotto questi): ${[...dynamicPrefixSet].sort().join(", ")}`
   );
