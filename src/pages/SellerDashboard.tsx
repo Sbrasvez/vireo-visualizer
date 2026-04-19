@@ -664,3 +664,86 @@ function QuestionRow({
     </Card>
   );
 }
+
+function MessageRow({ message }: { message: SellerMessage }) {
+  const { t, i18n } = useTranslation();
+  const markRead = useMarkSellerMessageRead();
+  const markReplied = useMarkSellerMessageReplied();
+  const [expanded, setExpanded] = useState(!message.is_read);
+
+  const handleToggle = () => {
+    if (!expanded && !message.is_read) {
+      markRead.mutate({ id: message.id, is_read: true });
+    }
+    setExpanded((v) => !v);
+  };
+
+  return (
+    <Card className={message.is_read ? "" : "border-primary/40"}>
+      <CardContent className="p-5 space-y-3">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[180px]">
+            <div className="flex items-center gap-2 flex-wrap">
+              {!message.is_read && <Badge className="bg-primary text-primary-foreground">{t("seller_dashboard.new", "Nuovo")}</Badge>}
+              {message.replied_at && (
+                <Badge variant="secondary" className="gap-1">
+                  <CheckCircle2 className="size-3" />
+                  {t("seller_dashboard.replied", "Risposto")}
+                </Badge>
+              )}
+              <span className="font-semibold">{message.sender_name}</span>
+              <span className="text-xs text-muted-foreground">
+                ·{" "}
+                {new Date(message.created_at).toLocaleDateString(i18n.language, {
+                  day: "numeric",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+            <p className="font-display text-lg mt-1">{message.subject}</p>
+          </div>
+          <Button variant="ghost" size="sm" onClick={handleToggle}>
+            {expanded ? <MailOpen className="size-4" /> : <Mail className="size-4" />}
+          </Button>
+        </div>
+
+        {expanded && (
+          <div className="space-y-3 pt-2 border-t border-border/50">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              <a href={`mailto:${message.sender_email}?subject=Re:%20${encodeURIComponent(message.subject)}`} className="text-primary hover:underline inline-flex items-center gap-1">
+                <Mail className="size-3.5" /> {message.sender_email}
+              </a>
+              {message.sender_phone && (
+                <a href={`tel:${message.sender_phone}`} className="text-primary hover:underline inline-flex items-center gap-1">
+                  <Phone className="size-3.5" /> {message.sender_phone}
+                </a>
+              )}
+            </div>
+            <p className="text-sm leading-relaxed whitespace-pre-line">{message.message}</p>
+            <div className="flex justify-end gap-2 pt-1">
+              {!message.replied_at && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => markReplied.mutate(message.id)}
+                  disabled={markReplied.isPending}
+                >
+                  <CheckCircle2 className="size-4 mr-2" />
+                  {t("seller_dashboard.mark_replied", "Segna come risposto")}
+                </Button>
+              )}
+              <Button asChild size="sm">
+                <a href={`mailto:${message.sender_email}?subject=Re:%20${encodeURIComponent(message.subject)}`}>
+                  <Mail className="size-4 mr-2" />
+                  {t("seller_dashboard.reply_via_email", "Rispondi via email")}
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
