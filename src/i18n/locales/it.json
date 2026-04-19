@@ -509,7 +509,14 @@
     "nearby_desc": "I locali eco-friendly più amati su Vireo",
     "explore_map": "Esplora mappa",
     "active_plan": "Piano attivo",
-    "free_plan_hint": "10 messaggi AI al giorno · 5 ricerche mappa"
+    "free_plan_hint": "10 messaggi AI al giorno · 5 ricerche mappa",
+    "eyebrow": "Il tuo diario sostenibile",
+    "greeting_em": "buon ritorno.",
+    "stats_eyebrow": "Il tuo impatto",
+    "tracker_eyebrow": "Misura ciò che conta",
+    "pro_eyebrow": "Passa a Pro",
+    "recipes_eyebrow": "Selezione del giorno",
+    "places_eyebrow": "Luoghi vicini"
   },
   "common": {
     "loading": "Caricamento...",
@@ -811,5 +818,22 @@
     "dashboard": "Vai alla dashboard",
     "view_orders": "Vedi i miei ordini",
     "continue_shopping": "Continua lo shopping"
+  },
+  "pricing": {
+    "eyebrow": "Scegli il tuo piano",
+    "title": "Cresci con",
+    "title_em": "Vireo",
+    "subtitle": "Inizia gratis, passa a Pro quando ne hai bisogno. Cambia o annulla quando vuoi.",
+    "most_popular": "Più scelto",
+    "free": "Gratis",
+    "month": "mese",
+    "current_plan": "Piano attuale",
+    "always_free": "Sempre gratis",
+    "manage_subscription": "Gestisci abbonamento",
+    "switch_plan": "Cambia piano",
+    "subscribe": "Abbonati",
+    "disclaimer": "Pagamento sicuro con Stripe. Annulla in qualsiasi momento.",
+    "checkout_title": "Completa l'abbonamento",
+    "portal_error": "Impossibile aprire il portale"
   }
 }

@@ -427,7 +427,14 @@
     "nearby_desc": "The eco-friendly spots most loved on Vireo",
     "explore_map": "Explore map",
     "active_plan": "Active plan",
-    "free_plan_hint": "10 AI messages/day · 5 map searches"
+    "free_plan_hint": "10 AI messages/day · 5 map searches",
+    "eyebrow": "Your sustainable journal",
+    "greeting_em": "welcome back.",
+    "stats_eyebrow": "Your impact",
+    "tracker_eyebrow": "Measure what matters",
+    "pro_eyebrow": "Upgrade to Pro",
+    "recipes_eyebrow": "Today's selection",
+    "places_eyebrow": "Nearby places"
   },
   "common": {
     "loading": "Loading...",
@@ -767,5 +774,22 @@
     "how_calculated": "How we calculate it",
     "rule_recipe": "+2.5 kg for each veg recipe saved",
     "rule_reservation": "+1.8 kg for each eco reservation"
+  },
+  "pricing": {
+    "eyebrow": "Choose your plan",
+    "title": "Grow with",
+    "title_em": "Vireo",
+    "subtitle": "Start free, upgrade to Pro when you need it. Switch or cancel anytime.",
+    "most_popular": "Most popular",
+    "free": "Free",
+    "month": "month",
+    "current_plan": "Current plan",
+    "always_free": "Always free",
+    "manage_subscription": "Manage subscription",
+    "switch_plan": "Switch plan",
+    "subscribe": "Subscribe",
+    "disclaimer": "Secure payment with Stripe. Cancel anytime.",
+    "checkout_title": "Complete your subscription",
+    "portal_error": "Couldn't open the portal"
   }
 }

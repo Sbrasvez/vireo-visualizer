@@ -68,7 +68,13 @@
     "stat_restaurants": "Restaurants",
     "stat_users": "Utilisateurs green",
     "badge_eco": "Eco-score",
-    "badge_co2": "CO₂ économisé"
+    "badge_co2": "CO₂ économisé",
+    "editorial_title_1": "La nature,",
+    "editorial_title_2": "sur votre table.",
+    "editorial_lead": "Rejoignez le marché durable. Découvrez des producteurs locaux, sauvez le surplus alimentaire et cuisinez avec un assistant IA qui pense comme vous.",
+    "image_alt": "Table rustique avec légumes de saison, herbes aromatiques et céramique artisanale",
+    "harvest_badge": "Récolte du jour",
+    "harvest_text": "Tomates cœur de bœuf et basilic frais, directement de nos producteurs locaux."
   },
   "features": {
     "kicker": "L'écosystème Vireo",
@@ -309,7 +315,12 @@
     "out_of_stock": "Épuisé",
     "added_title": "Ajouté au panier",
     "add_to_cart": "Ajouter au panier",
-    "view_cart": "Voir le panier"
+    "view_cart": "Voir le panier",
+    "section_eyebrow": "Sélection curatée",
+    "section_title": "Des objets qui",
+    "section_title_em": "racontent une histoire",
+    "items_count": "pièces disponibles",
+    "in_cart": "dans le panier"
   },
   "blog": {
     "badge": "Articles, guides et bonnes pratiques",
@@ -383,7 +394,14 @@
     "nearby_desc": "Les lieux éco-responsables les plus aimés sur Vireo",
     "explore_map": "Explorer la carte",
     "active_plan": "Plan actif",
-    "free_plan_hint": "10 messages IA par jour · 5 recherches sur la carte"
+    "free_plan_hint": "10 messages IA par jour · 5 recherches sur la carte",
+    "eyebrow": "Votre journal durable",
+    "greeting_em": "bon retour.",
+    "stats_eyebrow": "Votre impact",
+    "tracker_eyebrow": "Mesurez ce qui compte",
+    "pro_eyebrow": "Passez à Pro",
+    "recipes_eyebrow": "Sélection du jour",
+    "places_eyebrow": "Lieux à proximité"
   },
   "common": {
     "loading": "Chargement...",
@@ -716,5 +734,51 @@
     "how_calculated": "Comment nous le calculons",
     "rule_recipe": "+2,5 kg pour chaque recette végé enregistrée",
     "rule_reservation": "+1,8 kg pour chaque réservation éco"
+  },
+  "home": {
+    "sections_title": "Flânez entre les étals.",
+    "sections_subtitle": "Six espaces pensés pour transformer votre façon de vivre et de manger végétal.",
+    "ai_prompt": "J'ai des pois chiches et du chou-fleur — des idées ?",
+    "ai_reply": "Curry rustique en 25 minutes. Je vous guide pas à pas…",
+    "cta_open": "Ouvrir l'assistant",
+    "cta_join": "Rejoindre",
+    "cta_discover": "Découvrir",
+    "section": {
+      "market_eyebrow": "Le Marché",
+      "market_title": "Producteurs directs",
+      "market_body": "Achetez racines, feuilles et graines directement à ceux qui cultivent la terre. Sans intermédiaires.",
+      "surplus_eyebrow": "Garde-Manger Magique",
+      "surplus_title": "Sauvez la récolte",
+      "surplus_body": "Paniers surprise des meilleures boulangeries et maraîchers en fin de journée. Du frais, à moitié prix.",
+      "ai_eyebrow": "Botaniste IA",
+      "ai_title": "Cuisinez avec ce que vous avez",
+      "ai_body": "Pas d'idée pour le dîner ? Demandez à notre assistant. Il propose des recettes à partir de vos ingrédients.",
+      "recipes_eyebrow": "Le Recueil",
+      "recipes_title": "Plats de saison",
+      "recipes_body": "Des centaines de recettes végétales qui suivent le rythme naturel des saisons.",
+      "restaurants_eyebrow": "Tables Locales",
+      "restaurants_title": "Bistrots et trattorias",
+      "restaurants_body": "Trouvez près de chez vous des lieux où la cuisine végétale est traitée avec respect et créativité.",
+      "community_eyebrow": "La Racine",
+      "community_title": "Rejoignez la tablée",
+      "community_body": "Échangez des recettes, partagez vos victoires en cuisine et rencontrez des passionnés près de vous."
+    }
+  },
+  "pricing": {
+    "eyebrow": "Choisissez votre formule",
+    "title": "Grandissez avec",
+    "title_em": "Vireo",
+    "subtitle": "Commencez gratuitement, passez à Pro quand vous en avez besoin. Modifiez ou annulez à tout moment.",
+    "most_popular": "Le plus choisi",
+    "free": "Gratuit",
+    "month": "mois",
+    "current_plan": "Formule actuelle",
+    "always_free": "Toujours gratuit",
+    "manage_subscription": "Gérer l'abonnement",
+    "switch_plan": "Changer de formule",
+    "subscribe": "S'abonner",
+    "disclaimer": "Paiement sécurisé avec Stripe. Annulez à tout moment.",
+    "checkout_title": "Finaliser l'abonnement",
+    "portal_error": "Impossible d'ouvrir le portail"
   }
 }

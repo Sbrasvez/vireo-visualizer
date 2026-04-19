@@ -68,7 +68,13 @@
     "stat_restaurants": "Restaurantes",
     "stat_users": "Usuarios green",
     "badge_eco": "Eco-score",
-    "badge_co2": "CO₂ ahorrado"
+    "badge_co2": "CO₂ ahorrado",
+    "editorial_title_1": "La naturaleza,",
+    "editorial_title_2": "en tu mesa.",
+    "editorial_lead": "Únete al mercado sostenible. Descubre productores locales, rescata el excedente de comida y cocina con un asistente IA que piensa como tú.",
+    "image_alt": "Mesa rústica con verduras de temporada, hierbas y cerámica artesanal",
+    "harvest_badge": "Cosecha de hoy",
+    "harvest_text": "Tomates corazón de buey y albahaca fresca, directamente de nuestros productores locales."
   },
   "features": {
     "kicker": "El ecosistema Vireo",
@@ -309,7 +315,12 @@
     "out_of_stock": "Agotado",
     "added_title": "Añadido al carrito",
     "add_to_cart": "Añadir al carrito",
-    "view_cart": "Ir al carrito"
+    "view_cart": "Ir al carrito",
+    "section_eyebrow": "Selección curada",
+    "section_title": "Objetos que",
+    "section_title_em": "cuentan una historia",
+    "items_count": "piezas disponibles",
+    "in_cart": "en el carrito"
   },
   "blog": {
     "badge": "Artículos, guías y mejores prácticas",
@@ -383,7 +394,14 @@
     "nearby_desc": "Los locales eco-friendly más amados de Vireo",
     "explore_map": "Explora el mapa",
     "active_plan": "Plan activo",
-    "free_plan_hint": "10 mensajes IA al día · 5 búsquedas en el mapa"
+    "free_plan_hint": "10 mensajes IA al día · 5 búsquedas en el mapa",
+    "eyebrow": "Tu diario sostenible",
+    "greeting_em": "bienvenido de vuelta.",
+    "stats_eyebrow": "Tu impacto",
+    "tracker_eyebrow": "Mide lo que importa",
+    "pro_eyebrow": "Pásate a Pro",
+    "recipes_eyebrow": "Selección del día",
+    "places_eyebrow": "Lugares cercanos"
   },
   "common": {
     "loading": "Cargando...",
@@ -716,5 +734,51 @@
     "how_calculated": "Cómo lo calculamos",
     "rule_recipe": "+2,5 kg por cada receta veg guardada",
     "rule_reservation": "+1,8 kg por cada reserva eco"
+  },
+  "home": {
+    "sections_title": "Pasea entre los puestos.",
+    "sections_subtitle": "Seis espacios pensados para transformar tu manera de vivir y consumir comida vegetal.",
+    "ai_prompt": "Tengo garbanzos y coliflor — ¿ideas?",
+    "ai_reply": "Curry rústico en 25 minutos. Te cuento los pasos…",
+    "cta_open": "Abrir el asistente",
+    "cta_join": "Únete",
+    "cta_discover": "Descubre",
+    "section": {
+      "market_eyebrow": "El Mercado",
+      "market_title": "Productores directos",
+      "market_body": "Compra raíces, hojas y semillas directamente de quien cultiva la tierra. Sin intermediarios.",
+      "surplus_eyebrow": "Despensa Mágica",
+      "surplus_title": "Salva la cosecha",
+      "surplus_body": "Cajas sorpresa de las mejores panaderías y huertos al final del día. Comida fresca a mitad de precio.",
+      "ai_eyebrow": "Botánico IA",
+      "ai_title": "Cocina con lo que tienes",
+      "ai_body": "¿Sin idea para la cena? Pregunta a nuestro asistente. Te sugerirá recetas con los ingredientes que ya tienes.",
+      "recipes_eyebrow": "El Recetario",
+      "recipes_title": "Platos de temporada",
+      "recipes_body": "Cientos de recetas vegetales que siguen el ritmo natural de las estaciones.",
+      "restaurants_eyebrow": "Mesas Locales",
+      "restaurants_title": "Bistrós y tabernas",
+      "restaurants_body": "Encuentra lugares cerca de ti donde la cocina vegetal se trata con respeto y creatividad.",
+      "community_eyebrow": "La Raíz",
+      "community_title": "Únete a la mesa",
+      "community_body": "Intercambia recetas, comparte tus logros en la cocina y conoce a apasionados cerca de ti."
+    }
+  },
+  "pricing": {
+    "eyebrow": "Elige tu plan",
+    "title": "Crece con",
+    "title_em": "Vireo",
+    "subtitle": "Empieza gratis, pásate a Pro cuando lo necesites. Cambia o cancela cuando quieras.",
+    "most_popular": "Más elegido",
+    "free": "Gratis",
+    "month": "mes",
+    "current_plan": "Plan actual",
+    "always_free": "Siempre gratis",
+    "manage_subscription": "Gestionar suscripción",
+    "switch_plan": "Cambiar de plan",
+    "subscribe": "Suscribirse",
+    "disclaimer": "Pago seguro con Stripe. Cancela cuando quieras.",
+    "checkout_title": "Completa tu suscripción",
+    "portal_error": "No se pudo abrir el portal"
   }
 }
