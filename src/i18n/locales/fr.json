@@ -672,7 +672,19 @@
     "empty": "Le panier est vide.",
     "empty_title": "Rien dans le panier",
     "empty_desc": "Explorez le marketplace éco de Vireo.",
-    "browse_btn": "Aller au marketplace"
+    "browse_btn": "Aller au marketplace",
+    "checkout_btn": "Passer au paiement",
+    "checkout_title": "Finaliser la commande",
+    "decrease": "Diminuer la quantité",
+    "increase": "Augmenter la quantité",
+    "remove": "Retirer l'article",
+    "shipping": "Livraison",
+    "subtotal": "Sous-total",
+    "summary": "Récapitulatif",
+    "free": "Gratuit",
+    "selection_label": "Votre sélection",
+    "total": "Total",
+    "view_cart": "Voir le panier"
   },
   "surplus": {
     "eyebrow": "Anti-gaspi · Magic Bags",
@@ -682,5 +694,27 @@
     "lead": "Plats et produits des restaurants voisins jusqu'à -70%. Chaque Magic Bag évite environ 2,5 kg de CO₂.",
     "available_today": "disponibles aujourd'hui",
     "kg_co2_saved": "kg CO₂ à sauver"
+  },
+  "checkout_return": {
+    "sub_title": "Bienvenue à bord",
+    "sub_desc": "Votre abonnement est actif. Vous avez désormais accès à toutes les fonctionnalités Pro de Vireo.",
+    "order_title": "Merci pour votre commande",
+    "order_desc": "Votre paiement a été accepté. Vous recevrez un e-mail de confirmation sous peu.",
+    "try_ai": "Essayez le chat IA illimité",
+    "dashboard": "Aller au tableau de bord",
+    "view_orders": "Voir mes commandes",
+    "continue_shopping": "Continuer mes achats"
+  },
+  "co2": {
+    "title": "CO₂ économisé",
+    "saved": "au total",
+    "this_week": "{{kg}} kg cette semaine",
+    "last_7": "7 derniers jours",
+    "eq_car": "Équivaut à",
+    "eq_flights": "Vols évités",
+    "flights_unit": "vols",
+    "how_calculated": "Comment nous le calculons",
+    "rule_recipe": "+2,5 kg pour chaque recette végé enregistrée",
+    "rule_reservation": "+1,8 kg pour chaque réservation éco"
   }
 }
