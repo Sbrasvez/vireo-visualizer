@@ -26,26 +26,63 @@ Cerca parole italiane comuni (`Carrello`, `Riepilogo`, `Selezione`, `Prenotazion
 
 **Ignora**: commenti, import, stringhe già in `t("key", "fallback")`.
 
-## check-i18n-keys.mjs — chiavi mancanti
+## check-i18n-keys.mjs — missing + orphans
 
-Estrae tutte le chiavi statiche da `t("namespace.key")` / `t('namespace.key')` / `` t(`namespace.key`) `` nei file `.ts`/`.tsx` e verifica che esistano in `src/i18n/locales/{it,en,es,fr,de}.json`.
+Esegue **due check** sui locale:
 
-**Ignora**:
-- chiavi dinamiche (es. `t(variable)`, `` t(`prefix.${x}`) ``)
+1. **MISSING** — chiavi usate in `t("ns.key")` nel codice ma assenti in qualche locale
+2. **ORPHAN** — chiavi presenti in `it.json` (locale di riferimento) ma **mai usate** nel codice
+
+### Flag
+
+```bash
+node scripts/check-i18n-keys.mjs                 # entrambi i check
+node scripts/check-i18n-keys.mjs --no-orphans    # solo missing
+node scripts/check-i18n-keys.mjs --orphans-only  # solo orphans
+node scripts/check-i18n-keys.mjs --strict        # exit 1 anche solo per orphans
+node scripts/check-i18n-keys.mjs src/pages       # cartella specifica
+```
+
+### Exit code
+
+| Scenario | Default | Con `--strict` |
+|---|---|---|
+| Missing trovate | 1 | 1 |
+| Solo orphans trovate | 0 (warning) | 1 |
+| Tutto pulito | 0 | 0 |
+
+### Cosa estrae dal codice
+
+- `t("ns.key")` / `t('ns.key')` / `` t(`ns.key`) `` → chiavi statiche
+- `` t(`ns.${var}`) `` → registrato come **prefix dinamico** `"ns."`: tutte le chiavi sotto quel prefix sono considerate "usate" (no falsi positivi sugli orphans)
+
+### Cosa ignora
+
 - chiavi flat senza namespace (es. `t("Hello")`)
 - chiavi dentro a commenti
 - file di test
+- varianti plurali (`_zero/_one/_two/_few/_many/_other`) — la chiave base le copre tutte
 
-**Pluralizzazione**: una chiave `cart.eyebrow` è considerata presente se nel locale esiste `cart.eyebrow` o una variante plurale (`_zero`, `_one`, `_two`, `_few`, `_many`, `_other`).
+### Whitelist orphans
 
-**Output di esempio**:
+Per chiavi consumate dinamicamente in modi non rilevabili, aggiungile a `ORPHAN_WHITELIST` in `check-i18n-keys.mjs`.
+
+### Output di esempio
+
 ```
-✗ i18n keys lint: trovate 3 chiavi mancanti
+✓ i18n missing: 644 chiavi uniche, tutte presenti in it/en/es/fr/de
+⚠ i18n orphans: trovate 72 chiavi presenti in it.json ma MAI usate nel codice
 
-  "cart.checkout_btn"
-    mancante in: en, es, fr, de
-    usata in:
-      src/pages/Cart.tsx:173
+  [cart] 3 orphans
+    cart.free
+    cart.selection_label
+    cart.summary
+
+  [profile] 7 orphans
+    profile.bio
+    ...
+
+ℹ prefix dinamici registrati: green_score.levels, marketplace.categories, ...
 ```
 
 ## Estendere
