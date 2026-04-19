@@ -779,7 +779,19 @@
     "empty": "Il carrello è vuoto.",
     "empty_title": "Niente nel carrello",
     "empty_desc": "Esplora il marketplace eco di Vireo.",
-    "browse_btn": "Vai al marketplace"
+    "browse_btn": "Vai al marketplace",
+    "checkout_btn": "Procedi al checkout",
+    "checkout_title": "Completa l'ordine",
+    "decrease": "Riduci quantità",
+    "increase": "Aumenta quantità",
+    "remove": "Rimuovi articolo",
+    "shipping": "Spedizione",
+    "subtotal": "Subtotale",
+    "summary": "Riepilogo",
+    "free": "Gratis",
+    "selection_label": "La tua selezione",
+    "total": "Totale",
+    "view_cart": "Vai al carrello"
   },
   "surplus": {
     "eyebrow": "Anti-spreco · Magic Bags",
@@ -789,5 +801,15 @@
     "lead": "Pasti e prodotti dai ristoranti vicini fino al -70%. Ogni Magic Bag evita circa 2,5 kg di CO₂.",
     "available_today": "disponibili oggi",
     "kg_co2_saved": "kg CO₂ salvabili"
+  },
+  "checkout_return": {
+    "sub_title": "Benvenuto a bordo",
+    "sub_desc": "Il tuo abbonamento è attivo. Ora hai accesso a tutte le funzionalità Pro di Vireo.",
+    "order_title": "Grazie per il tuo ordine",
+    "order_desc": "Il pagamento è andato a buon fine. Riceverai una mail di conferma a breve.",
+    "try_ai": "Prova la chat AI illimitata",
+    "dashboard": "Vai alla dashboard",
+    "view_orders": "Vedi i miei ordini",
+    "continue_shopping": "Continua lo shopping"
   }
 }

@@ -672,7 +672,19 @@
     "empty": "El carrito está vacío.",
     "empty_title": "Nada en el carrito",
     "empty_desc": "Explora el marketplace eco de Vireo.",
-    "browse_btn": "Ir al marketplace"
+    "browse_btn": "Ir al marketplace",
+    "checkout_btn": "Ir al checkout",
+    "checkout_title": "Completa tu pedido",
+    "decrease": "Reducir cantidad",
+    "increase": "Aumentar cantidad",
+    "remove": "Quitar artículo",
+    "shipping": "Envío",
+    "subtotal": "Subtotal",
+    "summary": "Resumen",
+    "free": "Gratis",
+    "selection_label": "Tu selección",
+    "total": "Total",
+    "view_cart": "Ir al carrito"
   },
   "surplus": {
     "eyebrow": "Antidesperdicio · Magic Bags",
@@ -682,5 +694,27 @@
     "lead": "Comidas y productos de restaurantes cercanos hasta -70%. Cada Magic Bag evita unos 2,5 kg de CO₂.",
     "available_today": "disponibles hoy",
     "kg_co2_saved": "kg CO₂ a salvar"
+  },
+  "checkout_return": {
+    "sub_title": "Bienvenido a bordo",
+    "sub_desc": "Tu suscripción está activa. Ahora tienes acceso a todas las funciones Pro de Vireo.",
+    "order_title": "Gracias por tu pedido",
+    "order_desc": "El pago se ha realizado con éxito. Recibirás un email de confirmación en breve.",
+    "try_ai": "Prueba el chat IA ilimitado",
+    "dashboard": "Ir al panel",
+    "view_orders": "Ver mis pedidos",
+    "continue_shopping": "Seguir comprando"
+  },
+  "co2": {
+    "title": "CO₂ ahorrada",
+    "saved": "total",
+    "this_week": "{{kg}} kg esta semana",
+    "last_7": "Últimos 7 días",
+    "eq_car": "Equivale a",
+    "eq_flights": "Vuelos evitados",
+    "flights_unit": "vuelos",
+    "how_calculated": "Cómo lo calculamos",
+    "rule_recipe": "+2,5 kg por cada receta veg guardada",
+    "rule_reservation": "+1,8 kg por cada reserva eco"
   }
 }
