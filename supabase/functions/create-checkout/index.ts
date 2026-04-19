@@ -261,17 +261,20 @@ serve(async (req) => {
       }),
     };
 
+    const requestOrigin = req.headers.get("origin");
+    const safeReturnUrl = returnUrl && isAllowedReturnUrl(returnUrl, requestOrigin)
+      ? returnUrl
+      : `${requestOrigin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
+
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode,
       ui_mode: "embedded",
-      return_url:
-        returnUrl ||
-        `${req.headers.get("origin")}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: safeReturnUrl,
       ...(customerEmail && { customer_email: customerEmail }),
       metadata,
       ...(mode === "subscription" && {
-        subscription_data: { metadata: { ...(userId && { userId }), env } },
+        subscription_data: { metadata: { userId, env } },
       }),
       ...(mode === "payment" && {
         shipping_address_collection: { allowed_countries: ["IT", "FR", "DE", "ES", "AT", "CH", "GB"] },
