@@ -111,6 +111,18 @@ export function ContactSellerDialog({ sellerId, sellerName, trigger }: ContactSe
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Honeypot field — hidden from real users, bots will fill it */}
+          <div aria-hidden="true" className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
+            <Label htmlFor="cs-website">Website</Label>
+            <Input
+              id="cs-website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={form.website}
+              onChange={(e) => setForm({ ...form, website: e.target.value })}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="cs-name">{t("contact_seller.name", "Il tuo nome")} *</Label>
             <Input
