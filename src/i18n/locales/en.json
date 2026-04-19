@@ -759,7 +759,12 @@
       "branch": "Branch",
       "tree": "Tree",
       "forest": "Forest"
-    }
+    },
+    "badge_first_recipe": "First recipe",
+    "badge_explorer": "Explorer",
+    "badge_reviewer": "Reviewer",
+    "badge_shopper": "Eco shopper",
+    "badge_collector": "Collector"
   },
   "feature_gate": {
     "title": "Available with {{plan}}",
