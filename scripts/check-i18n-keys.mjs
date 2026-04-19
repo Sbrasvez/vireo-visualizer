@@ -211,10 +211,14 @@ if (CHECK_ORPHANS) {
 
     // 1. usata direttamente?
     if (usedLogical.has(logical)) continue;
-    // 2. coperta da un prefix dinamico? (es. green_score.levels.* via t(`green_score.levels.${k}`))
+    // 2. coperta da un prefix dinamico?
+    //    Il prefix è già il letterale completo prima di ${ (es.
+    //    "green_score.levels." per t(`green_score.levels.${k}`) oppure
+    //    "green_score.badge_" per t(`green_score.badge_${k}`)). Match
+    //    diretto con startsWith senza aggiungere altri separatori.
     let covered = false;
     for (const prefix of dynamicPrefixSet) {
-      if (logical.startsWith(prefix + ".")) {
+      if (logical.startsWith(prefix)) {
         covered = true;
         break;
       }
