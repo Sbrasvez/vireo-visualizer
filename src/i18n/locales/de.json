@@ -505,7 +505,13 @@
     "publish_answer": "Antwort veröffentlichen",
     "update_answer": "Aktualisieren",
     "edit": "Bearbeiten",
-    "sending": "Senden..."
+    "sending": "Senden...",
+    "tab_messages": "Nachrichten",
+    "no_messages": "Noch keine Nachrichten.",
+    "new": "Neu",
+    "replied": "Beantwortet",
+    "reply_via_email": "Per E-Mail antworten",
+    "mark_replied": "Als beantwortet markieren"
   },
   "admin_sellers": {
     "title": "Verkäuferverwaltung",

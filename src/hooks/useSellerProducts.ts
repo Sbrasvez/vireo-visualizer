@@ -60,7 +60,7 @@ export function useMarketplaceProducts(filters: ProductFilters = {}) {
     queryFn: async (): Promise<SellerProduct[]> => {
       let q = supabase
         .from("seller_products")
-        .select("*, seller:sellers!inner(id, business_name, slug, logo_url, rating, status)")
+        .select("*, seller:sellers_public!inner(id, business_name, slug, logo_url, rating, status)")
         .eq("is_published", true)
         .eq("seller.status", "approved");
 
