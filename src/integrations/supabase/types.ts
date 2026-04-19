@@ -248,6 +248,13 @@ export type Database = {
             referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "magic_bags_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       marketplace_order_items: {
@@ -750,6 +757,13 @@ export type Database = {
             referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "restaurant_menu_items_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       restaurant_photos: {
@@ -783,6 +797,13 @@ export type Database = {
             columns: ["restaurant_id"]
             isOneToOne: false
             referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "restaurant_photos_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants_public"
             referencedColumns: ["id"]
           },
         ]
@@ -841,6 +862,13 @@ export type Database = {
             referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "restaurant_reservations_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       restaurant_reviews: {
@@ -885,6 +913,13 @@ export type Database = {
             referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "restaurant_reviews_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       restaurants: {
@@ -903,6 +938,7 @@ export type Database = {
           lng: number
           name: string
           opening_hours: Json | null
+          owner_user_id: string | null
           phone: string | null
           price: Database["public"]["Enums"]["price_range"]
           rating: number | null
@@ -929,6 +965,7 @@ export type Database = {
           lng: number
           name: string
           opening_hours?: Json | null
+          owner_user_id?: string | null
           phone?: string | null
           price?: Database["public"]["Enums"]["price_range"]
           rating?: number | null
@@ -955,6 +992,7 @@ export type Database = {
           lng?: number
           name?: string
           opening_hours?: Json | null
+          owner_user_id?: string | null
           phone?: string | null
           price?: Database["public"]["Enums"]["price_range"]
           rating?: number | null
@@ -1395,6 +1433,81 @@ export type Database = {
       }
     }
     Views: {
+      restaurants_public: {
+        Row: {
+          address: string | null
+          available_now: boolean | null
+          city: string | null
+          cover_image: string | null
+          created_at: string | null
+          cuisine: Database["public"]["Enums"]["cuisine_type"][] | null
+          description: string | null
+          eco_certifications: string[] | null
+          id: string | null
+          lat: number | null
+          lng: number | null
+          name: string | null
+          opening_hours: Json | null
+          price: Database["public"]["Enums"]["price_range"] | null
+          rating: number | null
+          region: string | null
+          reviews_count: number | null
+          short_description: string | null
+          slug: string | null
+          tags: string[] | null
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          available_now?: boolean | null
+          city?: string | null
+          cover_image?: string | null
+          created_at?: string | null
+          cuisine?: Database["public"]["Enums"]["cuisine_type"][] | null
+          description?: string | null
+          eco_certifications?: string[] | null
+          id?: string | null
+          lat?: number | null
+          lng?: number | null
+          name?: string | null
+          opening_hours?: Json | null
+          price?: Database["public"]["Enums"]["price_range"] | null
+          rating?: number | null
+          region?: string | null
+          reviews_count?: number | null
+          short_description?: string | null
+          slug?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          available_now?: boolean | null
+          city?: string | null
+          cover_image?: string | null
+          created_at?: string | null
+          cuisine?: Database["public"]["Enums"]["cuisine_type"][] | null
+          description?: string | null
+          eco_certifications?: string[] | null
+          id?: string | null
+          lat?: number | null
+          lng?: number | null
+          name?: string | null
+          opening_hours?: Json | null
+          price?: Database["public"]["Enums"]["price_range"] | null
+          rating?: number | null
+          region?: string | null
+          reviews_count?: number | null
+          short_description?: string | null
+          slug?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       sellers_public: {
         Row: {
           business_name: string | null

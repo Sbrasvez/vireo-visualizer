@@ -24,8 +24,6 @@ export interface Restaurant {
   description: string | null;
   cuisine: CuisineType[];
   price: "€" | "€€" | "€€€" | "€€€€";
-  phone: string | null;
-  email: string | null;
   website: string | null;
   opening_hours: Record<string, string> | null;
   cover_image: string | null;
@@ -70,7 +68,7 @@ export function useRestaurants() {
     let cancel = false;
     (async () => {
       const { data, error } = await supabase
-        .from("restaurants")
+        .from("restaurants_public")
         .select("*")
         .order("name");
       if (cancel) return;

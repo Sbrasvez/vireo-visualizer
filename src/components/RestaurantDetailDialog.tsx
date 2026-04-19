@@ -278,16 +278,6 @@ export default function RestaurantDetailDialog({
               </div>
               <div className="grid sm:grid-cols-2 gap-4 pt-2">
                 <InfoRow icon={MapPin} label={t("restaurant_dialog.address")}>{restaurant.address}</InfoRow>
-                {restaurant.phone && (
-                  <InfoRow icon={Phone} label={t("restaurant_dialog.phone")}>
-                    <a href={`tel:${restaurant.phone}`} className="hover:text-primary">{restaurant.phone}</a>
-                  </InfoRow>
-                )}
-                {restaurant.email && (
-                  <InfoRow icon={Mail} label={t("restaurant_dialog.email")}>
-                    <a href={`mailto:${restaurant.email}`} className="hover:text-primary">{restaurant.email}</a>
-                  </InfoRow>
-                )}
                 {restaurant.website && (
                   <InfoRow icon={Globe} label={t("restaurant_dialog.website")}>
                     <a href={restaurant.website} target="_blank" rel="noreferrer" className="hover:text-primary">{restaurant.website.replace(/^https?:\/\//, "")}</a>
