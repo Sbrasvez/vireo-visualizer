@@ -510,7 +510,8 @@
     "no_messages": "Aún no hay mensajes.",
     "new": "Nuevo",
     "replied": "Respondido",
-    "reply_via_email": "Responder por email"
+    "reply_via_email": "Responder por email",
+    "mark_replied": "Marcar como respondido"
   },
   "admin_sellers": {
     "title": "Gestión de vendedores",

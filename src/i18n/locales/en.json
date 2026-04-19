@@ -539,7 +539,8 @@
     "no_messages": "No messages yet.",
     "new": "New",
     "replied": "Replied",
-    "reply_via_email": "Reply via email"
+    "reply_via_email": "Reply via email",
+    "mark_replied": "Mark as replied"
   },
   "admin_sellers": {
     "title": "Seller management",

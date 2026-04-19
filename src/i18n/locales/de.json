@@ -510,7 +510,8 @@
     "no_messages": "Noch keine Nachrichten.",
     "new": "Neu",
     "replied": "Beantwortet",
-    "reply_via_email": "Per E-Mail antworten"
+    "reply_via_email": "Per E-Mail antworten",
+    "mark_replied": "Als beantwortet markieren"
   },
   "admin_sellers": {
     "title": "Verkäuferverwaltung",
