@@ -9,7 +9,9 @@ export interface CheckoutItem {
 
 interface Props {
   items: CheckoutItem[];
+  /** @deprecated server derives email from the authenticated user */
   customerEmail?: string;
+  /** @deprecated server derives userId from the authenticated user */
   userId?: string;
   returnUrl?: string;
   mode?: "payment" | "subscription";
@@ -17,17 +19,14 @@ interface Props {
 
 export function StripeEmbeddedCheckout({
   items,
-  customerEmail,
-  userId,
   returnUrl,
   mode,
 }: Props) {
   const fetchClientSecret = async (): Promise<string> => {
+    // Identity (userId, email) is derived server-side from the JWT — never sent from the client.
     const { data, error } = await supabase.functions.invoke("create-checkout", {
       body: {
         items,
-        customerEmail,
-        userId,
         returnUrl,
         mode,
         environment: getStripeEnvironment(),

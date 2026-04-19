@@ -17,12 +17,41 @@ interface CartItem {
   kind?: "seller_product" | "stripe_price";
 }
 
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+
 const supabaseAdmin = createClient(
-  Deno.env.get("SUPABASE_URL")!,
+  SUPABASE_URL,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
 
 const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+
+// Allowlist of origins permitted as return_url hosts.
+const ALLOWED_RETURN_HOSTS = new Set<string>([
+  "lovable.app",
+  "lovable.dev",
+  "localhost",
+  "127.0.0.1",
+]);
+
+function isAllowedReturnUrl(url: string, requestOrigin: string | null): boolean {
+  try {
+    const u = new URL(url);
+    if (requestOrigin) {
+      try {
+        const o = new URL(requestOrigin);
+        if (o.host === u.host) return true;
+      } catch (_) { /* ignore */ }
+    }
+    // Allow lovable preview/published subdomains and localhost dev
+    return Array.from(ALLOWED_RETURN_HOSTS).some(
+      (h) => u.hostname === h || u.hostname.endsWith(`.${h}`),
+    );
+  } catch {
+    return false;
+  }
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -30,16 +59,40 @@ serve(async (req) => {
   }
 
   try {
+    // Require an authenticated caller — derive userId from the verified JWT.
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const supabaseUser = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: claimsData, error: claimsErr } = await supabaseUser.auth.getClaims(token);
+    if (claimsErr || !claimsData?.claims?.sub) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const verifiedUserId = claimsData.claims.sub as string;
+    const verifiedEmail = (claimsData.claims.email as string | undefined) ?? undefined;
+
     const {
       items,
       priceId,
       quantity,
-      customerEmail,
-      userId,
       returnUrl,
       environment,
       mode: requestedMode,
     } = await req.json();
+
+    // Always derive identity from JWT — never trust client-supplied userId/email.
+    const userId = verifiedUserId;
+    const customerEmail = verifiedEmail;
 
     const cart: CartItem[] = items && Array.isArray(items)
       ? items
@@ -199,7 +252,7 @@ serve(async (req) => {
     // Encode marketplace metadata so the webhook can build marketplace_orders rows.
     const isMarketplace = sellerLineMeta.length > 0;
     const metadata: Record<string, string> = {
-      ...(userId && { userId }),
+      userId,
       env,
       ...(isMarketplace && {
         marketplace: "1",
@@ -208,17 +261,20 @@ serve(async (req) => {
       }),
     };
 
+    const requestOrigin = req.headers.get("origin");
+    const safeReturnUrl = returnUrl && isAllowedReturnUrl(returnUrl, requestOrigin)
+      ? returnUrl
+      : `${requestOrigin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
+
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode,
       ui_mode: "embedded",
-      return_url:
-        returnUrl ||
-        `${req.headers.get("origin")}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: safeReturnUrl,
       ...(customerEmail && { customer_email: customerEmail }),
       metadata,
       ...(mode === "subscription" && {
-        subscription_data: { metadata: { ...(userId && { userId }), env } },
+        subscription_data: { metadata: { userId, env } },
       }),
       ...(mode === "payment" && {
         shipping_address_collection: { allowed_countries: ["IT", "FR", "DE", "ES", "AT", "CH", "GB"] },
