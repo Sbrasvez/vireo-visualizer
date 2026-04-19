@@ -52,7 +52,16 @@
     "link_copied": "Link copiato",
     "someone": "Qualcuno",
     "public_empty_title": "Nessun prodotto pubblico",
-    "public_empty_desc": "Questa wishlist non contiene ancora prodotti condivisi."
+    "public_empty_desc": "Questa wishlist non contiene ancora prodotti condivisi.",
+    "eyebrow": "I tuoi preferiti",
+    "editorial_title_1": "Oggetti che",
+    "editorial_title_2": "amerai a lungo",
+    "editorial_lead": "La tua collezione personale di pezzi che raccontano una storia.",
+    "share_eyebrow": "Condivisione",
+    "collection_eyebrow": "La tua collezione",
+    "empty_eyebrow": "Capitolo vuoto",
+    "item_singular": "pezzo",
+    "item_plural": "pezzi"
   },
   "shopping_list": {
     "title": "Lista della spesa",
@@ -311,7 +320,9 @@
     "decrease_servings": "Riduci porzioni",
     "increase_servings": "Aumenta porzioni",
     "add_to_shopping_list": "Aggiungi alla lista spesa",
-    "added_to_shopping_list": "{{count}} ingredienti aggiunti alla lista spesa"
+    "added_to_shopping_list": "{{count}} ingredienti aggiunti alla lista spesa",
+    "added_to_shopping_list_one": "{{count}} ingrediente aggiunto alla lista",
+    "added_to_shopping_list_other": "{{count}} ingredienti aggiunti alla lista"
   },
   "restaurants": {
     "badge_count": "{{count}} ristoranti eco-friendly in Italia",
@@ -486,7 +497,23 @@
     "avatar_too_large_desc": "Max 2MB",
     "upload_error": "Errore upload",
     "avatar_updated": "Avatar aggiornato!",
-    "profile_updated": "Profilo aggiornato!"
+    "profile_updated": "Profilo aggiornato!",
+    "eyebrow": "Il tuo spazio",
+    "editorial_title_1": "La tua",
+    "editorial_title_2": "identità",
+    "editorial_lead": "Personalizza il tuo profilo, gestisci il tuo abbonamento e ritrova i tuoi ordini.",
+    "change_avatar": "Cambia foto profilo",
+    "subscription_eyebrow": "Abbonamento",
+    "my_plan": "Il mio piano",
+    "plan_desc": "Gestisci abbonamento, fatture e metodo di pagamento",
+    "canceling": "Cancellazione in sospeso",
+    "access_until": "Accesso fino al",
+    "renews_on": "Rinnova il",
+    "upgrade": "Passa a Pro",
+    "my_orders": "I miei ordini",
+    "orders_desc": "Storico acquisti dal Marketplace",
+    "no_orders": "Nessun ordine ancora.",
+    "order": "Ordine"
   },
   "dashboard": {
     "good_morning": "Buongiorno",
