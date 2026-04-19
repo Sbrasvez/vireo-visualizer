@@ -18,10 +18,16 @@ import { useMySeller } from "@/hooks/useSeller";
 import { useMyProducts, useCreateProduct, useDeleteProduct, useUpdateProduct } from "@/hooks/useSellerProducts";
 import { useSellerOrders, useUpdateFulfillment } from "@/hooks/useSellerOrders";
 import { formatEur } from "@/lib/catalog";
-import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, MessageCircleQuestion } from "lucide-react";
+import { Plus, Package, Wallet, ShoppingBag, TrendingUp, Trash2, Eye, EyeOff, MessageCircleQuestion, Mail, MailOpen, CheckCircle2, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useSellerQuestions, useAnswerQuestion } from "@/hooks/useProductQuestions";
+import {
+  useSellerMessages,
+  useMarkSellerMessageRead,
+  useMarkSellerMessageReplied,
+  type SellerMessage,
+} from "@/hooks/useSellerMessages";
 
 const CATEGORIES = ["kitchen", "home", "personal", "reuse", "bio", "fashion", "beauty", "garden"];
 
@@ -39,6 +45,8 @@ export default function SellerDashboard() {
   const { data: questions = [] } = useSellerQuestions(seller?.id);
   const answerQuestion = useAnswerQuestion();
   const unansweredCount = questions.filter((q) => !q.answer).length;
+  const { data: messages = [] } = useSellerMessages(seller?.id);
+  const unreadMessagesCount = messages.filter((m) => !m.is_read).length;
 
   const [openCreate, setOpenCreate] = useState(false);
   const [form, setForm] = useState({
@@ -207,6 +215,15 @@ export default function SellerDashboard() {
                 {unansweredCount > 0 && (
                   <Badge variant="secondary" className="h-5">
                     {unansweredCount}
+                  </Badge>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="messages" className="gap-2">
+                <Mail className="size-4" />
+                {t("seller_dashboard.tab_messages", "Messaggi")}{" "}
+                {unreadMessagesCount > 0 && (
+                  <Badge variant="secondary" className="h-5">
+                    {unreadMessagesCount}
                   </Badge>
                 )}
               </TabsTrigger>
@@ -500,6 +517,22 @@ export default function SellerDashboard() {
                 </div>
               )}
             </TabsContent>
+
+            <TabsContent value="messages" className="mt-6">
+              {messages.length === 0 ? (
+                <Card>
+                  <CardContent className="py-16 text-center text-muted-foreground">
+                    {t("seller_dashboard.no_messages", "Nessun messaggio ricevuto")}
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-3">
+                  {messages.map((m) => (
+                    <MessageRow key={m.id} message={m} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
           </Tabs>
         </div>
       </main>
@@ -625,6 +658,89 @@ function QuestionRow({
             <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
               {t("seller_dashboard.edit")}
             </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function MessageRow({ message }: { message: SellerMessage }) {
+  const { t, i18n } = useTranslation();
+  const markRead = useMarkSellerMessageRead();
+  const markReplied = useMarkSellerMessageReplied();
+  const [expanded, setExpanded] = useState(!message.is_read);
+
+  const handleToggle = () => {
+    if (!expanded && !message.is_read) {
+      markRead.mutate({ id: message.id, is_read: true });
+    }
+    setExpanded((v) => !v);
+  };
+
+  return (
+    <Card className={message.is_read ? "" : "border-primary/40"}>
+      <CardContent className="p-5 space-y-3">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex-1 min-w-[180px]">
+            <div className="flex items-center gap-2 flex-wrap">
+              {!message.is_read && <Badge className="bg-primary text-primary-foreground">{t("seller_dashboard.new", "Nuovo")}</Badge>}
+              {message.replied_at && (
+                <Badge variant="secondary" className="gap-1">
+                  <CheckCircle2 className="size-3" />
+                  {t("seller_dashboard.replied", "Risposto")}
+                </Badge>
+              )}
+              <span className="font-semibold">{message.sender_name}</span>
+              <span className="text-xs text-muted-foreground">
+                ·{" "}
+                {new Date(message.created_at).toLocaleDateString(i18n.language, {
+                  day: "numeric",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+            <p className="font-display text-lg mt-1">{message.subject}</p>
+          </div>
+          <Button variant="ghost" size="sm" onClick={handleToggle}>
+            {expanded ? <MailOpen className="size-4" /> : <Mail className="size-4" />}
+          </Button>
+        </div>
+
+        {expanded && (
+          <div className="space-y-3 pt-2 border-t border-border/50">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              <a href={`mailto:${message.sender_email}?subject=Re:%20${encodeURIComponent(message.subject)}`} className="text-primary hover:underline inline-flex items-center gap-1">
+                <Mail className="size-3.5" /> {message.sender_email}
+              </a>
+              {message.sender_phone && (
+                <a href={`tel:${message.sender_phone}`} className="text-primary hover:underline inline-flex items-center gap-1">
+                  <Phone className="size-3.5" /> {message.sender_phone}
+                </a>
+              )}
+            </div>
+            <p className="text-sm leading-relaxed whitespace-pre-line">{message.message}</p>
+            <div className="flex justify-end gap-2 pt-1">
+              {!message.replied_at && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => markReplied.mutate(message.id)}
+                  disabled={markReplied.isPending}
+                >
+                  <CheckCircle2 className="size-4 mr-2" />
+                  {t("seller_dashboard.mark_replied", "Segna come risposto")}
+                </Button>
+              )}
+              <Button asChild size="sm">
+                <a href={`mailto:${message.sender_email}?subject=Re:%20${encodeURIComponent(message.subject)}`}>
+                  <Mail className="size-4 mr-2" />
+                  {t("seller_dashboard.reply_via_email", "Rispondi via email")}
+                </a>
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>
