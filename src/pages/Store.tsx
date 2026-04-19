@@ -9,9 +9,10 @@ import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Star, Recycle, Leaf, Plus, Check, ArrowLeft, ShoppingBag } from "lucide-react";
+import { Star, Recycle, Leaf, Plus, Check, ArrowLeft, ShoppingBag, Mail } from "lucide-react";
 import { formatEur } from "@/lib/catalog";
 import { useToast } from "@/hooks/use-toast";
+import { ContactSellerDialog } from "@/components/ContactSellerDialog";
 
 export default function Store() {
   const { t } = useTranslation();
