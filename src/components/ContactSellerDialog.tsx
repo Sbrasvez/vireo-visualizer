@@ -73,6 +73,7 @@ export function ContactSellerDialog({ sellerId, sellerName, trigger }: ContactSe
         sender_phone: parsed.data.sender_phone || undefined,
         subject: parsed.data.subject,
         message: parsed.data.message,
+        website: form.website,
       });
       toast.success(t("contact_seller.success", "Messaggio inviato! Il venditore ti risponderà via email."));
       setOpen(false);
@@ -82,6 +83,7 @@ export function ContactSellerDialog({ sellerId, sellerName, trigger }: ContactSe
         sender_phone: "",
         subject: "",
         message: "",
+        website: "",
       });
     } catch (err: any) {
       toast.error(err?.message ?? t("contact_seller.error", "Errore nell'invio"));
