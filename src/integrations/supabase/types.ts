@@ -324,6 +324,13 @@ export type Database = {
             referencedRelation: "sellers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "marketplace_order_items_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       marketplace_orders: {
@@ -1093,6 +1100,13 @@ export type Database = {
             referencedRelation: "sellers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "seller_products_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       sellers: {
@@ -1324,7 +1338,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      sellers_public: {
+        Row: {
+          business_name: string | null
+          category: string | null
+          country: string | null
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          is_demo: boolean | null
+          logo_url: string | null
+          rating: number | null
+          slug: string | null
+          status: Database["public"]["Enums"]["seller_status"] | null
+          total_orders: number | null
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          category?: string | null
+          country?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_demo?: boolean | null
+          logo_url?: string | null
+          rating?: number | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["seller_status"] | null
+          total_orders?: number | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          category?: string | null
+          country?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_demo?: boolean | null
+          logo_url?: string | null
+          rating?: number | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["seller_status"] | null
+          total_orders?: number | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       decrement_product_stock: {
