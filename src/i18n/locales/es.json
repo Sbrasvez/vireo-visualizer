@@ -759,7 +759,12 @@
       "branch": "Rama",
       "tree": "Árbol",
       "forest": "Bosque"
-    }
+    },
+    "badge_first_recipe": "Primera receta",
+    "badge_explorer": "Explorador",
+    "badge_reviewer": "Reseñador",
+    "badge_shopper": "Comprador eco",
+    "badge_collector": "Coleccionista"
   },
   "feature_gate": {
     "title": "Disponible con {{plan}}",

@@ -114,7 +114,12 @@
       "branch": "Ramo",
       "tree": "Albero",
       "forest": "Foresta"
-    }
+    },
+    "badge_first_recipe": "Prima ricetta",
+    "badge_explorer": "Esploratore",
+    "badge_reviewer": "Recensore",
+    "badge_shopper": "Acquirente eco",
+    "badge_collector": "Collezionista"
   },
   "feature_gate": {
     "title": "Disponibile con {{plan}}",

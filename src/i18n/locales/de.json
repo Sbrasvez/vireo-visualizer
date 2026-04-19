@@ -759,7 +759,12 @@
       "branch": "Zweig",
       "tree": "Baum",
       "forest": "Wald"
-    }
+    },
+    "badge_first_recipe": "Erstes Rezept",
+    "badge_explorer": "Entdecker",
+    "badge_reviewer": "Bewerter",
+    "badge_shopper": "Öko-Käufer",
+    "badge_collector": "Sammler"
   },
   "feature_gate": {
     "title": "Verfügbar mit {{plan}}",
