@@ -221,7 +221,37 @@ if (CHECK_ORPHANS) {
   }
 }
 
-// === REPORT ======================================================================
+// === CHECK 3: parity =============================================================
+// Per ogni locale, calcoliamo l'insieme delle chiavi foglia (path dotted, comprese
+// le varianti plurali). Poi confrontiamo a coppie ogni locale contro l'unione di
+// tutti, segnalando le chiavi mancanti per locale.
+//
+// NOTE: due chiavi sono considerate "equivalenti" se hanno la stessa path
+// completa (incluso eventuale suffisso plurale). Questo è voluto: se it.json ha
+// `cart.item_one`/`cart.item_other` e en.json ha solo `cart.item`, è una
+// desincronizzazione che vogliamo vedere — i18next risolverà comunque grazie ai
+// fallback ma il traduttore deve esserne consapevole.
+const parityIssues = []; // [{ key, missingIn: ["en", "fr"], presentIn: ["it", "es", "de"] }]
+if (CHECK_PARITY) {
+  const keysByLocale = Object.fromEntries(
+    LOCALES.map((l) => [l, new Set(flattenKeys(dictionaries[l]))])
+  );
+  const allKeysUnion = new Set();
+  for (const set of Object.values(keysByLocale)) {
+    for (const k of set) allKeysUnion.add(k);
+  }
+  for (const key of allKeysUnion) {
+    const missingIn = [];
+    const presentIn = [];
+    for (const loc of LOCALES) {
+      if (keysByLocale[loc].has(key)) presentIn.push(loc);
+      else missingIn.push(loc);
+    }
+    if (missingIn.length > 0) {
+      parityIssues.push({ key, missingIn, presentIn });
+    }
+  }
+}
 let exitCode = 0;
 
 if (CHECK_MISSING) {
