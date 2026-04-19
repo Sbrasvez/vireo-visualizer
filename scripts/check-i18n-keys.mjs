@@ -316,7 +316,44 @@ if (CHECK_ORPHANS) {
   }
 }
 
-if (dynamicPrefixSet.size > 0) {
+if (CHECK_PARITY) {
+  if (parityIssues.length === 0) {
+    console.log(
+      `✓ i18n parity: tutte le chiavi foglia sono allineate in ${LOCALES.join("/")}`
+    );
+  } else {
+    // Parità rotta = sempre errore: significa che un locale ha chiavi che gli
+    // altri non hanno (o viceversa). Diverso dagli orphans, qui è un bug di
+    // sync tra file di traduzione e va sempre risolto.
+    console.error(
+      `✗ i18n parity: trovate ${parityIssues.length} chiavi non allineate tra i locale\n`
+    );
+    // Raggruppa per "set di locale mancanti" per leggibilità (es. tutte le
+    // chiavi che mancano in en+fr+de finiscono nello stesso gruppo)
+    const byMissingSet = new Map();
+    for (const p of parityIssues.sort((a, b) => a.key.localeCompare(b.key))) {
+      const sig = p.missingIn.join(",");
+      if (!byMissingSet.has(sig)) byMissingSet.set(sig, []);
+      byMissingSet.get(sig).push(p);
+    }
+    for (const [sig, items] of [...byMissingSet.entries()].sort()) {
+      console.error(`  mancanti in [${sig}] (presenti in [${items[0].presentIn.join(",")}]) — ${items.length} chiavi`);
+      for (const p of items.slice(0, 50)) {
+        console.error(`    ${p.key}`);
+      }
+      if (items.length > 50) {
+        console.error(`    ...e altre ${items.length - 50} chiavi`);
+      }
+      console.error("");
+    }
+    console.error(
+      `Suggerimento: copia le chiavi mancanti dai locale di origine, oppure rimuovile da quelli che le contengono se sono morte.\n`
+    );
+    exitCode = 1;
+  }
+}
+
+
   console.log(
     `ℹ prefix dinamici registrati (orphans ignorate sotto questi): ${[...dynamicPrefixSet].sort().join(", ")}`
   );
