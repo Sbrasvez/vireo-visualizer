@@ -45,6 +45,8 @@ export default function SellerDashboard() {
   const { data: questions = [] } = useSellerQuestions(seller?.id);
   const answerQuestion = useAnswerQuestion();
   const unansweredCount = questions.filter((q) => !q.answer).length;
+  const { data: messages = [] } = useSellerMessages(seller?.id);
+  const unreadMessagesCount = messages.filter((m) => !m.is_read).length;
 
   const [openCreate, setOpenCreate] = useState(false);
   const [form, setForm] = useState({
