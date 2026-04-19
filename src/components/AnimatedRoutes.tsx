@@ -30,6 +30,7 @@ import ProductDetail from "@/pages/ProductDetail";
 import Wishlist from "@/pages/Wishlist";
 import PublicWishlist from "@/pages/PublicWishlist";
 import NotFound from "@/pages/NotFound";
+import PreviewGreenScore from "@/pages/PreviewGreenScore";
 
 const wrap = (node: React.ReactNode) => <PageTransition>{node}</PageTransition>;
 
