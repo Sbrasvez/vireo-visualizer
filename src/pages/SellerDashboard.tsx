@@ -218,6 +218,15 @@ export default function SellerDashboard() {
                   </Badge>
                 )}
               </TabsTrigger>
+              <TabsTrigger value="messages" className="gap-2">
+                <Mail className="size-4" />
+                {t("seller_dashboard.tab_messages", "Messaggi")}{" "}
+                {unreadMessagesCount > 0 && (
+                  <Badge variant="secondary" className="h-5">
+                    {unreadMessagesCount}
+                  </Badge>
+                )}
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="products" className="mt-6">
