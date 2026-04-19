@@ -51,8 +51,14 @@ const REFERENCE_LOCALE = "it";
 
 // Static literal: t("a.b.c", ...)
 const T_STATIC = /\bt\(\s*(["'`])([a-zA-Z0-9_.\-]+)\1/g;
-// Dynamic template: t(`a.b.${...}`) — cattura il prefix prima di ${
-const T_DYNAMIC = /\bt\(\s*`([a-zA-Z0-9_.\-]+)\.\$\{/g;
+// Dynamic template: t(`a.b.${...}`) o t(`a.b_${...}`) — cattura tutto il
+// prefix letterale prima di ${. Il prefix viene poi usato per match
+// "startsWith" sulle chiavi del locale, quindi:
+//   t(`green_score.levels.${k}`) → prefix "green_score.levels." → match
+//                                    green_score.levels.seedling, ecc.
+//   t(`green_score.badge_${k}`)  → prefix "green_score.badge_"  → match
+//                                    green_score.badge_first_recipe, ecc.
+const T_DYNAMIC = /\bt\(\s*`([a-zA-Z0-9_.\-]+)\$\{/g;
 
 const PLURAL_SUFFIXES = ["_zero", "_one", "_two", "_few", "_many", "_other"];
 
