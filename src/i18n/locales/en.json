@@ -174,7 +174,8 @@
     "increase_servings": "Increase servings",
     "add_to_shopping_list": "Add to shopping list",
     "added_to_shopping_list_one": "{{count}} ingredient added to the list",
-    "added_to_shopping_list_other": "{{count}} ingredients added to the list"
+    "added_to_shopping_list_other": "{{count}} ingredients added to the list",
+    "added_to_shopping_list": "{{count}} ingredients added to shopping list"
   },
   "restaurants": {
     "badge_count": "{{count}} eco-friendly restaurants in Italy",
@@ -750,7 +751,15 @@
     "reservations": "Tables",
     "reviews": "Reviews",
     "orders": "Orders",
-    "badges": "Unlocked badges"
+    "badges": "Unlocked badges",
+    "levels": {
+      "seedling": "Seedling",
+      "sprout": "Sprout",
+      "leaf": "Leaf",
+      "branch": "Branch",
+      "tree": "Tree",
+      "forest": "Forest"
+    }
   },
   "feature_gate": {
     "title": "Available with {{plan}}",

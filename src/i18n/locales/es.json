@@ -145,7 +145,8 @@
     "recipe_label": "Receta",
     "add_to_shopping_list": "Añadir a la lista de la compra",
     "added_to_shopping_list_one": "{{count}} ingrediente añadido a la lista",
-    "added_to_shopping_list_other": "{{count}} ingredientes añadidos a la lista"
+    "added_to_shopping_list_other": "{{count}} ingredientes añadidos a la lista",
+    "added_to_shopping_list": "{{count}} ingredientes añadidos a la lista de la compra"
   },
   "restaurants": {
     "badge_count": "{{count}} restaurantes eco-friendly en Italia",
@@ -750,7 +751,15 @@
     "reservations": "Mesas",
     "reviews": "Reseñas",
     "orders": "Pedidos",
-    "badges": "Insignias desbloqueadas"
+    "badges": "Insignias desbloqueadas",
+    "levels": {
+      "seedling": "Brote",
+      "sprout": "Plántula",
+      "leaf": "Hoja",
+      "branch": "Rama",
+      "tree": "Árbol",
+      "forest": "Bosque"
+    }
   },
   "feature_gate": {
     "title": "Disponible con {{plan}}",
