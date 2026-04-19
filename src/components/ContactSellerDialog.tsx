@@ -67,8 +67,11 @@ export function ContactSellerDialog({ sellerId, sellerName, trigger }: ContactSe
     try {
       await sendMessage.mutateAsync({
         seller_id: sellerId,
-        ...parsed.data,
+        sender_name: parsed.data.sender_name,
+        sender_email: parsed.data.sender_email,
         sender_phone: parsed.data.sender_phone || undefined,
+        subject: parsed.data.subject,
+        message: parsed.data.message,
       });
       toast.success(t("contact_seller.success", "Messaggio inviato! Il venditore ti risponderà via email."));
       setOpen(false);
