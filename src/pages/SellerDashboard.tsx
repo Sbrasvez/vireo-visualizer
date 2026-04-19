@@ -517,6 +517,22 @@ export default function SellerDashboard() {
                 </div>
               )}
             </TabsContent>
+
+            <TabsContent value="messages" className="mt-6">
+              {messages.length === 0 ? (
+                <Card>
+                  <CardContent className="py-16 text-center text-muted-foreground">
+                    {t("seller_dashboard.no_messages", "Nessun messaggio ricevuto")}
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-3">
+                  {messages.map((m) => (
+                    <MessageRow key={m.id} message={m} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
           </Tabs>
         </div>
       </main>
