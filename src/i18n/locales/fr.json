@@ -52,7 +52,16 @@
     "link_copied": "Lien copié",
     "someone": "Quelqu'un",
     "public_empty_title": "Aucun produit public",
-    "public_empty_desc": "Cette liste ne contient pas encore de produits partagés."
+    "public_empty_desc": "Cette liste ne contient pas encore de produits partagés.",
+    "eyebrow": "Vos favoris",
+    "editorial_title_1": "Des pièces que",
+    "editorial_title_2": "vous aimerez longtemps",
+    "editorial_lead": "Votre collection personnelle de pièces qui racontent une histoire.",
+    "share_eyebrow": "Partage",
+    "collection_eyebrow": "Votre collection",
+    "empty_eyebrow": "Chapitre vide",
+    "item_singular": "pièce",
+    "item_plural": "pièces"
   },
   "hero": {
     "badge": "IA pour un mode de vie durable",
@@ -197,7 +206,13 @@
     "not_found_title": "Recette non trouvée",
     "not_found_desc": "La recette que vous cherchez n'existe pas ou a été supprimée.",
     "decrease_servings": "Réduire les portions",
-    "increase_servings": "Augmenter les portions"
+    "increase_servings": "Augmenter les portions",
+    "section_eyebrow": "Sélection éditoriale",
+    "section_em": "du jour",
+    "recipe_label": "Recette",
+    "add_to_shopping_list": "Ajouter à la liste de courses",
+    "added_to_shopping_list_one": "{{count}} ingrédient ajouté à la liste",
+    "added_to_shopping_list_other": "{{count}} ingrédients ajoutés à la liste"
   },
   "restaurants": {
     "badge_count": "{{count}} restaurants éco-responsables en Italie",
@@ -247,7 +262,8 @@
       "crudista": "Cru / Raw",
       "fusion": "Fusion",
       "km_zero": "Km 0"
-    }
+    },
+    "list_eyebrow": "Adresses recommandées"
   },
   "restaurant_dialog": {
     "tab_info": "Info",
@@ -371,7 +387,23 @@
     "avatar_too_large_desc": "Max 2 Mo",
     "upload_error": "Erreur d'upload",
     "avatar_updated": "Avatar mis à jour !",
-    "profile_updated": "Profil mis à jour !"
+    "profile_updated": "Profil mis à jour !",
+    "eyebrow": "Votre espace",
+    "editorial_title_1": "Votre",
+    "editorial_title_2": "identité",
+    "editorial_lead": "Personnalisez votre profil, gérez votre abonnement et retrouvez vos commandes.",
+    "change_avatar": "Changer la photo de profil",
+    "subscription_eyebrow": "Abonnement",
+    "my_plan": "Mon abonnement",
+    "plan_desc": "Gérez l'abonnement, les factures et le mode de paiement",
+    "canceling": "Résiliation en attente",
+    "access_until": "Accès jusqu'au",
+    "renews_on": "Renouvelé le",
+    "upgrade": "Passer à Pro",
+    "my_orders": "Mes commandes",
+    "orders_desc": "Historique des achats sur le Marketplace",
+    "no_orders": "Aucune commande pour l'instant.",
+    "order": "Commande"
   },
   "dashboard": {
     "good_morning": "Bonjour",
@@ -438,7 +470,9 @@
       "Comment réduire le gaspillage alimentaire en cuisine ?",
       "Quelles sont les protéines végétales les plus durables ?",
       "Crée un menu hebdomadaire végétal équilibré"
-    ]
+    ],
+    "no_recipes_found": "Aucune recette trouvée. Essayez de changer les filtres.",
+    "no_restaurants_found": "Aucun restaurant trouvé. Essayez d'élargir la zone de recherche."
   },
   "sell": {
     "badge": "Marketplace Vireo",
@@ -588,7 +622,8 @@
     "products_count": "Produits ({{count}})",
     "no_products": "Aucun produit publié.",
     "out_of_stock": "Épuisé",
-    "added_title": "Ajouté au panier"
+    "added_title": "Ajouté au panier",
+    "collection_eyebrow": "La collection"
   },
   "product_detail": {
     "back": "Marketplace",
@@ -613,7 +648,11 @@
     "rating_stars": "{{count}} étoiles",
     "reviews_short": "{{count}} avis",
     "reviews_count": "{{count}} avis",
-    "rating_summary": "{{rating}} sur 5 · {{count}} avis"
+    "rating_summary": "{{rating}} sur 5 · {{count}} avis",
+    "description_eyebrow": "Détails",
+    "reviews_eyebrow": "Voix des clients",
+    "qa_eyebrow": "Questions",
+    "related_eyebrow": "Du même atelier"
   },
   "reviews": {
     "title": "Avis",
@@ -780,5 +819,34 @@
     "disclaimer": "Paiement sécurisé avec Stripe. Annulez à tout moment.",
     "checkout_title": "Finaliser l'abonnement",
     "portal_error": "Impossible d'ouvrir le portail"
+  },
+  "review_form": {
+    "title": "Laissez un avis",
+    "title_field": "Titre",
+    "title_placeholder": "Résumez votre expérience",
+    "body_field": "Avis",
+    "body_placeholder": "Comment s'est passée votre expérience ? Qu'avez-vous goûté ?",
+    "submit": "Publier l'avis",
+    "rating_required": "Sélectionnez une note",
+    "body_required": "Écrivez quelques mots sur votre expérience",
+    "success": "Avis publié, merci !",
+    "error": "Impossible de publier l'avis",
+    "login_required": "Connectez-vous pour laisser un avis."
+  },
+  "green_score": {
+    "title": "Green Score",
+    "points": "points",
+    "to_next": "vers {{level}}",
+    "recipes": "Recettes",
+    "reservations": "Tables",
+    "reviews": "Avis",
+    "orders": "Commandes",
+    "badges": "Badges débloqués"
+  },
+  "feature_gate": {
+    "title": "Disponible avec {{plan}}",
+    "desc": "Débloquez cette fonctionnalité en passant à une formule supérieure.",
+    "upgrade": "Découvrir les formules",
+    "locked": "Pro uniquement"
   }
 }

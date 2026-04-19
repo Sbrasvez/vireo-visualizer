@@ -52,7 +52,16 @@
     "link_copied": "Link copied",
     "someone": "Someone",
     "public_empty_title": "No public products",
-    "public_empty_desc": "This wishlist doesn't have any shared products yet."
+    "public_empty_desc": "This wishlist doesn't have any shared products yet.",
+    "eyebrow": "Your favorites",
+    "editorial_title_1": "Pieces you'll",
+    "editorial_title_2": "love for a long time",
+    "editorial_lead": "Your personal collection of pieces that tell a story.",
+    "share_eyebrow": "Sharing",
+    "collection_eyebrow": "Your collection",
+    "empty_eyebrow": "Empty chapter",
+    "item_singular": "piece",
+    "item_plural": "pieces"
   },
   "hero": {
     "badge": "Real food, zero waste",
@@ -229,7 +238,10 @@
     "not_found_title": "Recipe not found",
     "not_found_desc": "The recipe you are looking for doesn't exist or has been removed.",
     "decrease_servings": "Decrease servings",
-    "increase_servings": "Increase servings"
+    "increase_servings": "Increase servings",
+    "add_to_shopping_list": "Add to shopping list",
+    "added_to_shopping_list_one": "{{count}} ingredient added to the list",
+    "added_to_shopping_list_other": "{{count}} ingredients added to the list"
   },
   "restaurants": {
     "badge_count": "{{count}} eco-friendly restaurants in Italy",
@@ -404,7 +416,23 @@
     "avatar_too_large_desc": "Max 2MB",
     "upload_error": "Upload error",
     "avatar_updated": "Avatar updated!",
-    "profile_updated": "Profile updated!"
+    "profile_updated": "Profile updated!",
+    "eyebrow": "Your space",
+    "editorial_title_1": "Your",
+    "editorial_title_2": "identity",
+    "editorial_lead": "Customize your profile, manage your subscription and find your orders.",
+    "change_avatar": "Change profile picture",
+    "subscription_eyebrow": "Subscription",
+    "my_plan": "My plan",
+    "plan_desc": "Manage subscription, invoices and payment method",
+    "canceling": "Cancellation pending",
+    "access_until": "Access until",
+    "renews_on": "Renews on",
+    "upgrade": "Upgrade to Pro",
+    "my_orders": "My orders",
+    "orders_desc": "Purchase history from the Marketplace",
+    "no_orders": "No orders yet.",
+    "order": "Order"
   },
   "dashboard": {
     "good_morning": "Good morning",
@@ -791,5 +819,34 @@
     "disclaimer": "Secure payment with Stripe. Cancel anytime.",
     "checkout_title": "Complete your subscription",
     "portal_error": "Couldn't open the portal"
+  },
+  "review_form": {
+    "title": "Leave a review",
+    "title_field": "Title",
+    "title_placeholder": "Sum up your experience",
+    "body_field": "Review",
+    "body_placeholder": "How was your experience? What did you have?",
+    "submit": "Publish review",
+    "rating_required": "Please pick a rating",
+    "body_required": "Write a few words about your experience",
+    "success": "Review published, thanks!",
+    "error": "Couldn't publish the review",
+    "login_required": "Sign in to leave a review."
+  },
+  "green_score": {
+    "title": "Green Score",
+    "points": "points",
+    "to_next": "to {{level}}",
+    "recipes": "Recipes",
+    "reservations": "Tables",
+    "reviews": "Reviews",
+    "orders": "Orders",
+    "badges": "Unlocked badges"
+  },
+  "feature_gate": {
+    "title": "Available with {{plan}}",
+    "desc": "Unlock this feature by upgrading to a higher plan.",
+    "upgrade": "Discover plans",
+    "locked": "Pro only"
   }
 }
