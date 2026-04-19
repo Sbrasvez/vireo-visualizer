@@ -22,9 +22,6 @@
     "home": "Inicio"
   },
   "wishlist": {
-    "badge": "Tus favoritos",
-    "title": "Lista de deseos",
-    "subtitle": "Todos los productos que te gustan, en un solo lugar.",
     "add": "Añadir a favoritos",
     "in_list": "En favoritos",
     "added": "Añadido a favoritos",
@@ -65,79 +62,17 @@
   },
   "hero": {
     "badge": "IA para una vida sostenible",
-    "title_1": "Vive",
-    "title_smart": "smart",
-    "title_2": "elige",
-    "title_green": "green",
-    "tagline": "\"Vive green, simplemente.\"",
-    "description": "Recetas veganas y orgánicas, restaurantes eco-friendly, marketplace ético y un asistente IA con comandos de voz — todo en una plataforma para un futuro más verde.",
     "cta_start": "Empezar ahora",
     "cta_explore": "Explorar recetas",
     "stat_recipes": "Recetas bio",
     "stat_restaurants": "Restaurantes",
     "stat_users": "Usuarios green",
-    "badge_eco": "Eco-score",
-    "badge_co2": "CO₂ ahorrado",
     "editorial_title_1": "La naturaleza,",
     "editorial_title_2": "en tu mesa.",
     "editorial_lead": "Únete al mercado sostenible. Descubre productores locales, rescata el excedente de comida y cocina con un asistente IA que piensa como tú.",
     "image_alt": "Mesa rústica con verduras de temporada, hierbas y cerámica artesanal",
     "harvest_badge": "Cosecha de hoy",
     "harvest_text": "Tomates corazón de buey y albahaca fresca, directamente de nuestros productores locales."
-  },
-  "features": {
-    "kicker": "El ecosistema Vireo",
-    "title_1": "Todo lo que necesitas para",
-    "title_green": "vivir green",
-    "subtitle": "Una plataforma digital de vanguardia que integra tecnología, sostenibilidad y bienestar.",
-    "items": {
-      "recipes_title": "Recetas Veganas y Bio",
-      "recipes_desc": "Miles de recetas filtrables por dieta, ingredientes, tiempo de preparación y valores nutricionales, con sugerencias de ingredientes locales.",
-      "map_title": "Mapa Interactivo",
-      "map_desc": "Geolocalización avanzada para encontrar restaurantes y tiendas eco-friendly con filtros de precio, valoración y distancia.",
-      "market_title": "Marketplace Ético",
-      "market_desc": "Escaparate dedicado a la compraventa de productos eco y al reuso, con directrices estrictas para garantizar la sostenibilidad.",
-      "ai_title": "Asistente IA",
-      "ai_desc": "Chatbot basado en GPT que te guía con sugerencias personalizadas, planes de comida y consejos para reducir el desperdicio.",
-      "voice_title": "Comandos de Voz",
-      "voice_desc": "Reconocimiento de voz para interacciones manos libres — pide recetas, temporizadores y conversiones mientras cocinas.",
-      "blog_title": "Blog y Comunidad",
-      "blog_desc": "Artículos, guías y una red de personas comprometidas con elecciones responsables. Notificaciones, social y reservas en vivo."
-    }
-  },
-  "how": {
-    "kicker": "Cómo funciona",
-    "title_1": "Tres pasos hacia un",
-    "title_2": "estilo de vida green",
-    "subtitle": "Democratizamos un estilo de vida sano y sostenible, aprovechando la tecnología para reducir el impacto ambiental.",
-    "step1_title": "Descubre",
-    "step1_desc": "Explora recetas veganas y bio, restaurantes eco y productos sostenibles con filtros avanzados y geolocalización.",
-    "step2_title": "Cocina y Pide",
-    "step2_desc": "Sigue recetas guiadas por IA con comandos de voz, reserva mesas en vivo en los mejores locales green cerca de ti.",
-    "step3_title": "Reduce el impacto",
-    "step3_desc": "Monitoriza el CO₂ ahorrado, participa en el marketplace del reuso y construye un futuro más verde."
-  },
-  "testimonials": {
-    "kicker": "Voces de la comunidad",
-    "title_1": "Una comunidad que crece",
-    "title_2": "cada día",
-    "items": [
-      {
-        "name": "Giulia M.",
-        "role": "Food blogger vegana",
-        "text": "Vireo ha revolucionado mi rutina. Las recetas están cuidadas, la IA me sugiere alternativas cuando tengo otros ingredientes y el mapa de restaurantes es impecable."
-      },
-      {
-        "name": "Marco R.",
-        "role": "Chef del Ristorante Verde",
-        "text": "Desde que estamos en Vireo, las reservas han aumentado un 40%. La comunidad se preocupa de verdad por la sostenibilidad y los productos locales."
-      },
-      {
-        "name": "Sara T.",
-        "role": "Mamá y usuaria green",
-        "text": "Los comandos de voz mientras cocino son una bendición. Y el marketplace del reuso me ha permitido reducir el desperdicio familiar."
-      }
-    ]
   },
   "cta": {
     "badge": "Empieza hoy, gratis",
@@ -185,7 +120,6 @@
     "no_results_title": "No se encontraron recetas",
     "no_results_desc": "Prueba a ampliar los filtros o cambiar la búsqueda.",
     "min": "min",
-    "minutes": "min",
     "servings": "porciones",
     "ingredients": "Ingredientes",
     "instructions": "Instrucciones paso a paso",
@@ -197,7 +131,6 @@
     "nutri_carbs": "Carbohidratos",
     "nutri_fat": "Grasas",
     "save": "Guardar",
-    "saved": "Guardada",
     "save_login_required": "Inicia sesión para guardar recetas",
     "save_error": "Error al guardar",
     "save_success": "Receta guardada en tu perfil",
@@ -287,14 +220,10 @@
     "covers": "Comensales",
     "date": "Fecha",
     "time": "Horario",
-    "select_time": "Selecciona horario",
     "notes": "Notas",
     "notes_placeholder": "Alergias, ocasiones especiales...",
     "reserve_btn": "Confirmar reserva",
     "submitting": "Enviando...",
-    "success_title": "¡Reserva confirmada!",
-    "success_desc": "Hemos enviado los detalles de la reserva a {{email}}. Te esperamos en {{restaurant}}.",
-    "close": "Cerrar",
     "select_date_error": "Selecciona una fecha",
     "select_time_error": "Selecciona un horario",
     "check_data_error": "Comprueba los datos",
@@ -313,7 +242,6 @@
     "title_2": "sostenible",
     "subtitle": "Un escaparate dedicado a la compraventa de productos eco-friendly y al reuso, con directrices estrictas para garantizar la sostenibilidad.",
     "search_placeholder": "Busca un producto...",
-    "search_btn": "Buscar",
     "categories": {
       "all": "Todos",
       "kitchen": "Cocina",
@@ -322,7 +250,6 @@
       "reuse": "Reuso",
       "bio": "Bio"
     },
-    "favorite": "Añadir a favoritos",
     "reuse_badge": "Reuso",
     "no_results": "No se encontraron productos",
     "become_seller": "Conviértete en vendedor",
@@ -331,7 +258,6 @@
     "out_of_stock": "Agotado",
     "added_title": "Añadido al carrito",
     "add_to_cart": "Añadir al carrito",
-    "view_cart": "Ir al carrito",
     "section_eyebrow": "Selección curada",
     "section_title": "Objetos que",
     "section_title_em": "cuentan una historia",
@@ -376,13 +302,6 @@
     "error": "Error"
   },
   "profile": {
-    "title": "Tu perfil",
-    "display_name": "Nombre visible",
-    "name_placeholder": "Tu nombre",
-    "bio": "Bio",
-    "bio_placeholder": "Cuenta algo sobre ti...",
-    "save": "Guardar cambios",
-    "saving": "Guardando...",
     "avatar_too_large": "Archivo demasiado grande",
     "avatar_too_large_desc": "Máx 2MB",
     "upload_error": "Error al subir",
@@ -436,12 +355,8 @@
     "places_eyebrow": "Lugares cercanos"
   },
   "common": {
-    "loading": "Cargando...",
     "error": "Error",
-    "retry": "Reintentar",
-    "save": "Guardar",
-    "cancel": "Cancelar",
-    "close": "Cerrar"
+    "cancel": "Cancelar"
   },
   "ai": {
     "fab_tooltip": "Pregunta a Vireo AI",
@@ -589,8 +504,7 @@
     "publish_answer": "Publicar respuesta",
     "update_answer": "Actualizar",
     "edit": "Editar",
-    "sending": "Enviando...",
-    "asked": "preguntó"
+    "sending": "Enviando..."
   },
   "admin_sellers": {
     "title": "Gestión de vendedores",
@@ -646,7 +560,6 @@
     "see_all": "Ver todos",
     "add": "Añadir",
     "rating_stars": "{{count}} estrellas",
-    "reviews_short": "{{count}} reseñas",
     "reviews_count": "{{count}} reseñas",
     "rating_summary": "{{rating}} de 5 · {{count}} reseñas",
     "description_eyebrow": "Detalles",
@@ -737,9 +650,6 @@
     "remove": "Quitar artículo",
     "shipping": "Envío",
     "subtotal": "Subtotal",
-    "summary": "Resumen",
-    "free": "Gratis",
-    "selection_label": "Tu selección",
     "total": "Total",
     "view_cart": "Ir al carrito"
   },
@@ -806,7 +716,6 @@
   "pricing": {
     "eyebrow": "Elige tu plan",
     "title": "Crece con",
-    "title_em": "Vireo",
     "subtitle": "Empieza gratis, pásate a Pro cuando lo necesites. Cambia o cancela cuando quieras.",
     "most_popular": "Más elegido",
     "free": "Gratis",
