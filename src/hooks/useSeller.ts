@@ -57,19 +57,25 @@ export function useMySeller() {
   });
 }
 
+// Columns exposed by the `sellers_public` view (safe for unauthenticated visitors).
+// Sensitive fields like email, phone, vat_number, stripe_account_id, commission_rate
+// and total_sales_cents are intentionally NOT selected here.
+const PUBLIC_SELLER_COLUMNS =
+  "id, slug, business_name, description, logo_url, cover_url, category, country, website, rating, total_orders, status, is_demo, created_at, updated_at";
+
 export function useSellerBySlug(slug: string | undefined) {
   return useQuery({
     queryKey: ["seller-by-slug", slug],
     enabled: !!slug,
     queryFn: async (): Promise<Seller | null> => {
+      // Public-facing: read from the safe view so anonymous visitors are allowed.
       const { data, error } = await supabase
-        .from("sellers")
-        .select("*")
+        .from("sellers_public" as any)
+        .select(PUBLIC_SELLER_COLUMNS)
         .eq("slug", slug!)
-        .eq("status", "approved")
         .maybeSingle();
       if (error) throw error;
-      return (data as Seller) ?? null;
+      return (data as unknown as Seller) ?? null;
     },
   });
 }
@@ -78,13 +84,14 @@ export function useApprovedSellers() {
   return useQuery({
     queryKey: ["approved-sellers"],
     queryFn: async (): Promise<Seller[]> => {
+      // Public-facing: read from the safe view. Sort by rating since total_sales_cents is private.
       const { data, error } = await supabase
-        .from("sellers")
-        .select("*")
-        .eq("status", "approved")
-        .order("total_sales_cents", { ascending: false });
+        .from("sellers_public" as any)
+        .select(PUBLIC_SELLER_COLUMNS)
+        .order("rating", { ascending: false, nullsFirst: false })
+        .order("total_orders", { ascending: false });
       if (error) throw error;
-      return (data as Seller[]) ?? [];
+      return (data as unknown as Seller[]) ?? [];
     },
   });
 }
