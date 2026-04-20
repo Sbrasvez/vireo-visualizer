@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, Navigate } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { it } from "date-fns/locale";
@@ -100,18 +99,21 @@ export default function RestaurantOwnerDashboard() {
     };
   }, [reservations]);
 
+  useEffect(() => {
+    document.title = "Dashboard ristoratore — Vireo";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) {
+      meta.setAttribute(
+        "content",
+        "Gestisci le prenotazioni del tuo ristorante: conferma, annulla e organizza la tua sala.",
+      );
+    }
+  }, []);
+
   if (!authLoading && !user) return <Navigate to="/login" replace />;
 
   return (
     <DashboardLayout>
-      <Helmet>
-        <title>Dashboard ristoratore — Vireo</title>
-        <meta
-          name="description"
-          content="Gestisci le prenotazioni del tuo ristorante: conferma, annulla e organizza la tua sala."
-        />
-      </Helmet>
-
       <div className="container mx-auto px-4 py-8 space-y-6">
         <header className="space-y-2">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
