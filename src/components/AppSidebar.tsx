@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useHasRole } from "@/hooks/useUserRole";
 import { useMySeller } from "@/hooks/useSeller";
+import { useOwnedRestaurants } from "@/hooks/useRestaurantOwner";
 import {
   Sidebar,
   SidebarContent,
@@ -47,6 +48,8 @@ export function AppSidebar() {
   const { t } = useTranslation();
   const { has: isAdmin } = useHasRole("admin");
   const { data: mySeller } = useMySeller();
+  const { data: ownedRestaurants = [] } = useOwnedRestaurants();
+  const isRestaurantOwner = ownedRestaurants.length > 0;
 
   const mainItems = [
     { title: t("nav.dashboard"), url: "/dashboard", icon: LayoutDashboard },
@@ -67,6 +70,9 @@ export function AppSidebar() {
     ...(mySeller
       ? [{ title: "Seller Dashboard", url: "/seller/dashboard", icon: Store }]
       : [{ title: "Diventa venditore", url: "/sell", icon: Store }]),
+    ...(isRestaurantOwner
+      ? [{ title: "Dashboard ristoratore", url: "/restaurant/dashboard", icon: Utensils }]
+      : []),
     ...(isAdmin ? [{ title: "Admin Sellers", url: "/admin/sellers", icon: ShieldCheck }] : []),
   ];
 
