@@ -31,6 +31,7 @@ import Wishlist from "@/pages/Wishlist";
 import PublicWishlist from "@/pages/PublicWishlist";
 import NotFound from "@/pages/NotFound";
 import PreviewGreenScore from "@/pages/PreviewGreenScore";
+import RestaurantOwnerDashboard from "@/pages/RestaurantOwnerDashboard";
 
 const wrap = (node: React.ReactNode) => <PageTransition>{node}</PageTransition>;
 
@@ -64,6 +65,7 @@ const AnimatedRoutes = () => {
         <Route path="/sell/apply" element={wrap(<SellApply />)} />
         <Route path="/seller/dashboard" element={wrap(<SellerDashboard />)} />
         <Route path="/admin/sellers" element={wrap(<AdminSellers />)} />
+        <Route path="/restaurant/dashboard" element={wrap(<RestaurantOwnerDashboard />)} />
         <Route path="/store/:slug" element={wrap(<Store />)} />
         <Route path="/product/:slug" element={wrap(<ProductDetail />)} />
         <Route path="/wishlist" element={wrap(<Wishlist />)} />
