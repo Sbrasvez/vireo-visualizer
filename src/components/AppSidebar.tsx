@@ -73,7 +73,12 @@ export function AppSidebar() {
     ...(isRestaurantOwner
       ? [{ title: "Dashboard ristoratore", url: "/restaurant/dashboard", icon: Utensils }]
       : []),
-    ...(isAdmin ? [{ title: "Admin Sellers", url: "/admin/sellers", icon: ShieldCheck }] : []),
+    ...(isAdmin
+      ? [
+          { title: "Admin Sellers", url: "/admin/sellers", icon: ShieldCheck },
+          { title: "Admin Ristoranti", url: "/admin/restaurants", icon: Utensils },
+        ]
+      : []),
   ];
 
   const isActive = (path: string) => location.pathname === path;
