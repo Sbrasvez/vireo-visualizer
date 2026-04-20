@@ -25,6 +25,7 @@ import Sell from "@/pages/Sell";
 import SellApply from "@/pages/SellApply";
 import SellerDashboard from "@/pages/SellerDashboard";
 import AdminSellers from "@/pages/AdminSellers";
+import AdminRestaurants from "@/pages/AdminRestaurants";
 import Store from "@/pages/Store";
 import ProductDetail from "@/pages/ProductDetail";
 import Wishlist from "@/pages/Wishlist";
@@ -65,6 +66,7 @@ const AnimatedRoutes = () => {
         <Route path="/sell/apply" element={wrap(<SellApply />)} />
         <Route path="/seller/dashboard" element={wrap(<SellerDashboard />)} />
         <Route path="/admin/sellers" element={wrap(<AdminSellers />)} />
+        <Route path="/admin/restaurants" element={wrap(<AdminRestaurants />)} />
         <Route path="/restaurant/dashboard" element={wrap(<RestaurantOwnerDashboard />)} />
         <Route path="/store/:slug" element={wrap(<Store />)} />
         <Route path="/product/:slug" element={wrap(<ProductDetail />)} />

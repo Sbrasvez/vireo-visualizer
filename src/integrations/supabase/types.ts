@@ -1564,6 +1564,13 @@ export type Database = {
       }
     }
     Functions: {
+      admin_find_user_by_email: {
+        Args: { _email: string }
+        Returns: {
+          email: string
+          user_id: string
+        }[]
+      }
       decrement_product_stock: {
         Args: { _id: string; _qty: number }
         Returns: undefined
