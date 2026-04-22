@@ -9,6 +9,7 @@ export type OwnedRestaurant = {
   slug: string;
   city: string;
   cover_image: string | null;
+  slot_capacity: number;
 };
 
 export type RestaurantReservation = {
@@ -33,11 +34,33 @@ export function useOwnedRestaurants() {
     queryFn: async (): Promise<OwnedRestaurant[]> => {
       const { data, error } = await supabase
         .from("restaurants")
-        .select("id, name, slug, city, cover_image")
+        .select("id, name, slug, city, cover_image, slot_capacity")
         .eq("owner_user_id", user!.id)
         .order("name");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as OwnedRestaurant[];
+    },
+  });
+}
+
+export function useUpdateRestaurantSlotCapacity() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async ({ id, slot_capacity }: { id: string; slot_capacity: number }) => {
+      const { error } = await supabase
+        .from("restaurants")
+        .update({ slot_capacity })
+        .eq("id", id);
+      if (error) throw error;
+      return { id, slot_capacity };
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["owned-restaurants", user?.id] });
+      toast.success("Capienza per fascia aggiornata");
+    },
+    onError: (err: Error) => {
+      toast.error(err.message ?? "Errore aggiornamento capienza");
     },
   });
 }
