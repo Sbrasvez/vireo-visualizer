@@ -384,11 +384,13 @@ export default function RestaurantOwnerDashboard() {
 function AgendaView({
   reservations,
   loading,
+  slotCapacity,
   onUpdate,
   actionLoading,
 }: {
   reservations: RestaurantReservation[];
   loading: boolean;
+  slotCapacity: number;
   onUpdate: (
     id: string,
     status: RestaurantReservation["status"],
