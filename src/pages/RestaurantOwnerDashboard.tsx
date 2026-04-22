@@ -362,6 +362,7 @@ export default function RestaurantOwnerDashboard() {
                     <AgendaView
                       reservations={reservations}
                       loading={loadingReservations}
+                      slotCapacity={selectedRestaurant?.slot_capacity ?? 30}
                       onUpdate={(id, status, restaurant_id) =>
                         updateStatus.mutate({ id, status, restaurant_id })
                       }
