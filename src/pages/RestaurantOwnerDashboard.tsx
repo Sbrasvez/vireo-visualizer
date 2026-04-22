@@ -11,6 +11,7 @@ import {
   Loader2,
   Mail,
   Phone,
+  Save,
   Users,
   Utensils,
   X,
@@ -19,6 +20,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -34,6 +36,8 @@ import {
   useOwnedRestaurants,
   useRestaurantReservations,
   useUpdateReservationStatus,
+  useUpdateRestaurantSlotCapacity,
+  type OwnedRestaurant,
   type RestaurantReservation,
 } from "@/hooks/useRestaurantOwner";
 
@@ -79,6 +83,10 @@ export default function RestaurantOwnerDashboard() {
   const { data: reservations = [], isLoading: loadingReservations } =
     useRestaurantReservations(selectedId);
   const updateStatus = useUpdateReservationStatus();
+  const selectedRestaurant = useMemo(
+    () => restaurants.find((r) => r.id === selectedId),
+    [restaurants, selectedId],
+  );
 
   const filtered = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
@@ -153,28 +161,38 @@ export default function RestaurantOwnerDashboard() {
           </Card>
         ) : (
           <>
-            {/* Restaurant selector */}
-            {restaurants.length > 1 && (
-              <Card>
-                <CardContent className="pt-6">
-                  <label className="text-sm font-medium mb-2 block">
-                    Ristorante
-                  </label>
-                  <Select value={selectedId} onValueChange={setSelectedId}>
-                    <SelectTrigger className="max-w-md">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {restaurants.map((r) => (
-                        <SelectItem key={r.id} value={r.id}>
-                          {r.name} — {r.city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </CardContent>
-              </Card>
-            )}
+            {/* Restaurant selector + capacity */}
+            <Card>
+              <CardContent className="pt-6 grid gap-4 md:grid-cols-[2fr_1fr]">
+                {restaurants.length > 1 ? (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Ristorante</label>
+                    <Select value={selectedId} onValueChange={setSelectedId}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {restaurants.map((r) => (
+                          <SelectItem key={r.id} value={r.id}>
+                            {r.name} — {r.city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Ristorante</label>
+                    <div className="text-sm text-muted-foreground">
+                      {restaurants[0]?.name} — {restaurants[0]?.city}
+                    </div>
+                  </div>
+                )}
+                {selectedRestaurant && (
+                  <SlotCapacityEditor restaurant={selectedRestaurant} />
+                )}
+              </CardContent>
+            </Card>
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -344,6 +362,7 @@ export default function RestaurantOwnerDashboard() {
                     <AgendaView
                       reservations={reservations}
                       loading={loadingReservations}
+                      slotCapacity={selectedRestaurant?.slot_capacity ?? 30}
                       onUpdate={(id, status, restaurant_id) =>
                         updateStatus.mutate({ id, status, restaurant_id })
                       }
@@ -365,11 +384,13 @@ export default function RestaurantOwnerDashboard() {
 function AgendaView({
   reservations,
   loading,
+  slotCapacity,
   onUpdate,
   actionLoading,
 }: {
   reservations: RestaurantReservation[];
   loading: boolean;
+  slotCapacity: number;
   onUpdate: (
     id: string,
     status: RestaurantReservation["status"],
@@ -480,7 +501,7 @@ function AgendaView({
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {dayCount === 0
-                      ? "Nessuna prenotazione"
+                      ? `Nessuna prenotazione · capienza ${slotCapacity}/fascia`
                       : `${dayCount} prenotaz. · ${dayTotal} coperti`}
                   </div>
                 </div>
@@ -494,13 +515,14 @@ function AgendaView({
                     );
                     return (
                       <div key={slot} className="px-4 py-3 space-y-2">
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
                           <div className="font-mono text-sm font-medium">
                             {slot}
                           </div>
-                          <Badge variant="secondary" className="gap-1">
-                            <Users className="size-3" /> {slotCovers} coperti
-                          </Badge>
+                          <SlotCapacityBadge
+                            covers={slotCovers}
+                            capacity={slotCapacity}
+                          />
                         </div>
                         <div className="grid gap-2">
                           {list.map((r) => (
@@ -635,6 +657,89 @@ function ReservationActions({
           <X className="size-3.5" /> Annulla
         </Button>
       )}
+    </div>
+  );
+}
+
+/* ===================== SLOT CAPACITY ===================== */
+
+function SlotCapacityBadge({
+  covers,
+  capacity,
+}: {
+  covers: number;
+  capacity: number;
+}) {
+  const remaining = Math.max(0, capacity - covers);
+  const ratio = capacity > 0 ? covers / capacity : 0;
+  const full = covers >= capacity;
+  const tone = full
+    ? "bg-destructive/15 text-destructive border-destructive/30"
+    : ratio >= 0.8
+      ? "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30"
+      : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30";
+  return (
+    <Badge
+      variant="outline"
+      className={`gap-1 font-normal ${tone}`}
+      title={`${covers} su ${capacity} coperti prenotati`}
+    >
+      <Users className="size-3" />
+      {covers}/{capacity}
+      <span className="text-[10px] opacity-80 ml-0.5">
+        {full ? "pieno" : `${remaining} liberi`}
+      </span>
+    </Badge>
+  );
+}
+
+function SlotCapacityEditor({ restaurant }: { restaurant: OwnedRestaurant }) {
+  const [value, setValue] = useState<string>(String(restaurant.slot_capacity));
+  const update = useUpdateRestaurantSlotCapacity();
+
+  useEffect(() => {
+    setValue(String(restaurant.slot_capacity));
+  }, [restaurant.slot_capacity, restaurant.id]);
+
+  const parsed = Number.parseInt(value, 10);
+  const valid = Number.isFinite(parsed) && parsed > 0 && parsed <= 999;
+  const dirty = valid && parsed !== restaurant.slot_capacity;
+
+  return (
+    <div>
+      <label className="text-sm font-medium mb-2 block">
+        Capienza per fascia oraria
+      </label>
+      <div className="flex items-center gap-2">
+        <Input
+          type="number"
+          min={1}
+          max={999}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="max-w-[120px]"
+        />
+        <span className="text-xs text-muted-foreground">coperti</span>
+        <Button
+          size="sm"
+          variant={dirty ? "default" : "outline"}
+          disabled={!dirty || update.isPending}
+          onClick={() =>
+            update.mutate({ id: restaurant.id, slot_capacity: parsed })
+          }
+          className="gap-1"
+        >
+          {update.isPending ? (
+            <Loader2 className="size-3.5 animate-spin" />
+          ) : (
+            <Save className="size-3.5" />
+          )}
+          Salva
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground mt-1.5">
+        Massimo coperti accettabili in ogni fascia oraria.
+      </p>
     </div>
   );
 }
