@@ -157,28 +157,38 @@ export default function RestaurantOwnerDashboard() {
           </Card>
         ) : (
           <>
-            {/* Restaurant selector */}
-            {restaurants.length > 1 && (
-              <Card>
-                <CardContent className="pt-6">
-                  <label className="text-sm font-medium mb-2 block">
-                    Ristorante
-                  </label>
-                  <Select value={selectedId} onValueChange={setSelectedId}>
-                    <SelectTrigger className="max-w-md">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {restaurants.map((r) => (
-                        <SelectItem key={r.id} value={r.id}>
-                          {r.name} — {r.city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </CardContent>
-              </Card>
-            )}
+            {/* Restaurant selector + capacity */}
+            <Card>
+              <CardContent className="pt-6 grid gap-4 md:grid-cols-[2fr_1fr]">
+                {restaurants.length > 1 ? (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Ristorante</label>
+                    <Select value={selectedId} onValueChange={setSelectedId}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {restaurants.map((r) => (
+                          <SelectItem key={r.id} value={r.id}>
+                            {r.name} — {r.city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Ristorante</label>
+                    <div className="text-sm text-muted-foreground">
+                      {restaurants[0]?.name} — {restaurants[0]?.city}
+                    </div>
+                  </div>
+                )}
+                {selectedRestaurant && (
+                  <SlotCapacityEditor restaurant={selectedRestaurant} />
+                )}
+              </CardContent>
+            </Card>
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
