@@ -945,6 +945,7 @@ export type Database = {
           region: string | null
           reviews_count: number | null
           short_description: string | null
+          slot_capacity: number
           slug: string
           tags: string[] | null
           updated_at: string
@@ -972,6 +973,7 @@ export type Database = {
           region?: string | null
           reviews_count?: number | null
           short_description?: string | null
+          slot_capacity?: number
           slug: string
           tags?: string[] | null
           updated_at?: string
@@ -999,6 +1001,7 @@ export type Database = {
           region?: string | null
           reviews_count?: number | null
           short_description?: string | null
+          slot_capacity?: number
           slug?: string
           tags?: string[] | null
           updated_at?: string
