@@ -712,6 +712,48 @@ export type Database = {
         }
         Relationships: []
       }
+      restaurant_capacity_audit: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          new_capacity: number
+          old_capacity: number | null
+          restaurant_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_capacity: number
+          old_capacity?: number | null
+          restaurant_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_capacity?: number
+          old_capacity?: number | null
+          restaurant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_capacity_audit_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "restaurant_capacity_audit_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       restaurant_menu_items: {
         Row: {
           allergens: string[] | null
