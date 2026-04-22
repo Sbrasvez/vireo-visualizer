@@ -83,6 +83,10 @@ export default function RestaurantOwnerDashboard() {
   const { data: reservations = [], isLoading: loadingReservations } =
     useRestaurantReservations(selectedId);
   const updateStatus = useUpdateReservationStatus();
+  const selectedRestaurant = useMemo(
+    () => restaurants.find((r) => r.id === selectedId),
+    [restaurants, selectedId],
+  );
 
   const filtered = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
