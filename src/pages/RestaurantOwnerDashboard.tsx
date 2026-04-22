@@ -3,11 +3,13 @@ import { Link, Navigate } from "react-router-dom";
 import { addDays, format, parseISO, startOfDay } from "date-fns";
 import { it } from "date-fns/locale";
 import {
+  ArrowRight,
   CalendarDays,
   Check,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
+  History,
   Loader2,
   Mail,
   Phone,
@@ -24,6 +26,11 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   Table,
   TableBody,
   TableCell,
@@ -33,6 +40,7 @@ import {
 } from "@/components/ui/table";
 import { useAuth } from "@/hooks/useAuth";
 import {
+  useCapacityAudit,
   useOwnedRestaurants,
   useRestaurantReservations,
   useUpdateReservationStatus,
