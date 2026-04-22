@@ -703,7 +703,11 @@ function SlotCapacityBadge({
 
 function SlotCapacityEditor({ restaurant }: { restaurant: OwnedRestaurant }) {
   const [value, setValue] = useState<string>(String(restaurant.slot_capacity));
+  const [historyOpen, setHistoryOpen] = useState(false);
   const update = useUpdateRestaurantSlotCapacity();
+  const { data: audit = [], isLoading: loadingAudit } = useCapacityAudit(
+    historyOpen ? restaurant.id : undefined,
+  );
 
   useEffect(() => {
     setValue(String(restaurant.slot_capacity));
@@ -748,6 +752,55 @@ function SlotCapacityEditor({ restaurant }: { restaurant: OwnedRestaurant }) {
       <p className="text-xs text-muted-foreground mt-1.5">
         Massimo coperti accettabili in ogni fascia oraria.
       </p>
+
+      <Collapsible open={historyOpen} onOpenChange={setHistoryOpen} className="mt-3">
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" size="sm" className="gap-1.5 -ml-2 h-8 text-xs">
+            <History className="size-3.5" />
+            {historyOpen ? "Nascondi storico" : "Mostra storico modifiche"}
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-2">
+          {loadingAudit ? (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground py-3">
+              <Loader2 className="size-3.5 animate-spin" /> Caricamento storico…
+            </div>
+          ) : audit.length === 0 ? (
+            <div className="text-xs text-muted-foreground py-3 border-t border-border/60">
+              Nessuna modifica registrata.
+            </div>
+          ) : (
+            <ul className="divide-y divide-border/60 border-t border-border/60 max-h-64 overflow-y-auto">
+              {audit.map((entry) => (
+                <li
+                  key={entry.id}
+                  className="py-2 flex items-start justify-between gap-3 text-xs"
+                >
+                  <div className="min-w-0 space-y-0.5">
+                    <div className="font-medium">
+                      {entry.changed_by_name || "Utente sconosciuto"}
+                    </div>
+                    <div className="text-muted-foreground">
+                      {format(parseISO(entry.created_at), "d MMM yyyy, HH:mm", {
+                        locale: it,
+                      })}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 font-mono shrink-0">
+                    <Badge variant="outline" className="font-mono">
+                      {entry.old_capacity ?? "—"}
+                    </Badge>
+                    <ArrowRight className="size-3 text-muted-foreground" />
+                    <Badge variant="secondary" className="font-mono">
+                      {entry.new_capacity}
+                    </Badge>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }
