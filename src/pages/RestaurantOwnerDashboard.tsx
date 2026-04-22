@@ -660,3 +660,86 @@ function ReservationActions({
     </div>
   );
 }
+
+/* ===================== SLOT CAPACITY ===================== */
+
+function SlotCapacityBadge({
+  covers,
+  capacity,
+}: {
+  covers: number;
+  capacity: number;
+}) {
+  const remaining = Math.max(0, capacity - covers);
+  const ratio = capacity > 0 ? covers / capacity : 0;
+  const full = covers >= capacity;
+  const tone = full
+    ? "bg-destructive/15 text-destructive border-destructive/30"
+    : ratio >= 0.8
+      ? "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30"
+      : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30";
+  return (
+    <Badge
+      variant="outline"
+      className={`gap-1 font-normal ${tone}`}
+      title={`${covers} su ${capacity} coperti prenotati`}
+    >
+      <Users className="size-3" />
+      {covers}/{capacity}
+      <span className="text-[10px] opacity-80 ml-0.5">
+        {full ? "pieno" : `${remaining} liberi`}
+      </span>
+    </Badge>
+  );
+}
+
+function SlotCapacityEditor({ restaurant }: { restaurant: OwnedRestaurant }) {
+  const [value, setValue] = useState<string>(String(restaurant.slot_capacity));
+  const update = useUpdateRestaurantSlotCapacity();
+
+  useEffect(() => {
+    setValue(String(restaurant.slot_capacity));
+  }, [restaurant.slot_capacity, restaurant.id]);
+
+  const parsed = Number.parseInt(value, 10);
+  const valid = Number.isFinite(parsed) && parsed > 0 && parsed <= 999;
+  const dirty = valid && parsed !== restaurant.slot_capacity;
+
+  return (
+    <div>
+      <label className="text-sm font-medium mb-2 block">
+        Capienza per fascia oraria
+      </label>
+      <div className="flex items-center gap-2">
+        <Input
+          type="number"
+          min={1}
+          max={999}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="max-w-[120px]"
+        />
+        <span className="text-xs text-muted-foreground">coperti</span>
+        <Button
+          size="sm"
+          variant={dirty ? "default" : "outline"}
+          disabled={!dirty || update.isPending}
+          onClick={() =>
+            update.mutate({ id: restaurant.id, slot_capacity: parsed })
+          }
+          className="gap-1"
+        >
+          {update.isPending ? (
+            <Loader2 className="size-3.5 animate-spin" />
+          ) : (
+            <Save className="size-3.5" />
+          )}
+          Salva
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground mt-1.5">
+        Massimo coperti accettabili in ogni fascia oraria.
+      </p>
+    </div>
+  );
+}
