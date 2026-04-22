@@ -55,12 +55,57 @@ export function useUpdateRestaurantSlotCapacity() {
       if (error) throw error;
       return { id, slot_capacity };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ["owned-restaurants", user?.id] });
+      qc.invalidateQueries({ queryKey: ["capacity-audit", data.id] });
       toast.success("Capienza per fascia aggiornata");
     },
     onError: (err: Error) => {
       toast.error(err.message ?? "Errore aggiornamento capienza");
+    },
+  });
+}
+
+export type CapacityAuditEntry = {
+  id: string;
+  restaurant_id: string;
+  changed_by: string | null;
+  changed_by_name: string | null;
+  old_capacity: number | null;
+  new_capacity: number;
+  created_at: string;
+};
+
+export function useCapacityAudit(restaurantId: string | undefined) {
+  return useQuery({
+    queryKey: ["capacity-audit", restaurantId],
+    enabled: !!restaurantId,
+    queryFn: async (): Promise<CapacityAuditEntry[]> => {
+      const { data, error } = await supabase
+        .from("restaurant_capacity_audit")
+        .select("id, restaurant_id, changed_by, old_capacity, new_capacity, created_at")
+        .eq("restaurant_id", restaurantId!)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      const rows = data ?? [];
+      const userIds = Array.from(
+        new Set(rows.map((r) => r.changed_by).filter((v): v is string => !!v)),
+      );
+      let nameMap = new Map<string, string>();
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("user_id, display_name")
+          .in("user_id", userIds);
+        nameMap = new Map(
+          (profiles ?? []).map((p) => [p.user_id, p.display_name ?? ""]),
+        );
+      }
+      return rows.map((r) => ({
+        ...r,
+        changed_by_name: r.changed_by ? nameMap.get(r.changed_by) ?? null : null,
+      }));
     },
   });
 }
