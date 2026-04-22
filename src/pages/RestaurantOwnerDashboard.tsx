@@ -11,6 +11,7 @@ import {
   Loader2,
   Mail,
   Phone,
+  Save,
   Users,
   Utensils,
   X,
@@ -19,6 +20,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -34,6 +36,8 @@ import {
   useOwnedRestaurants,
   useRestaurantReservations,
   useUpdateReservationStatus,
+  useUpdateRestaurantSlotCapacity,
+  type OwnedRestaurant,
   type RestaurantReservation,
 } from "@/hooks/useRestaurantOwner";
 
