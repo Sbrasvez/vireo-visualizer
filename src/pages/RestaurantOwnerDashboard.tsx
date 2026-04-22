@@ -515,13 +515,14 @@ function AgendaView({
                     );
                     return (
                       <div key={slot} className="px-4 py-3 space-y-2">
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
                           <div className="font-mono text-sm font-medium">
                             {slot}
                           </div>
-                          <Badge variant="secondary" className="gap-1">
-                            <Users className="size-3" /> {slotCovers} coperti
-                          </Badge>
+                          <SlotCapacityBadge
+                            covers={slotCovers}
+                            capacity={slotCapacity}
+                          />
                         </div>
                         <div className="grid gap-2">
                           {list.map((r) => (
