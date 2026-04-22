@@ -501,7 +501,7 @@ function AgendaView({
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {dayCount === 0
-                      ? "Nessuna prenotazione"
+                      ? `Nessuna prenotazione · capienza ${slotCapacity}/fascia`
                       : `${dayCount} prenotaz. · ${dayTotal} coperti`}
                   </div>
                 </div>
