@@ -6,11 +6,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import { ShoppingListProvider } from "@/hooks/useShoppingList";
+import { CookieConsentProvider } from "@/hooks/useCookieConsent";
 import { AIAssistantFAB } from "@/components/AIAssistantFAB";
 import ScrollToTop from "@/components/ScrollToTop";
 import BackButtonFAB from "@/components/BackButtonFAB";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import AnimatedRoutes from "@/components/AnimatedRoutes";
+import CookieBanner from "@/components/CookieBanner";
 
 const queryClient = new QueryClient();
 
@@ -20,17 +22,20 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <ShoppingListProvider>
-              <ScrollToTop />
-              <Breadcrumbs />
-              <AnimatedRoutes />
-              <BackButtonFAB />
-              <AIAssistantFAB />
-            </ShoppingListProvider>
-          </CartProvider>
-        </AuthProvider>
+        <CookieConsentProvider>
+          <AuthProvider>
+            <CartProvider>
+              <ShoppingListProvider>
+                <ScrollToTop />
+                <Breadcrumbs />
+                <AnimatedRoutes />
+                <BackButtonFAB />
+                <AIAssistantFAB />
+                <CookieBanner />
+              </ShoppingListProvider>
+            </CartProvider>
+          </AuthProvider>
+        </CookieConsentProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

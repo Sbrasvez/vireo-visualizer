@@ -33,6 +33,9 @@ import PublicWishlist from "@/pages/PublicWishlist";
 import NotFound from "@/pages/NotFound";
 import PreviewGreenScore from "@/pages/PreviewGreenScore";
 import RestaurantOwnerDashboard from "@/pages/RestaurantOwnerDashboard";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import Cookies from "@/pages/Cookies";
 
 const wrap = (node: React.ReactNode) => <PageTransition>{node}</PageTransition>;
 
@@ -73,6 +76,9 @@ const AnimatedRoutes = () => {
         <Route path="/wishlist" element={wrap(<Wishlist />)} />
         <Route path="/wishlist/:userId" element={wrap(<PublicWishlist />)} />
         <Route path="/preview/green-score" element={wrap(<PreviewGreenScore />)} />
+        <Route path="/privacy" element={wrap(<Privacy />)} />
+        <Route path="/terms" element={wrap(<Terms />)} />
+        <Route path="/cookies" element={wrap(<Cookies />)} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={wrap(<NotFound />)} />
       </Routes>

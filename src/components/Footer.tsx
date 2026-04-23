@@ -26,9 +26,9 @@ export default function Footer() {
     {
       title: t("footer.legal"),
       items: [
-        { label: "Privacy", href: "#" },
-        { label: "Terms", href: "#" },
-        { label: "Cookie", href: "#" },
+        { label: "Privacy", href: "/privacy" },
+        { label: "Termini", href: "/terms" },
+        { label: "Cookie", href: "/cookies" },
       ],
     },
   ];
