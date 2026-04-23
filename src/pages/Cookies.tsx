@@ -174,22 +174,22 @@ export default function Cookies() {
 
             <CategoryBlock
               title="Cookie statistici / analytics"
-              status={consent?.analytics ? "Attivi" : "Non in uso"}
-              statusVariant="secondary"
+              status={consent?.analytics ? "Consentiti (nessuno attivo)" : "Non in uso"}
+              statusVariant={consent?.analytics ? "default" : "secondary"}
               description="Ci aiuterebbero a capire in forma aggregata come gli utenti usano il sito. Attualmente Vireo NON utilizza alcun cookie analitico o di profilazione di terze parti. Se in futuro li introdurremo, ti chiederemo un nuovo consenso esplicito."
               base="Consenso (art. 6.1.a GDPR)"
               rows={[]}
-              isActive={false}
+              isActive={!!consent?.analytics}
             />
 
             <CategoryBlock
               title="Cookie marketing"
-              status={consent?.marketing ? "Attivi" : "Non in uso"}
-              statusVariant="secondary"
+              status={consent?.marketing ? "Consentiti (nessuno attivo)" : "Non in uso"}
+              statusVariant={consent?.marketing ? "default" : "secondary"}
               description="Servirebbero a personalizzare comunicazioni pubblicitarie. Attualmente NON in uso."
               base="Consenso (art. 6.1.a GDPR)"
               rows={[]}
-              isActive={false}
+              isActive={!!consent?.marketing}
             />
           </div>
         </div>
