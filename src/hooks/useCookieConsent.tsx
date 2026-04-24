@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 
 export type CookieCategories = {
   necessary: true; // sempre attivo
@@ -7,8 +7,16 @@ export type CookieCategories = {
   marketing: boolean;
 };
 
+export type EditableCategories = Omit<CookieCategories, "necessary">;
+
 const STORAGE_KEY = "vireo-cookie-consent";
 const CONSENT_VERSION = 1;
+
+const DEFAULT_DRAFT: EditableCategories = {
+  preferences: true,
+  analytics: false,
+  marketing: false,
+};
 
 type StoredConsent = {
   version: number;
@@ -22,9 +30,18 @@ type Ctx = {
   hasDecided: boolean;
   showBanner: boolean;
   showPreferences: boolean;
+  /** Stato corrente dei toggle (in dialog o non), riflette modifiche pendenti. */
+  draftPrefs: EditableCategories;
+  /** True quando draftPrefs differisce dall'ultimo consenso salvato. */
+  isDirty: boolean;
+  setDraftPref: (key: keyof EditableCategories, value: boolean) => void;
+  setDraftPrefs: (next: EditableCategories) => void;
+  /** Ripristina la draft all'ultimo consenso salvato (o ai default). */
+  revertDraft: () => void;
   acceptAll: () => void;
   rejectAll: () => void;
-  savePreferences: (categories: Omit<CookieCategories, "necessary">) => void;
+  /** Salva la draft corrente (o categorie esplicite). */
+  savePreferences: (categories?: EditableCategories) => void;
   openPreferences: () => void;
   closePreferences: () => void;
 };
@@ -53,26 +70,50 @@ function saveConsent(categories: CookieCategories) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+function baselineFrom(consent: CookieCategories | null): EditableCategories {
+  if (!consent) return DEFAULT_DRAFT;
+  return {
+    preferences: consent.preferences,
+    analytics: consent.analytics,
+    marketing: consent.marketing,
+  };
+}
+
+function prefsEqual(a: EditableCategories, b: EditableCategories) {
+  return (
+    a.preferences === b.preferences &&
+    a.analytics === b.analytics &&
+    a.marketing === b.marketing
+  );
+}
+
 export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [consent, setConsent] = useState<CookieCategories | null>(null);
   const [consentDate, setConsentDate] = useState<string | null>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
+  const [draftPrefs, setDraftPrefsState] = useState<EditableCategories>(DEFAULT_DRAFT);
 
   useEffect(() => {
     const stored = loadConsent();
     if (stored) {
       setConsent(stored.categories);
       setConsentDate(stored.date);
+      setDraftPrefsState(baselineFrom(stored.categories));
     } else {
       setShowBanner(true);
+      setDraftPrefsState(DEFAULT_DRAFT);
     }
   }, []);
+
+  const baseline = useMemo(() => baselineFrom(consent), [consent]);
+  const isDirty = useMemo(() => !prefsEqual(draftPrefs, baseline), [draftPrefs, baseline]);
 
   const apply = useCallback((c: CookieCategories) => {
     saveConsent(c);
     setConsent(c);
     setConsentDate(new Date().toISOString());
+    setDraftPrefsState(baselineFrom(c));
     setShowBanner(false);
     setShowPreferences(false);
   }, []);
@@ -86,14 +127,31 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
   }, [apply]);
 
   const savePreferences = useCallback(
-    (categories: Omit<CookieCategories, "necessary">) => {
-      apply({ necessary: true, ...categories });
+    (categories?: EditableCategories) => {
+      const target = categories ?? draftPrefs;
+      apply({ necessary: true, ...target });
     },
-    [apply],
+    [apply, draftPrefs],
   );
 
+  const setDraftPref = useCallback((key: keyof EditableCategories, value: boolean) => {
+    setDraftPrefsState((p) => ({ ...p, [key]: value }));
+  }, []);
+
+  const setDraftPrefs = useCallback((next: EditableCategories) => {
+    setDraftPrefsState(next);
+  }, []);
+
+  const revertDraft = useCallback(() => {
+    setDraftPrefsState(baseline);
+  }, [baseline]);
+
   const openPreferences = useCallback(() => setShowPreferences(true), []);
-  const closePreferences = useCallback(() => setShowPreferences(false), []);
+  const closePreferences = useCallback(() => {
+    // Chiusura senza salvare: scartiamo eventuali modifiche pendenti
+    setDraftPrefsState(baseline);
+    setShowPreferences(false);
+  }, [baseline]);
 
   return (
     <CookieConsentContext.Provider
@@ -103,6 +161,11 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
         hasDecided: consent !== null,
         showBanner,
         showPreferences,
+        draftPrefs,
+        isDirty,
+        setDraftPref,
+        setDraftPrefs,
+        revertDraft,
         acceptAll,
         rejectAll,
         savePreferences,
