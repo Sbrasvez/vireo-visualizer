@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +10,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { CheckCircle2, Clock, Undo2, AlertCircle } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { cookieStatusStyles, resolveCookieStatus } from "@/lib/cookieStatus";
 
 type CookieRow = {
   name: string;
