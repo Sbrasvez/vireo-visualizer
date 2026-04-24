@@ -18,6 +18,7 @@ type StoredConsent = {
 
 type Ctx = {
   consent: CookieCategories | null;
+  consentDate: string | null;
   hasDecided: boolean;
   showBanner: boolean;
   showPreferences: boolean;
