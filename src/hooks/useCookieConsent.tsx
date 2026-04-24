@@ -34,6 +34,8 @@ type Ctx = {
   draftPrefs: EditableCategories;
   /** True quando draftPrefs differisce dall'ultimo consenso salvato. */
   isDirty: boolean;
+  /** True per ~2.5s subito dopo un salvataggio (feedback visivo globale). */
+  justUpdated: boolean;
   setDraftPref: (key: keyof EditableCategories, value: boolean) => void;
   setDraftPrefs: (next: EditableCategories) => void;
   /** Ripristina la draft all'ultimo consenso salvato (o ai default). */
