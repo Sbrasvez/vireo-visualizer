@@ -98,7 +98,14 @@ const thirdParties = [
 ];
 
 export default function Cookies() {
-  const { openPreferences, consent, consentDate } = useCookieConsent();
+  const {
+    openPreferences,
+    consent,
+    consentDate,
+    showPreferences,
+    isDirty,
+    revertDraft,
+  } = useCookieConsent();
   const [justUpdated, setJustUpdated] = useState(false);
   const isFirst = useRef(true);
 
