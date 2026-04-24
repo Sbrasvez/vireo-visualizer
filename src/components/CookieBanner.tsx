@@ -22,6 +22,7 @@ export default function CookieBanner() {
     showPreferences,
     draftPrefs,
     isDirty,
+    justUpdated,
     setDraftPref,
     revertDraft,
     acceptAll,
@@ -32,6 +33,8 @@ export default function CookieBanner() {
   } = useCookieConsent();
 
   const hasSavedConsent = consent !== null;
+  const statusKey = resolveCookieStatus({ isDirty, justUpdated, consent });
+  const status = cookieStatusStyles[statusKey];
 
   return (
     <>
