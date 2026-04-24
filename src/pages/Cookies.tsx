@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { CheckCircle2, Clock } from "lucide-react";
+import { CheckCircle2, Clock, Undo2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type CookieRow = {
