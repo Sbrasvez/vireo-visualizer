@@ -12,6 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
+import { cookieStatusStyles, resolveCookieStatus } from "@/lib/cookieStatus";
+import { cn } from "@/lib/utils";
 
 export default function CookieBanner() {
   const {
