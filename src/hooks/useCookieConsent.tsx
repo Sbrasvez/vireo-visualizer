@@ -176,6 +176,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
         showPreferences,
         draftPrefs,
         isDirty,
+        justUpdated,
         setDraftPref,
         setDraftPrefs,
         revertDraft,
