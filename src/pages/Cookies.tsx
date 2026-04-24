@@ -130,6 +130,56 @@ export default function Cookies() {
       })
     : null;
 
+  // Stato unificato: pilota icone + colori sia del badge header sia del pannello sticky.
+  // Priorità: dirty > just-updated > saved > none.
+  type StatusKey = "dirty" | "just-updated" | "saved" | "none";
+  const statusKey: StatusKey = isDirty
+    ? "dirty"
+    : justUpdated
+      ? "just-updated"
+      : consent
+        ? "saved"
+        : "none";
+
+  const statusStyles: Record<
+    StatusKey,
+    {
+      Icon: typeof CheckCircle2;
+      tone: string; // testo + bordo accentati o neutri
+      surface: string; // sfondo
+      border: string; // bordo
+      iconClass?: string;
+    }
+  > = {
+    dirty: {
+      Icon: AlertCircle,
+      tone: "text-primary",
+      surface: "bg-primary/10",
+      border: "border-primary/50",
+    },
+    "just-updated": {
+      Icon: CheckCircle2,
+      tone: "text-primary",
+      surface: "bg-primary/10",
+      border: "border-primary",
+      iconClass: "animate-in zoom-in-50",
+    },
+    saved: {
+      Icon: CheckCircle2,
+      tone: "text-muted-foreground",
+      surface: "bg-muted/40",
+      border: "border-border",
+    },
+    none: {
+      Icon: Clock,
+      tone: "text-muted-foreground",
+      surface: "bg-muted/40",
+      border: "border-border",
+    },
+  };
+
+  const status = statusStyles[statusKey];
+
   return (
     <main className="container max-w-4xl py-16">
       <header className="mb-10">
@@ -146,52 +196,52 @@ export default function Cookies() {
         <div
           className={cn(
             "mt-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-all duration-300",
-            justUpdated
-              ? "border-primary bg-primary/10 text-primary shadow-sm scale-[1.02]"
-              : "border-border bg-muted/40 text-muted-foreground",
+            status.border,
+            status.surface,
+            status.tone,
+            statusKey === "just-updated" && "shadow-sm scale-[1.02]",
+            statusKey === "dirty" && "shadow-sm",
           )}
           aria-live="polite"
         >
-          {justUpdated ? (
-            <CheckCircle2 className="size-3.5 animate-in zoom-in-50" />
-          ) : (
-            <Clock className="size-3.5" />
-          )}
+          <status.Icon className={cn("size-3.5", status.iconClass)} />
           <span>
-            {formattedConsentDate
-              ? justUpdated
+            {statusKey === "dirty"
+              ? formattedConsentDate
+                ? `Modifiche non salvate · ultimo consenso ${formattedConsentDate}`
+                : "Modifiche non salvate · nessun consenso ancora salvato"
+              : statusKey === "just-updated"
                 ? `Preferenze aggiornate ora · ${formattedConsentDate}`
-                : `Tue preferenze · ultimo aggiornamento ${formattedConsentDate}`
-              : "Nessuna preferenza salvata · usa il banner per scegliere"}
+                : statusKey === "saved"
+                  ? `Tue preferenze · ultimo aggiornamento ${formattedConsentDate}`
+                  : "Nessuna preferenza salvata · usa il banner per scegliere"}
           </span>
         </div>
       </header>
 
-      {/* Pannello sticky modifiche pendenti — visibile mentre il dialog è aperto */}
+      {/* Pannello sticky modifiche pendenti — visibile mentre il dialog è aperto.
+          Usa le stesse varianti di stato del badge header per coerenza visiva. */}
       {showPreferences && (
         <div
           className={cn(
             "sticky top-2 z-40 mb-8 rounded-xl border px-4 py-3 shadow-sm backdrop-blur-md transition-all duration-300",
-            isDirty
-              ? "border-primary/40 bg-primary/5"
-              : "border-border bg-card/80",
+            status.border,
+            status.surface,
           )}
           role="status"
           aria-live="polite"
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-2 text-sm">
-              {isDirty ? (
-                <AlertCircle className="size-4 mt-0.5 shrink-0 text-primary" />
-              ) : (
-                <CheckCircle2 className="size-4 mt-0.5 shrink-0 text-muted-foreground" />
-              )}
-              <span className={isDirty ? "text-foreground font-medium" : "text-muted-foreground"}>
-                {isDirty
+              <status.Icon className={cn("size-4 mt-0.5 shrink-0", status.tone, status.iconClass)} />
+              <span className={cn(statusKey === "dirty" ? "text-foreground font-medium" : status.tone)}>
+                {statusKey === "dirty"
                   ? "Hai modifiche non salvate nelle preferenze cookie."
-                  : consent
-                    ? "Le preferenze nel dialog corrispondono all'ultimo consenso salvato."
-                    : "Stai impostando le preferenze per la prima volta."}
+                  : statusKey === "just-updated"
+                    ? "Preferenze cookie aggiornate."
+                    : statusKey === "saved"
+                      ? "Le preferenze nel dialog corrispondono all'ultimo consenso salvato."
+                      : "Stai impostando le preferenze per la prima volta."}
               </span>
             </div>
             <Button
