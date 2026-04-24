@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, Undo2 } from "lucide-react";
@@ -14,42 +13,15 @@ import {
 } from "@/components/ui/dialog";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 
-type EditablePrefs = {
-  preferences: boolean;
-  analytics: boolean;
-  marketing: boolean;
-};
-
-const DEFAULT_PREFS: EditablePrefs = {
-  preferences: true,
-  analytics: false,
-  marketing: false,
-};
-
-function prefsFromConsent(
-  consent: ReturnType<typeof useCookieConsent>["consent"],
-): EditablePrefs {
-  if (!consent) return DEFAULT_PREFS;
-  return {
-    preferences: consent.preferences,
-    analytics: consent.analytics,
-    marketing: consent.marketing,
-  };
-}
-
-function prefsEqual(a: EditablePrefs, b: EditablePrefs) {
-  return (
-    a.preferences === b.preferences &&
-    a.analytics === b.analytics &&
-    a.marketing === b.marketing
-  );
-}
-
 export default function CookieBanner() {
   const {
     consent,
     showBanner,
     showPreferences,
+    draftPrefs,
+    isDirty,
+    setDraftPref,
+    revertDraft,
     acceptAll,
     rejectAll,
     savePreferences,
@@ -57,32 +29,7 @@ export default function CookieBanner() {
     closePreferences,
   } = useCookieConsent();
 
-  // Baseline = ultimo consenso salvato (o default se mai salvato)
-  const baseline = useMemo<EditablePrefs>(() => prefsFromConsent(consent), [consent]);
-  const [prefs, setPrefs] = useState<EditablePrefs>(baseline);
-
-  // Quando si apre il dialog (o cambia la baseline), ripopoliamo i toggle
-  // dall'ultimo consenso effettivamente salvato.
-  useEffect(() => {
-    if (showPreferences) {
-      setPrefs(baseline);
-    }
-  }, [showPreferences, baseline]);
-
-  const isDirty = !prefsEqual(prefs, baseline);
   const hasSavedConsent = consent !== null;
-
-  const handleRevert = () => {
-    setPrefs(baseline);
-  };
-
-  const handleDialogChange = (open: boolean) => {
-    if (!open) {
-      // Chiusura senza salvare: scartiamo eventuali modifiche pendenti
-      setPrefs(baseline);
-      closePreferences();
-    }
-  };
 
   return (
     <>
@@ -137,7 +84,7 @@ export default function CookieBanner() {
         )}
       </AnimatePresence>
 
-      <Dialog open={showPreferences} onOpenChange={handleDialogChange}>
+      <Dialog open={showPreferences} onOpenChange={(o) => !o && closePreferences()}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="font-display">Preferenze cookie</DialogTitle>
@@ -157,20 +104,20 @@ export default function CookieBanner() {
             <PreferenceRow
               title="Preferenze"
               description="Memorizzano le tue scelte (es. tema, filtri preferiti) per migliorare l'esperienza."
-              checked={prefs.preferences}
-              onCheckedChange={(v) => setPrefs((p) => ({ ...p, preferences: v }))}
+              checked={draftPrefs.preferences}
+              onCheckedChange={(v) => setDraftPref("preferences", v)}
             />
             <PreferenceRow
               title="Statistiche / Analytics"
               description="Ci aiutano a capire come usi il sito in forma aggregata e anonima. Attualmente non in uso."
-              checked={prefs.analytics}
-              onCheckedChange={(v) => setPrefs((p) => ({ ...p, analytics: v }))}
+              checked={draftPrefs.analytics}
+              onCheckedChange={(v) => setDraftPref("analytics", v)}
             />
             <PreferenceRow
               title="Marketing"
               description="Per personalizzare comunicazioni promozionali. Attualmente non in uso."
-              checked={prefs.marketing}
-              onCheckedChange={(v) => setPrefs((p) => ({ ...p, marketing: v }))}
+              checked={draftPrefs.marketing}
+              onCheckedChange={(v) => setDraftPref("marketing", v)}
             />
           </div>
 
@@ -189,7 +136,7 @@ export default function CookieBanner() {
               type="button"
               variant="ghost"
               size="sm"
-              onClick={handleRevert}
+              onClick={revertDraft}
               disabled={!isDirty}
               className="h-7 px-2 text-xs"
               aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
@@ -205,7 +152,7 @@ export default function CookieBanner() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => savePreferences(prefs)}
+              onClick={() => savePreferences()}
               disabled={hasSavedConsent && !isDirty}
             >
               Salva scelte
