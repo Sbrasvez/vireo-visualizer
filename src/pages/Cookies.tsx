@@ -98,20 +98,66 @@ const thirdParties = [
 ];
 
 export default function Cookies() {
-  const { openPreferences, consent } = useCookieConsent();
+  const { openPreferences, consent, consentDate } = useCookieConsent();
+  const [justUpdated, setJustUpdated] = useState(false);
+  const isFirst = useRef(true);
+
+  useEffect(() => {
+    if (isFirst.current) {
+      isFirst.current = false;
+      return;
+    }
+    if (!consentDate) return;
+    setJustUpdated(true);
+    const t = setTimeout(() => setJustUpdated(false), 2500);
+    return () => clearTimeout(t);
+  }, [consentDate]);
+
+  const formattedConsentDate = consentDate
+    ? new Date(consentDate).toLocaleString("it-IT", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
 
   return (
     <main className="container max-w-4xl py-16">
       <header className="mb-10">
         <h1 className="font-display text-4xl font-bold mb-2">Cookie Policy</h1>
         <p className="text-sm text-muted-foreground">
-          Ultimo aggiornamento:{" "}
+          Ultimo aggiornamento documento:{" "}
           {new Date().toLocaleDateString("it-IT", {
             year: "numeric",
             month: "long",
             day: "numeric",
           })}
         </p>
+
+        <div
+          className={cn(
+            "mt-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-all duration-300",
+            justUpdated
+              ? "border-primary bg-primary/10 text-primary shadow-sm scale-[1.02]"
+              : "border-border bg-muted/40 text-muted-foreground",
+          )}
+          aria-live="polite"
+        >
+          {justUpdated ? (
+            <CheckCircle2 className="size-3.5 animate-in zoom-in-50" />
+          ) : (
+            <Clock className="size-3.5" />
+          )}
+          <span>
+            {formattedConsentDate
+              ? justUpdated
+                ? `Preferenze aggiornate ora · ${formattedConsentDate}`
+                : `Tue preferenze · ultimo aggiornamento ${formattedConsentDate}`
+              : "Nessuna preferenza salvata · usa il banner per scegliere"}
+          </span>
+        </div>
       </header>
 
       <section className="space-y-10 text-sm leading-relaxed">
