@@ -95,6 +95,8 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [showBanner, setShowBanner] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [draftPrefs, setDraftPrefsState] = useState<EditableCategories>(DEFAULT_DRAFT);
+  const [justUpdated, setJustUpdated] = useState(false);
+  const justUpdatedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const stored = loadConsent();
