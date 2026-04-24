@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cookie, X } from "lucide-react";
+import { Cookie, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -14,8 +14,40 @@ import {
 } from "@/components/ui/dialog";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 
+type EditablePrefs = {
+  preferences: boolean;
+  analytics: boolean;
+  marketing: boolean;
+};
+
+const DEFAULT_PREFS: EditablePrefs = {
+  preferences: true,
+  analytics: false,
+  marketing: false,
+};
+
+function prefsFromConsent(
+  consent: ReturnType<typeof useCookieConsent>["consent"],
+): EditablePrefs {
+  if (!consent) return DEFAULT_PREFS;
+  return {
+    preferences: consent.preferences,
+    analytics: consent.analytics,
+    marketing: consent.marketing,
+  };
+}
+
+function prefsEqual(a: EditablePrefs, b: EditablePrefs) {
+  return (
+    a.preferences === b.preferences &&
+    a.analytics === b.analytics &&
+    a.marketing === b.marketing
+  );
+}
+
 export default function CookieBanner() {
   const {
+    consent,
     showBanner,
     showPreferences,
     acceptAll,
@@ -25,11 +57,32 @@ export default function CookieBanner() {
     closePreferences,
   } = useCookieConsent();
 
-  const [prefs, setPrefs] = useState({
-    preferences: true,
-    analytics: false,
-    marketing: false,
-  });
+  // Baseline = ultimo consenso salvato (o default se mai salvato)
+  const baseline = useMemo<EditablePrefs>(() => prefsFromConsent(consent), [consent]);
+  const [prefs, setPrefs] = useState<EditablePrefs>(baseline);
+
+  // Quando si apre il dialog (o cambia la baseline), ripopoliamo i toggle
+  // dall'ultimo consenso effettivamente salvato.
+  useEffect(() => {
+    if (showPreferences) {
+      setPrefs(baseline);
+    }
+  }, [showPreferences, baseline]);
+
+  const isDirty = !prefsEqual(prefs, baseline);
+  const hasSavedConsent = consent !== null;
+
+  const handleRevert = () => {
+    setPrefs(baseline);
+  };
+
+  const handleDialogChange = (open: boolean) => {
+    if (!open) {
+      // Chiusura senza salvare: scartiamo eventuali modifiche pendenti
+      setPrefs(baseline);
+      closePreferences();
+    }
+  };
 
   return (
     <>
@@ -84,7 +137,7 @@ export default function CookieBanner() {
         )}
       </AnimatePresence>
 
-      <Dialog open={showPreferences} onOpenChange={(o) => !o && closePreferences()}>
+      <Dialog open={showPreferences} onOpenChange={handleDialogChange}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="font-display">Preferenze cookie</DialogTitle>
@@ -121,11 +174,40 @@ export default function CookieBanner() {
             />
           </div>
 
+          <div
+            className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2 text-xs"
+            aria-live="polite"
+          >
+            <span className={isDirty ? "text-foreground" : "text-muted-foreground"}>
+              {isDirty
+                ? "Modifiche non salvate rispetto all'ultimo consenso."
+                : hasSavedConsent
+                  ? "Nessuna modifica rispetto all'ultimo consenso salvato."
+                  : "Nessuna preferenza ancora salvata."}
+            </span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleRevert}
+              disabled={!isDirty}
+              className="h-7 px-2 text-xs"
+              aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
+            >
+              <Undo2 className="size-3.5 mr-1" />
+              Annulla modifiche
+            </Button>
+          </div>
+
           <DialogFooter className="gap-2 sm:gap-2">
             <Button variant="ghost" onClick={rejectAll}>
               Rifiuta tutti
             </Button>
-            <Button variant="outline" onClick={() => savePreferences(prefs)}>
+            <Button
+              variant="outline"
+              onClick={() => savePreferences(prefs)}
+              disabled={hasSavedConsent && !isDirty}
+            >
               Salva scelte
             </Button>
             <Button onClick={acceptAll}>Accetta tutti</Button>
