@@ -167,6 +167,49 @@ export default function Cookies() {
         </div>
       </header>
 
+      {/* Pannello sticky modifiche pendenti — visibile mentre il dialog è aperto */}
+      {showPreferences && (
+        <div
+          className={cn(
+            "sticky top-2 z-40 mb-8 rounded-xl border px-4 py-3 shadow-sm backdrop-blur-md transition-all duration-300",
+            isDirty
+              ? "border-primary/40 bg-primary/5"
+              : "border-border bg-card/80",
+          )}
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-2 text-sm">
+              {isDirty ? (
+                <AlertCircle className="size-4 mt-0.5 shrink-0 text-primary" />
+              ) : (
+                <CheckCircle2 className="size-4 mt-0.5 shrink-0 text-muted-foreground" />
+              )}
+              <span className={isDirty ? "text-foreground font-medium" : "text-muted-foreground"}>
+                {isDirty
+                  ? "Hai modifiche non salvate nelle preferenze cookie."
+                  : consent
+                    ? "Le preferenze nel dialog corrispondono all'ultimo consenso salvato."
+                    : "Stai impostando le preferenze per la prima volta."}
+              </span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={revertDraft}
+              disabled={!isDirty}
+              className="self-start sm:self-auto"
+              aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
+            >
+              <Undo2 className="size-3.5 mr-1.5" />
+              Annulla modifiche
+            </Button>
+          </div>
+        </div>
+      )}
+
       <section className="space-y-10 text-sm leading-relaxed">
         <div className="space-y-3">
           <p>
