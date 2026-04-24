@@ -18,6 +18,7 @@ type StoredConsent = {
 
 type Ctx = {
   consent: CookieCategories | null;
+  consentDate: string | null;
   hasDecided: boolean;
   showBanner: boolean;
   showPreferences: boolean;
@@ -54,6 +55,7 @@ function saveConsent(categories: CookieCategories) {
 
 export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [consent, setConsent] = useState<CookieCategories | null>(null);
+  const [consentDate, setConsentDate] = useState<string | null>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
 
@@ -61,6 +63,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     const stored = loadConsent();
     if (stored) {
       setConsent(stored.categories);
+      setConsentDate(stored.date);
     } else {
       setShowBanner(true);
     }
@@ -69,6 +72,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const apply = useCallback((c: CookieCategories) => {
     saveConsent(c);
     setConsent(c);
+    setConsentDate(new Date().toISOString());
     setShowBanner(false);
     setShowPreferences(false);
   }, []);
@@ -95,6 +99,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     <CookieConsentContext.Provider
       value={{
         consent,
+        consentDate,
         hasDecided: consent !== null,
         showBanner,
         showPreferences,
