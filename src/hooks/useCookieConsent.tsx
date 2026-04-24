@@ -120,6 +120,15 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     setDraftPrefsState(baselineFrom(c));
     setShowBanner(false);
     setShowPreferences(false);
+    setJustUpdated(true);
+    if (justUpdatedTimer.current) clearTimeout(justUpdatedTimer.current);
+    justUpdatedTimer.current = setTimeout(() => setJustUpdated(false), 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (justUpdatedTimer.current) clearTimeout(justUpdatedTimer.current);
+    };
   }, []);
 
   const acceptAll = useCallback(() => {
