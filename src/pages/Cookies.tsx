@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +10,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { CheckCircle2, Clock, Undo2, AlertCircle } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { cookieStatusStyles, resolveCookieStatus } from "@/lib/cookieStatus";
 
 type CookieRow = {
   name: string;
@@ -104,21 +104,9 @@ export default function Cookies() {
     consentDate,
     showPreferences,
     isDirty,
+    justUpdated,
     revertDraft,
   } = useCookieConsent();
-  const [justUpdated, setJustUpdated] = useState(false);
-  const isFirst = useRef(true);
-
-  useEffect(() => {
-    if (isFirst.current) {
-      isFirst.current = false;
-      return;
-    }
-    if (!consentDate) return;
-    setJustUpdated(true);
-    const t = setTimeout(() => setJustUpdated(false), 2500);
-    return () => clearTimeout(t);
-  }, [consentDate]);
 
   const formattedConsentDate = consentDate
     ? new Date(consentDate).toLocaleString("it-IT", {
@@ -130,55 +118,10 @@ export default function Cookies() {
       })
     : null;
 
-  // Stato unificato: pilota icone + colori sia del badge header sia del pannello sticky.
-  // Priorità: dirty > just-updated > saved > none.
-  type StatusKey = "dirty" | "just-updated" | "saved" | "none";
-  const statusKey: StatusKey = isDirty
-    ? "dirty"
-    : justUpdated
-      ? "just-updated"
-      : consent
-        ? "saved"
-        : "none";
-
-  const statusStyles: Record<
-    StatusKey,
-    {
-      Icon: typeof CheckCircle2;
-      tone: string; // testo + bordo accentati o neutri
-      surface: string; // sfondo
-      border: string; // bordo
-      iconClass?: string;
-    }
-  > = {
-    dirty: {
-      Icon: AlertCircle,
-      tone: "text-primary",
-      surface: "bg-primary/10",
-      border: "border-primary/50",
-    },
-    "just-updated": {
-      Icon: CheckCircle2,
-      tone: "text-primary",
-      surface: "bg-primary/10",
-      border: "border-primary",
-      iconClass: "animate-in zoom-in-50",
-    },
-    saved: {
-      Icon: CheckCircle2,
-      tone: "text-muted-foreground",
-      surface: "bg-muted/40",
-      border: "border-border",
-    },
-    none: {
-      Icon: Clock,
-      tone: "text-muted-foreground",
-      surface: "bg-muted/40",
-      border: "border-border",
-    },
-  };
-
-  const status = statusStyles[statusKey];
+  // Stato unificato condiviso con il banner globale: pilota icone + colori
+  // sia del badge header sia del pannello sticky.
+  const statusKey = resolveCookieStatus({ isDirty, justUpdated, consent });
+  const status = cookieStatusStyles[statusKey];
 
   return (
     <main className="container max-w-4xl py-16">

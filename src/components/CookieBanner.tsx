@@ -12,6 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
+import { cookieStatusStyles, resolveCookieStatus } from "@/lib/cookieStatus";
+import { cn } from "@/lib/utils";
 
 export default function CookieBanner() {
   const {
@@ -20,6 +22,7 @@ export default function CookieBanner() {
     showPreferences,
     draftPrefs,
     isDirty,
+    justUpdated,
     setDraftPref,
     revertDraft,
     acceptAll,
@@ -30,6 +33,8 @@ export default function CookieBanner() {
   } = useCookieConsent();
 
   const hasSavedConsent = consent !== null;
+  const statusKey = resolveCookieStatus({ isDirty, justUpdated, consent });
+  const status = cookieStatusStyles[statusKey];
 
   return (
     <>
@@ -122,15 +127,24 @@ export default function CookieBanner() {
           </div>
 
           <div
-            className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2 text-xs"
+            className={cn(
+              "flex items-center justify-between gap-3 rounded-lg border border-dashed px-3 py-2 text-xs transition-colors duration-300",
+              status.border,
+              status.surface,
+            )}
             aria-live="polite"
           >
-            <span className={isDirty ? "text-foreground" : "text-muted-foreground"}>
-              {isDirty
-                ? "Modifiche non salvate rispetto all'ultimo consenso."
-                : hasSavedConsent
-                  ? "Nessuna modifica rispetto all'ultimo consenso salvato."
-                  : "Nessuna preferenza ancora salvata."}
+            <span className={cn("flex items-center gap-2", isDirty ? "text-foreground" : status.tone)}>
+              <status.Icon className={cn("size-3.5 shrink-0", status.tone, status.iconClass)} />
+              <span>
+                {statusKey === "dirty"
+                  ? "Modifiche non salvate rispetto all'ultimo consenso."
+                  : statusKey === "just-updated"
+                    ? "Preferenze cookie aggiornate."
+                    : statusKey === "saved"
+                      ? "Nessuna modifica rispetto all'ultimo consenso salvato."
+                      : "Nessuna preferenza ancora salvata."}
+              </span>
             </span>
             <Button
               type="button"

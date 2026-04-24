@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, ReactNode } from "react";
 
 export type CookieCategories = {
   necessary: true; // sempre attivo
@@ -34,6 +34,8 @@ type Ctx = {
   draftPrefs: EditableCategories;
   /** True quando draftPrefs differisce dall'ultimo consenso salvato. */
   isDirty: boolean;
+  /** True per ~2.5s subito dopo un salvataggio (feedback visivo globale). */
+  justUpdated: boolean;
   setDraftPref: (key: keyof EditableCategories, value: boolean) => void;
   setDraftPrefs: (next: EditableCategories) => void;
   /** Ripristina la draft all'ultimo consenso salvato (o ai default). */
@@ -93,6 +95,8 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [showBanner, setShowBanner] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [draftPrefs, setDraftPrefsState] = useState<EditableCategories>(DEFAULT_DRAFT);
+  const [justUpdated, setJustUpdated] = useState(false);
+  const justUpdatedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const stored = loadConsent();
@@ -116,6 +120,15 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     setDraftPrefsState(baselineFrom(c));
     setShowBanner(false);
     setShowPreferences(false);
+    setJustUpdated(true);
+    if (justUpdatedTimer.current) clearTimeout(justUpdatedTimer.current);
+    justUpdatedTimer.current = setTimeout(() => setJustUpdated(false), 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (justUpdatedTimer.current) clearTimeout(justUpdatedTimer.current);
+    };
   }, []);
 
   const acceptAll = useCallback(() => {
@@ -163,6 +176,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
         showPreferences,
         draftPrefs,
         isDirty,
+        justUpdated,
         setDraftPref,
         setDraftPrefs,
         revertDraft,
