@@ -109,20 +109,62 @@ export default function Cookies() {
     justUpdated,
     revertDraft,
   } = useCookieConsent();
-  const { hash, pathname } = useLocation();
+  const { hash, pathname, key: locationKey } = useLocation();
 
-  // Scroll all'ancora richiesta (es. #categorie-cookie dal banner cookie),
-  // dopo il reset di ScrollToTop. Usa requestAnimationFrame per sicurezza.
+  // Gestione hash robusta: dopo navigazione (ScrollToTop forza top:0 su cambio
+  // pathname), portiamo lo scroll fluido all'ancora richiesta — qualunque sia
+  // l'hash, non solo #categorie-cookie. Usiamo doppio rAF per eseguire DOPO
+  // l'effetto di ScrollToTop e un piccolo retry per coprire sezioni montate
+  // tardivamente. Rispettiamo prefers-reduced-motion.
   useEffect(() => {
-    if (!hash) return;
-    const id = hash.replace(/^#/, "");
-    const target = document.getElementById(id);
-    if (!target) return;
-    const raf = requestAnimationFrame(() => {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!hash || hash === "#") return;
+    const id = decodeURIComponent(hash.slice(1));
+    if (!id) return;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const behavior: ScrollBehavior = prefersReducedMotion ? "auto" : "smooth";
+
+    let cancelled = false;
+    let raf1 = 0;
+    let raf2 = 0;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    const scrollToTarget = (attempt = 0) => {
+      if (cancelled) return;
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior, block: "start" });
+        // Sposta il focus per accessibilità senza ulteriore scroll.
+        const prevTabIndex = target.getAttribute("tabindex");
+        if (prevTabIndex === null) target.setAttribute("tabindex", "-1");
+        (target as HTMLElement).focus({ preventScroll: true });
+        if (prevTabIndex === null) {
+          timers.push(setTimeout(() => target.removeAttribute("tabindex"), 1000));
+        }
+        return;
+      }
+      // Retry breve se la sezione non è ancora nel DOM (max ~600ms).
+      if (attempt < 6) {
+        timers.push(setTimeout(() => scrollToTarget(attempt + 1), 100));
+      }
+    };
+
+    // Doppio rAF: assicura esecuzione dopo ScrollToTop (montato prima nell'albero).
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => scrollToTarget());
     });
-    return () => cancelAnimationFrame(raf);
-  }, [hash, pathname]);
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      timers.forEach(clearTimeout);
+    };
+    // locationKey cambia anche quando si naviga allo stesso hash (es. ri-click
+    // sul pulsante "Vedi categorie"), permettendo di ri-scrollare.
+  }, [hash, pathname, locationKey]);
 
   const formattedConsentDate = consentDate
     ? new Date(consentDate).toLocaleString("it-IT", {
