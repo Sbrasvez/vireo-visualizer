@@ -235,7 +235,7 @@ export default function Cookies() {
           </p>
         </div>
 
-        <div>
+        <div id="categorie-cookie" className="scroll-mt-24">
           <h2 className="text-xl font-semibold mb-3">2. Categorie di cookie utilizzati</h2>
           <p className="mb-4">
             Suddividiamo i cookie in quattro categorie. Solo i <strong>cookie tecnici</strong> sono
