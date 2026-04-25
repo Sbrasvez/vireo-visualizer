@@ -254,6 +254,32 @@ export default function Cookies() {
 
   return (
     <main className="container max-w-4xl py-16">
+      {missingHash && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="mb-6 flex items-start gap-3 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-foreground animate-in fade-in slide-in-from-top-2 duration-300"
+        >
+          <AlertTriangle className="size-4 mt-0.5 shrink-0 text-destructive" aria-hidden />
+          <div className="min-w-0 flex-1">
+            <p className="font-medium">Sezione non trovata</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Il riferimento <code className="font-mono">#{missingHash}</code> non corrisponde a
+              nessuna sezione di questa pagina. Ti abbiamo riportato in cima.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="-mr-1 size-7 shrink-0 text-muted-foreground hover:text-foreground"
+            onClick={() => setMissingHash(null)}
+            aria-label="Chiudi notifica"
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
+      )}
       <header className="mb-10">
         <h1 className="font-display text-4xl font-bold mb-2">Cookie Policy</h1>
         <p className="text-sm text-muted-foreground">
