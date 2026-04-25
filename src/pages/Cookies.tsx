@@ -149,6 +149,21 @@ export default function Cookies() {
       previousActive.focus({ preventScroll: true });
     };
 
+    const handleMissingTarget = () => {
+      // Fallback: ancora inesistente. NON tocchiamo il focus (niente
+      // tabindex temporaneo, niente restore di un focus mai spostato) e
+      // facciamo solo uno scroll fluido all'inizio della pagina, così
+      // l'utente non resta su una posizione casuale lasciata dal browser
+      // dopo aver tentato di risolvere l'hash.
+      if (cancelled) return;
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, left: 0, behavior });
+      }
+      if (typeof console !== "undefined") {
+        console.warn(`[Cookies] Hash anchor "#${id}" non trovato — fallback a top.`);
+      }
+    };
+
     const scrollToTarget = (attempt = 0) => {
       if (cancelled) return;
       const target = document.getElementById(id);
@@ -186,7 +201,10 @@ export default function Cookies() {
       // Retry breve se la sezione non è ancora nel DOM (max ~600ms).
       if (attempt < 6) {
         timers.push(setTimeout(() => scrollToTarget(attempt + 1), 100));
+        return;
       }
+      // Esauriti i retry: attiviamo il fallback senza toccare il focus.
+      handleMissingTarget();
     };
 
     // Doppio rAF: assicura esecuzione dopo ScrollToTop (montato prima nell'albero).
