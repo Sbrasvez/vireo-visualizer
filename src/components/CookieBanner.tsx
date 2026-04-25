@@ -152,18 +152,31 @@ export default function CookieBanner() {
                       : "Nessuna preferenza ancora salvata."}
               </span>
             </span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={revertDraft}
-              disabled={!isDirty}
-              className="h-7 px-2 text-xs"
-              aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
-            >
-              <Undo2 className="size-3.5 mr-1" />
-              Annulla modifiche
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleViewCategories}
+                className={cn("h-7 px-2 text-xs", status.tone)}
+                aria-label="Apri la sezione dettagli categorie cookie nella Cookie Policy"
+              >
+                <ListTree className="size-3.5 mr-1" />
+                Vedi categorie
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={revertDraft}
+                disabled={!isDirty}
+                className="h-7 px-2 text-xs"
+                aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
+              >
+                <Undo2 className="size-3.5 mr-1" />
+                Annulla modifiche
+              </Button>
+            </div>
           </div>
 
           <DialogFooter className="gap-2 sm:gap-2">
