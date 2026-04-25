@@ -31,10 +31,16 @@ export default function CookieBanner() {
     openPreferences,
     closePreferences,
   } = useCookieConsent();
+  const navigate = useNavigate();
 
   const hasSavedConsent = consent !== null;
   const statusKey = resolveCookieStatus({ isDirty, justUpdated, consent });
   const status = cookieStatusStyles[statusKey];
+
+  const handleViewCategories = () => {
+    closePreferences();
+    navigate("/cookies#categorie-cookie");
+  };
 
   return (
     <>
