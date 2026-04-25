@@ -171,6 +171,8 @@ export default function Cookies() {
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0, left: 0, behavior });
       }
+      // Notifica visibile + log diagnostico.
+      setMissingHash(id);
       if (typeof console !== "undefined") {
         console.warn(`[Cookies] Hash anchor "#${id}" non trovato — fallback a top.`);
       }
