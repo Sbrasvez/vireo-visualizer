@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { Undo2 } from "lucide-react";
+import { Undo2, AlertTriangle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cookieStatusStyles, resolveCookieStatus } from "@/lib/cookieStatus";
 
