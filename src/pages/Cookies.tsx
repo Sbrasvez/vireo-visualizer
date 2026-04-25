@@ -110,6 +110,9 @@ export default function Cookies() {
     revertDraft,
   } = useCookieConsent();
   const { hash, pathname, key: locationKey } = useLocation();
+  // Notifica on-page mostrata quando un hash richiesto non viene trovato.
+  // Conserva l'id originale per essere mostrato all'utente, oppure null.
+  const [missingHash, setMissingHash] = useState<string | null>(null);
 
   // Gestione hash robusta: dopo navigazione (ScrollToTop forza top:0 su cambio
   // pathname), portiamo lo scroll fluido all'ancora richiesta — qualunque sia
