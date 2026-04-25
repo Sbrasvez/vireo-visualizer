@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cookie, Undo2 } from "lucide-react";
+import { Cookie, Undo2, ListTree } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -31,10 +31,16 @@ export default function CookieBanner() {
     openPreferences,
     closePreferences,
   } = useCookieConsent();
+  const navigate = useNavigate();
 
   const hasSavedConsent = consent !== null;
   const statusKey = resolveCookieStatus({ isDirty, justUpdated, consent });
   const status = cookieStatusStyles[statusKey];
+
+  const handleViewCategories = () => {
+    closePreferences();
+    navigate("/cookies#categorie-cookie");
+  };
 
   return (
     <>
@@ -146,18 +152,31 @@ export default function CookieBanner() {
                       : "Nessuna preferenza ancora salvata."}
               </span>
             </span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={revertDraft}
-              disabled={!isDirty}
-              className="h-7 px-2 text-xs"
-              aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
-            >
-              <Undo2 className="size-3.5 mr-1" />
-              Annulla modifiche
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleViewCategories}
+                className={cn("h-7 px-2 text-xs", status.tone)}
+                aria-label="Apri la sezione dettagli categorie cookie nella Cookie Policy"
+              >
+                <ListTree className="size-3.5 mr-1" />
+                Vedi categorie
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={revertDraft}
+                disabled={!isDirty}
+                className="h-7 px-2 text-xs"
+                aria-label="Annulla modifiche e ripristina l'ultimo consenso salvato"
+              >
+                <Undo2 className="size-3.5 mr-1" />
+                Annulla modifiche
+              </Button>
+            </div>
           </div>
 
           <DialogFooter className="gap-2 sm:gap-2">

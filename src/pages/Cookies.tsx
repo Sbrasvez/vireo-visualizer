@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { Button } from "@/components/ui/button";
 import {
@@ -107,6 +109,20 @@ export default function Cookies() {
     justUpdated,
     revertDraft,
   } = useCookieConsent();
+  const { hash, pathname } = useLocation();
+
+  // Scroll all'ancora richiesta (es. #categorie-cookie dal banner cookie),
+  // dopo il reset di ScrollToTop. Usa requestAnimationFrame per sicurezza.
+  useEffect(() => {
+    if (!hash) return;
+    const id = hash.replace(/^#/, "");
+    const target = document.getElementById(id);
+    if (!target) return;
+    const raf = requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [hash, pathname]);
 
   const formattedConsentDate = consentDate
     ? new Date(consentDate).toLocaleString("it-IT", {
@@ -235,7 +251,7 @@ export default function Cookies() {
           </p>
         </div>
 
-        <div>
+        <div id="categorie-cookie" className="scroll-mt-24">
           <h2 className="text-xl font-semibold mb-3">2. Categorie di cookie utilizzati</h2>
           <p className="mb-4">
             Suddividiamo i cookie in quattro categorie. Solo i <strong>cookie tecnici</strong> sono
