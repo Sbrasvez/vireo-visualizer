@@ -126,23 +126,61 @@ export default function Cookies() {
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const behavior: ScrollBehavior = prefersReducedMotion ? "auto" : "smooth";
 
+    // Memorizziamo il focus precedente solo se è un elemento "vero" (non body)
+    // così, dopo lo scroll all'ancora, possiamo restituirglielo senza che il
+    // focus rimanga permanentemente bloccato sull'header della sezione.
+    const previousActive =
+      document.activeElement instanceof HTMLElement &&
+      document.activeElement !== document.body
+        ? document.activeElement
+        : null;
+
     let cancelled = false;
     let raf1 = 0;
     let raf2 = 0;
     const timers: ReturnType<typeof setTimeout>[] = [];
+    let cleanupTarget: (() => void) | null = null;
+
+    const restorePreviousFocus = (target: HTMLElement) => {
+      // Ripristina il focus precedente SOLO se nessun altro elemento ha
+      // rubato il focus nel frattempo (evita di scavalcare l'utente).
+      if (document.activeElement !== target) return;
+      if (!previousActive || !previousActive.isConnected) return;
+      previousActive.focus({ preventScroll: true });
+    };
 
     const scrollToTarget = (attempt = 0) => {
       if (cancelled) return;
       const target = document.getElementById(id);
       if (target) {
         target.scrollIntoView({ behavior, block: "start" });
-        // Sposta il focus per accessibilità senza ulteriore scroll.
+
+        // Sposta temporaneamente il focus sul target per a11y / screen reader.
         const prevTabIndex = target.getAttribute("tabindex");
-        if (prevTabIndex === null) target.setAttribute("tabindex", "-1");
+        const tabIndexAdded = prevTabIndex === null;
+        if (tabIndexAdded) target.setAttribute("tabindex", "-1");
         (target as HTMLElement).focus({ preventScroll: true });
-        if (prevTabIndex === null) {
-          timers.push(setTimeout(() => target.removeAttribute("tabindex"), 1000));
-        }
+
+        // Se l'utente sposta il focus (Tab, click), consideriamo conclusa la
+        // "presa di focus" e puliamo subito; se invece resta sul target,
+        // lo restituiamo all'elemento precedente dopo un breve delay.
+        const onBlur = () => {
+          cleanup();
+        };
+        target.addEventListener("blur", onBlur, { once: true });
+
+        const restoreTimer = setTimeout(() => {
+          restorePreviousFocus(target as HTMLElement);
+          cleanup();
+        }, 800);
+        timers.push(restoreTimer);
+
+        const cleanup = () => {
+          target.removeEventListener("blur", onBlur);
+          if (tabIndexAdded) target.removeAttribute("tabindex");
+          cleanupTarget = null;
+        };
+        cleanupTarget = cleanup;
         return;
       }
       // Retry breve se la sezione non è ancora nel DOM (max ~600ms).
@@ -161,6 +199,7 @@ export default function Cookies() {
       cancelAnimationFrame(raf1);
       cancelAnimationFrame(raf2);
       timers.forEach(clearTimeout);
+      cleanupTarget?.();
     };
     // locationKey cambia anche quando si naviga allo stesso hash (es. ri-click
     // sul pulsante "Vedi categorie"), permettendo di ri-scrollare.
