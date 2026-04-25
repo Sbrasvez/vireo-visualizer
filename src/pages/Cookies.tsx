@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { Button } from "@/components/ui/button";
 import {
