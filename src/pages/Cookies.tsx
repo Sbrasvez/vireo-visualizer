@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { Undo2 } from "lucide-react";
+import { Undo2, AlertTriangle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cookieStatusStyles, resolveCookieStatus } from "@/lib/cookieStatus";
 
@@ -110,6 +110,9 @@ export default function Cookies() {
     revertDraft,
   } = useCookieConsent();
   const { hash, pathname, key: locationKey } = useLocation();
+  // Notifica on-page mostrata quando un hash richiesto non viene trovato.
+  // Conserva l'id originale per essere mostrato all'utente, oppure null.
+  const [missingHash, setMissingHash] = useState<string | null>(null);
 
   // Gestione hash robusta: dopo navigazione (ScrollToTop forza top:0 su cambio
   // pathname), portiamo lo scroll fluido all'ancora richiesta — qualunque sia
@@ -117,9 +120,18 @@ export default function Cookies() {
   // l'effetto di ScrollToTop e un piccolo retry per coprire sezioni montate
   // tardivamente. Rispettiamo prefers-reduced-motion.
   useEffect(() => {
-    if (!hash || hash === "#") return;
+    if (!hash || hash === "#") {
+      // Nessun hash richiesto: archivia eventuale notifica precedente.
+      setMissingHash(null);
+      return;
+    }
     const id = decodeURIComponent(hash.slice(1));
-    if (!id) return;
+    if (!id) {
+      setMissingHash(null);
+      return;
+    }
+    // Nuovo tentativo: nascondi una eventuale notifica residua.
+    setMissingHash(null);
 
     const prefersReducedMotion =
       typeof window !== "undefined" &&
@@ -159,6 +171,8 @@ export default function Cookies() {
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0, left: 0, behavior });
       }
+      // Notifica visibile + log diagnostico.
+      setMissingHash(id);
       if (typeof console !== "undefined") {
         console.warn(`[Cookies] Hash anchor "#${id}" non trovato — fallback a top.`);
       }
@@ -240,6 +254,32 @@ export default function Cookies() {
 
   return (
     <main className="container max-w-4xl py-16">
+      {missingHash && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="mb-6 flex items-start gap-3 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-foreground animate-in fade-in slide-in-from-top-2 duration-300"
+        >
+          <AlertTriangle className="size-4 mt-0.5 shrink-0 text-destructive" aria-hidden />
+          <div className="min-w-0 flex-1">
+            <p className="font-medium">Sezione non trovata</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Il riferimento <code className="font-mono">#{missingHash}</code> non corrisponde a
+              nessuna sezione di questa pagina. Ti abbiamo riportato in cima.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="-mr-1 size-7 shrink-0 text-muted-foreground hover:text-foreground"
+            onClick={() => setMissingHash(null)}
+            aria-label="Chiudi notifica"
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
+      )}
       <header className="mb-10">
         <h1 className="font-display text-4xl font-bold mb-2">Cookie Policy</h1>
         <p className="text-sm text-muted-foreground">
