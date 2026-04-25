@@ -120,9 +120,18 @@ export default function Cookies() {
   // l'effetto di ScrollToTop e un piccolo retry per coprire sezioni montate
   // tardivamente. Rispettiamo prefers-reduced-motion.
   useEffect(() => {
-    if (!hash || hash === "#") return;
+    if (!hash || hash === "#") {
+      // Nessun hash richiesto: archivia eventuale notifica precedente.
+      setMissingHash(null);
+      return;
+    }
     const id = decodeURIComponent(hash.slice(1));
-    if (!id) return;
+    if (!id) {
+      setMissingHash(null);
+      return;
+    }
+    // Nuovo tentativo: nascondi una eventuale notifica residua.
+    setMissingHash(null);
 
     const prefersReducedMotion =
       typeof window !== "undefined" &&
